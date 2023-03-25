@@ -1,10 +1,16 @@
-import '@/styles/globals.css'
 import Container from '@mui/material/Container';
+import { SessionProvider } from "next-auth/react"
+import '../components/Navbar.css'
+import Navbar from '@/components/Navbar';
 
-export default function App({ Component, pageProps }) {
+export default function App({ Component, pageProps: { session, ...pageProps } }) {
   return (
-    <Container fixed maxWidth="xs">
-      <Component {...pageProps} />
-    </Container>
+    <SessionProvider session={session}>
+      <Container fixed maxWidth="xs">
+        <Navbar />
+        <Component {...pageProps} />
+      </Container>
+    </SessionProvider >
+
   )
 }
