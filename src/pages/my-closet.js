@@ -7,12 +7,12 @@ import { useEffect } from 'react';
 
 
 export default function MyCloset() {
-    const [parent, setParent] = useState(null);
     const [closet, setCloset] = useState([]);
 
     useEffect(() => {
         console.log(closet);
     }, [closet])
+
     const draggableMarkup = (
         <>
             <h2>아우터</h2>
@@ -71,8 +71,7 @@ export default function MyCloset() {
 
     return (
         <DndContext onDragEnd={handleDragEnd}>
-            {parent === null ? draggableMarkup : null}
-
+            {draggableMarkup}
             <Droppable id='droppable' closet={closet}>
                 Drop here
             </Droppable>
