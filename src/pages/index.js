@@ -9,7 +9,6 @@ import Grid from '@mui/material/Grid';
 export default function Home() {
   const [loading, setLoading] = useState(true);
   const { data: session, status } = useSession();
-  console.log(session);
 
   return (
     <div>

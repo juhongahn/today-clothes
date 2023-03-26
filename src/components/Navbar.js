@@ -1,8 +1,10 @@
 import Link from 'next/link'
 import { signIn, signOut, useSession } from 'next-auth/react'
+import { useRouter } from 'next/router';
 
 function Navbar() {
     const { data: session, status } = useSession()
+    const router = useRouter();
     return (
         <nav className='header'>
             <h1 className='logo'>
@@ -17,7 +19,7 @@ function Navbar() {
                         <a
                             onClick={e => {
                                 e.preventDefault()
-                                signIn();
+                                router.push('/signin');
                             }}>
                             Sign In
                         </a>

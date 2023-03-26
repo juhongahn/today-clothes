@@ -8,17 +8,28 @@ import Link from 'next/link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-
+import { useSession, signIn } from "next-auth/react";
+import { useRouter } from "next/router";
+import { useState, useRef } from "react";
 
 
 export default function SignIn() {
-    const handleSubmit = (event) => {
+    const router = useRouter();
+
+    async function handleSubmit(event) {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
+        const result = await signIn("credentials", {
+            redirect: false,
             email: data.get('email'),
             password: data.get('password'),
         });
+
+        if (!result.error) {
+            router.replace("/");
+        } else {
+            console.log(result.error);
+        }
     };
 
     return (
