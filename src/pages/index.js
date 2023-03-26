@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useSession, getSession } from "next-auth/react";
+import Link from "next/link";
 
 export default function Home() {
 
@@ -7,5 +8,7 @@ export default function Home() {
   console.log(session)
   console.log(status)
 
-  return;
+  return (
+    <Link href="/my-closet">옷장</Link>
+  )
 }
