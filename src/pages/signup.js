@@ -35,8 +35,6 @@ export default function SignUp() {
     const { data: session } = useSession()
     const router = useRouter();
 
-
-
     async function handleSubmit(event) {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
