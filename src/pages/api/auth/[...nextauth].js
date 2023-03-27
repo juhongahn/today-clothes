@@ -2,18 +2,14 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { verifyPassword } from "../../../lib/auth";
 import { PrismaClient } from "@prisma/client";
+import async from './../hello';
 
 let prisma = new PrismaClient();
 
 export default NextAuth({
     providers: [
         CredentialsProvider({
-            // The name to display on the sign in form (e.g. "Sign in with...")
             name: "Credentials",
-            // `credentials` is used to generate a form on the sign in page.
-            // You can specify which fields should be submitted, by adding keys to the `credentials` object.
-            // e.g. domain, username, password, 2FA token, etc.
-            // You can pass any HTML attribute to the <input> tag through the object.
             credentials: {
                 email: { label: "Email", type: "email", placeholder: "jsmith" },
                 password: { label: "Password", type: "password" }
@@ -21,7 +17,6 @@ export default NextAuth({
 
             /** signin() 함수가 호출되면 authorize 메서드가 호출된다. */
             async authorize(credentials, req) {
-
                 const user = await prisma.user.findUnique({
                     where: {
                         email: String(credentials.email),
@@ -43,25 +38,17 @@ export default NextAuth({
                 if (!isValid) {
                     throw new Error('Could not log you in!');
                 }
-                return { email: user.email };
+                return { id: user.id, email: user.email };
             }
         })
     ],
-    callbacks: {
-        async jwt({ token, account, profile, user }) {
-            if (account && user) {
-                console.log(token)
-                console.log(user)
-                token.accessToken = account.access_token;
-                token.accessTokenExpires = account.expires_at;
-                token.refreshToken = account.refresh_token;
 
-            }
-            return token;
-        },
+
+    callbacks: {
+
+
         // 세션에 로그인한 유저 데이터 입력
         async session({ session, token, user }) {
-
             const exUser = await prisma.user.findUnique({
                 where: { email: session.user?.email },
                 select: {
@@ -73,9 +60,7 @@ export default NextAuth({
             // 로그인한 유저 데이터 재정의
             // 단, 기존에 "user"의 형태가 정해져있기 때문에 변경하기 위해서는 타입 재정의가 필요함
             session.user = exUser;
-            session.accessToken = token.accessToken;
-            session.accessTokenExpires = token.accessTokenExpires
-            session.error = token.error
+
             // 여기서 반환한 session값이 "useSession()"의 "data"값이 됨
             return session;
         },
