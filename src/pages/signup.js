@@ -6,34 +6,14 @@ import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { useSession } from "next-auth/react"
 import { useRouter } from 'next/router';
+import { useDaumPostcodePopup } from 'react-daum-postcode';
 
-async function createUser(
-    email,
-    password,
-) {
-    const response = await fetch("/api/auth/signup", {
-        method: "POST",
-        body: JSON.stringify({ email, password }),
-        headers: {
-            "Content-Type": "application/json",
-        },
-    });
 
-    const data = await response.json();
-
-    if (!response.ok) {
-        throw new Error(data.message || "Something went wrong!");
-    }
-
-    return data;
-}
 
 export default function SignUp() {
-
-    const { data: session } = useSession()
     const router = useRouter();
+    const open = useDaumPostcodePopup();
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -42,15 +22,27 @@ export default function SignUp() {
         const email = data.get('email');
         const password = data.get('password');
 
-        try {
-            const result = await createUser(
-                email,
-                password
-            );
-            router.replace("/signin");
-        } catch (error) {
-            console.log(error);
+    };
+
+    function handleComplete(data) {
+        let fullAddress = data.address;
+        let extraAddress = '';
+
+        if (data.addressType === 'R') {
+            if (data.bname !== '') {
+                extraAddress += data.bname;
+            }
+            if (data.buildingName !== '') {
+                extraAddress += extraAddress !== '' ? `, ${data.buildingName}` : data.buildingName;
+            }
+            fullAddress += extraAddress !== '' ? ` (${extraAddress})` : '';
         }
+
+        console.log(fullAddress); // e.g. '서울 성동구 왕십리로2길 20 (성수동1가)'
+    };
+
+    const handleClick = () => {
+        open({ onComplete: handleComplete });
     };
 
     return (
@@ -91,6 +83,9 @@ export default function SignUp() {
                         />
                     </Grid>
                 </Grid>
+                <Button type='button' onClick={handleClick} variant="contained">
+                    Open
+                </Button>
                 <Button
                     type="submit"
                     fullWidth

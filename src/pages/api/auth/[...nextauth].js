@@ -17,28 +17,7 @@ export default NextAuth({
 
             /** signin() 함수가 호출되면 authorize 메서드가 호출된다. */
             async authorize(credentials, req) {
-                const user = await prisma.user.findUnique({
-                    where: {
-                        email: String(credentials.email),
-                    },
-                    select: {
-                        email: true, password: true
-                    },
-                });
 
-                if (!user) {
-                    throw new Error('No user found!');
-                }
-
-                const isValid = await verifyPassword(
-                    credentials.password,
-                    user.password
-                );
-
-                if (!isValid) {
-                    throw new Error('Could not log you in!');
-                }
-                return { id: user.id, email: user.email };
             }
         })
     ],

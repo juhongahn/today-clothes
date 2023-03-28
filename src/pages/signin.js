@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import { useSession, signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useState, useRef } from "react";
+import { style } from '@mui/system';
 
 
 export default function SignIn() {
@@ -44,7 +45,7 @@ export default function SignIn() {
             <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             </Avatar>
             <Typography component="h1" variant="h5">
-                Sign in
+                오늘의 옷
             </Typography>
             <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                 <TextField
@@ -52,7 +53,7 @@ export default function SignIn() {
                     required
                     fullWidth
                     id="email"
-                    label="Email Address"
+                    label="이메일"
                     name="email"
                     autoComplete="email"
                     autoFocus
@@ -62,22 +63,23 @@ export default function SignIn() {
                     required
                     fullWidth
                     name="password"
-                    label="Password"
+                    label="비밀번호"
                     type="password"
                     id="password"
                     autoComplete="current-password"
                 />
                 <FormControlLabel
                     control={<Checkbox value="remember" color="primary" />}
-                    label="Remember me"
+                    label={<Typography styles={style.formControlLabel}>로그인 상태유지</Typography>}
                 />
                 <Button
+                    size="lg"
                     type="submit"
                     fullWidth
                     variant="contained"
-                    sx={{ mt: 3, mb: 2 }}
+                    sx={{ mt: 1, mb: 2 }}
                 >
-                    Sign In
+                    로그인
                 </Button>
                 <Grid container>
                     <Grid item xs>
@@ -86,12 +88,13 @@ export default function SignIn() {
                         </Link>
                     </Grid>
                     <Grid item>
-                        <Link href="#">
-                            {"Sign Up"}
+                        <Link href="/signup">
+                            회원 가입
                         </Link>
                     </Grid>
                 </Grid>
             </Box>
+
         </Box>
     );
 }
