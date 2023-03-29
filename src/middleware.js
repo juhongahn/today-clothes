@@ -1,9 +1,10 @@
-import { getToken } from "next-auth/jwt";
 import { NextResponse } from "next/server";
+import { getToken } from "next-auth/jwt"
 
+const secret = process.env.SECRET;
 
-export async function middleware(req, res, event) {
-    const session = await getToken({ req });
+export async function middleware(req) {
+    const session = await getToken({ req, secret, raw: true })
     const { pathname } = req.nextUrl;
 
     if (pathname.startsWith("/signin") || pathname.startsWith("/signup")) {

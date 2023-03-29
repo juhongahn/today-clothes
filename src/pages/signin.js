@@ -20,18 +20,19 @@ export default function SignIn() {
     async function handleSubmit(event) {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        const result = await signIn("credentials", {
+        const status = await signIn("credentials", {
             redirect: false,
             email: data.get('email'),
             password: data.get('password'),
+            callbackUrl: "/"
         });
-
-        if (!result.error) {
-            router.replace("/");
+        if (status.ok) {
+            router.push('/');
         } else {
-            console.log(result.error);
+            //TOOD: 로그인 폼에 에러 표시.
+            console.log(status);
         }
-    };
+    }
 
     return (
         <Box

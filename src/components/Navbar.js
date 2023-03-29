@@ -31,7 +31,7 @@ function Navbar() {
                             <a
                                 onClick={e => {
                                     e.preventDefault()
-                                    signOut()
+                                    signOut({ redirect: true, callbackUrl: "/signin" })
                                 }}>
                                 Sign Out
                             </a>

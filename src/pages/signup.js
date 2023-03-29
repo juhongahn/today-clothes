@@ -8,19 +8,40 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { useRouter } from 'next/router';
 import { useDaumPostcodePopup } from 'react-daum-postcode';
-
+import { useState, useEffect } from 'react';
 
 
 export default function SignUp() {
     const router = useRouter();
     const open = useDaumPostcodePopup();
+    const [address, setAddress] = useState('');
+
+    const url = "http://localhost:3000/api/auth/signup";
 
     async function handleSubmit(event) {
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
 
-        const email = data.get('email');
-        const password = data.get('password');
+        const data = new FormData(event.currentTarget);
+        const signupData = {
+            email: data.get('email'),
+            password: data.get('password'),
+            address: { fullAddress: address, x: 32, y: 128 },
+        };
+
+        const options = {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(signupData)
+        }
+
+        await fetch(url, options)
+            .then(res => res.json())
+            .catch((error) => {
+                console.log(error)
+            })
+            .then((data) => {
+                if (data) router.push('/signin');
+            })
 
     };
 
@@ -38,7 +59,7 @@ export default function SignUp() {
             fullAddress += extraAddress !== '' ? ` (${extraAddress})` : '';
         }
 
-        console.log(fullAddress); // e.g. '서울 성동구 왕십리로2길 20 (성수동1가)'
+        setAddress(fullAddress);
     };
 
     const handleClick = () => {
@@ -66,7 +87,7 @@ export default function SignUp() {
                             required
                             fullWidth
                             id="email"
-                            label="Email Address"
+                            label="이메일"
                             name="email"
                             autoComplete="email"
                         />
@@ -76,23 +97,36 @@ export default function SignUp() {
                             required
                             fullWidth
                             name="password"
-                            label="Password"
+                            label="비밀번호"
                             type="password"
                             id="password"
                             autoComplete="new-password"
                         />
                     </Grid>
+                    <Grid item xs={12} sm={8}>
+                        <TextField
+                            required
+                            fullWidth
+                            name="주소"
+                            label="주소"
+                            id="address"
+                            value={address}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                        <Button type='button' onClick={handleClick} variant="contained">
+                            Open
+                        </Button>
+                    </Grid>
                 </Grid>
-                <Button type='button' onClick={handleClick} variant="contained">
-                    Open
-                </Button>
+
                 <Button
                     type="submit"
                     fullWidth
                     variant="contained"
                     sx={{ mt: 3, mb: 2 }}
                 >
-                    Sign Up
+                    회원 가입
                 </Button>
                 <Grid container justifyContent="flex-end">
                     <Grid item>
@@ -102,6 +136,6 @@ export default function SignUp() {
                     </Grid>
                 </Grid>
             </Box>
-        </Box>
+        </Box >
     );
 }

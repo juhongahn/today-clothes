@@ -1,61 +1,47 @@
-import { PrismaClient } from '@prisma/client';
 import { hashPassword } from '../../../lib/auth';
+import connectMongo from '../../../../database/conn';
+import Users from '../../../../model/Schema';
 
 export default async function handler(req, res) {
 
-    // Loading prisma client
-    let prisma = new PrismaClient();
+    connectMongo().catch(error => res.json({ error: `Connection Failed...! ${error}` }))
 
-    if (req.method !== 'POST') {
-        return;
-    }
+    if (req.method === 'POST') {
+        const data = req.body;
+        //if (!data) return res.status(404).json({ error: "Don't have form data...!" });
+        const { email, password, address } = data;
 
-    const data = req.body;
-    const { email, password } = data;
-
-    /* 유효성 검사 */
-    if (
-        !email ||
-        !email.includes('@') ||
-        !password ||
-        password.trim().length < 7
-    ) {
-        res.status(422).json({
-            message:
-                'password should also be at least 7 characters long.',
-            error: true,
-        });
-        return;
-    }
-
-    /* 이미 존재하는 계정인지 검사 */
-    const existingUser = await prisma.user.findUnique({
-        where: {
-            email: email,
-        },
-        select: {
-            email: true
+        /* 유효성 검사 */
+        if (
+            !email ||
+            !email.includes('@') ||
+            !password ||
+            password.trim().length < 7 ||
+            !address
+        ) {
+            return res.status(422).json({
+                message:
+                    'password should also be at least 7 characters long.',
+                error: true,
+            });
         }
+
+        /* 이미 존재하는 계정인지 검사 */
+        const checkExisting = await Users.findOne({ email })
+        if (checkExisting) {
+            return res.status(422).json({ message: 'User Email already exists!', error: true });
+        }
+        const hashedPassword = await hashPassword(password);
+
+        Users.create({ email, password: hashedPassword, address })
+            .then(data => {
+                return res.status(201).json({ status: true, user: data })
+            })
+            .catch((err) => {
+                return res.status(422).json({ err: 'Error occured Createing with: ' + err });
+            });
     }
-    );
-
-    if (existingUser) {
-        res.status(422).json({ message: 'User Email already exists!', error: true });
-        return;
-    }
-
-    const hashedPassword = await hashPassword(password);
-
-    const result = await prisma.user.create({
-        data: {
-            email: email,
-            password: hashedPassword,
-        },
-    });
-
-    if (result) {
-        res.status(201).json({ message: 'Created user!', error: false });
-    } else {
-        res.status(422).json({ message: 'Prisma error occured', error: true })
+    else {
+        res.status(500).json({ message: "HTTP method not vaild only POST Accepted" })
     }
 }
