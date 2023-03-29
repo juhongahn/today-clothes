@@ -8,7 +8,8 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { useRouter } from 'next/router';
 import { useDaumPostcodePopup } from 'react-daum-postcode';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { convertAddress } from '@/lib/addressConvert';
 
 
 export default function SignUp() {
@@ -19,13 +20,22 @@ export default function SignUp() {
     const url = "http://localhost:3000/api/auth/signup";
 
     async function handleSubmit(event) {
+        let x, y;
         event.preventDefault();
-
+        console.log(address)
         const data = new FormData(event.currentTarget);
+
+        await convertAddress(address)
+            .then(res => {
+                x = res.x
+                y = res.y
+            });
+
+
         const signupData = {
             email: data.get('email'),
             password: data.get('password'),
-            address: { fullAddress: address, x: 32, y: 128 },
+            address: { fullAddress: address, x: x, y: y },
         };
 
         const options = {
