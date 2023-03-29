@@ -26,6 +26,7 @@ export default function SignIn() {
             password: data.get('password'),
             callbackUrl: "/"
         });
+
         if (status.ok) {
             router.push('/');
         } else {

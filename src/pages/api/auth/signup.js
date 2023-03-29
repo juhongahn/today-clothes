@@ -4,11 +4,10 @@ import Users from '../../../../model/Schema';
 
 export default async function handler(req, res) {
 
-    connectMongo().catch(error => res.json({ error: `Connection Failed...! ${error}` }))
-
+    connectMongo().catch(error => res.json({ error: `Connection Failed...! ${error}` }));
     if (req.method === 'POST') {
         const data = req.body;
-        //if (!data) return res.status(404).json({ error: "Don't have form data...!" });
+        if (!data) return res.status(404).json({ error: "Don't have form data...!" });
         const { email, password, address } = data;
 
         /* 유효성 검사 */

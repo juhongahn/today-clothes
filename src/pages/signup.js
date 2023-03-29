@@ -20,9 +20,8 @@ export default function SignUp() {
     const url = "http://localhost:3000/api/auth/signup";
 
     async function handleSubmit(event) {
-        let x, y;
         event.preventDefault();
-        console.log(address)
+        let x, y;
         const data = new FormData(event.currentTarget);
 
         await convertAddress(address)
@@ -40,17 +39,19 @@ export default function SignUp() {
 
         const options = {
             method: "POST",
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+            },
             body: JSON.stringify(signupData)
         }
 
         await fetch(url, options)
             .then(res => res.json())
-            .catch((error) => {
-                console.log(error)
-            })
             .then((data) => {
                 if (data) router.push('/signin');
+            })
+            .catch((error) => {
+                console.log(error)
             })
 
     };

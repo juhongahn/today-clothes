@@ -5,14 +5,27 @@ import Link from "next/link";
 import Image from 'next/image';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button'
-import fetchWeather from "@/lib/fetchWeather";
+
+const url = "http://localhost:3000/api/fetch-weather";
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
   const { data: session, status } = useSession();
 
-  function showTodayCloth() {
-    fetchWeather();
+  async function fetchWeather() {
+    console.log("called");
+
+    const options = {
+      method: "POST",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: session.user.email })
+    }
+
+    await fetch(url, options)
+      .then(res => res.json())
+      .then(data => {
+        console.log(data);
+      })
   }
 
   return (
@@ -21,9 +34,7 @@ export default function Home() {
         <Grid item xs={12} md={12}>
           <Button
             variant="contained"
-            onClick={() => {
-              showTodayCloth();
-            }}
+            onClick={fetchWeather}
           >
             오늘의 옷
           </Button>
