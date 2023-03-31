@@ -1,29 +1,49 @@
 import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from 'next/link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import { useSession, signIn } from "next-auth/react";
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useState, useRef } from "react";
+import { useState } from 'react';
 import { style } from '@mui/system';
+import {
+    Grid,
+    Box,
+    Typography,
+    Avatar,
+    Button,
+    TextField,
+} from '@mui/material';
 
+const validationSchema = yup.object({
+    email: yup.string()
+      .required('이메일을 입력해 주세요'),
+    password: yup.string()
+      .required('비밀번호를 입력해 주세요'),
+  });
 
 export default function SignIn() {
     const router = useRouter();
+    const [signinError, setSigninError] = useState(false);
+    const [errorMsg, setErrorMsg] = useState(false);
+    const formik = useFormik({
+        initialValues: {
+          email: '',
+          password: '',
+        },
+        validationSchema: validationSchema,
 
-    async function handleSubmit(event) {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
+        onSubmit: (values) => {
+            handleSignin(values);
+        },
+      });
+
+    async function handleSignin(data) {
+
         const status = await signIn("credentials", {
             redirect: false,
-            email: data.get('email'),
-            password: data.get('password'),
+            email: data.email,
+            password: data.password,
             callbackUrl: "/"
         });
 
@@ -32,6 +52,8 @@ export default function SignIn() {
         } else {
             //TOOD: 로그인 폼에 에러 표시.
             console.log(status);
+            setErrorMsg(status.error);
+            setSigninError(true);
         }
     }
 
@@ -46,34 +68,40 @@ export default function SignIn() {
         >
             <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             </Avatar>
+
             <Typography component="h1" variant="h5">
                 오늘의 옷
             </Typography>
-            <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+            <Box component="form" onSubmit={formik.handleSubmit} sx={{ mt: 1 }}>
                 <TextField
                     margin="normal"
-                    required
                     fullWidth
                     id="email"
                     label="이메일"
                     name="email"
                     autoComplete="email"
                     autoFocus
+                    value={formik.values.email}
+                    onChange={formik.handleChange}
+                    error={formik.touched.email && Boolean(formik.errors.email)}
+                    helperText={formik.touched.email && formik.errors.email}
                 />
                 <TextField
                     margin="normal"
-                    required
                     fullWidth
                     name="password"
                     label="비밀번호"
                     type="password"
                     id="password"
                     autoComplete="current-password"
+                    value={formik.values.password}
+                    onChange={formik.handleChange}
+                    error={formik.touched.password && Boolean(formik.errors.password)}
+                    helperText={formik.touched.password && formik.errors.password}
                 />
-                <FormControlLabel
-                    control={<Checkbox value="remember" color="primary" />}
-                    label={<Typography styles={style.formControlLabel}>로그인 상태유지</Typography>}
-                />
+                {signinError && <div className="error-msg">
+                    {errorMsg}
+                </div>}
                 <Button
                     size="lg"
                     type="submit"
@@ -96,7 +124,12 @@ export default function SignIn() {
                     </Grid>
                 </Grid>
             </Box>
-
+            <style jsx>{`
+                    .error-msg{
+                        font-size: 1.5vw;
+                        color: red;
+                    }
+                `}</style>
         </Box>
     );
 }

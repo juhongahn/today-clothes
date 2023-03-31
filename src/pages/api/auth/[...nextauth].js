@@ -15,11 +15,11 @@ export default NextAuth({
                 // 유저 체크
                 const result = await Users.findOne({ email: credentials.email })
                 if (!result) {
-                    throw new Error("No user Found with Email Please Sign Up");
+                    throw new Error("없는 이메일 입니다. 회원가입을 해주세요");
                 }
                 const checkPassword = await verifyPassword(credentials.password, result.password);
                 if (!checkPassword || result.email !== credentials.email) {
-                    throw new Error("Email or Password doesn't match");
+                    throw new Error("이메일과 비밀번호가 일치하지 않습니다.");
                 }
 
                 return result;

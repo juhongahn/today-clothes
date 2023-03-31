@@ -1,62 +1,64 @@
 import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
+import { Grid, Box, Typography, Avatar, Button, TextField } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useDaumPostcodePopup } from 'react-daum-postcode';
 import { useState } from 'react';
-import { convertAddress } from '@/lib/addressConvert';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+import Link from 'next/link'
 
+const validationSchema = yup.object({
+    email: yup.string()
+      .email('유효한 이메일을 입력해 주세요')
+      .required('이메일을 입력해 주세요'),
+    password: yup.string()
+      .min(7, '7글자 이상 입력해 주세요')
+      .required('비밀번호를 입력해 주세요'),
+    passwordConfirmation: yup.string()
+      .required('비밀번호를 입력해 주세요')
+      .oneOf([yup.ref('password'), null], '비밀번호와 일치하지 않습니다'),
+    address: yup.string()
+      .required('주소를 입력해 주세요')
+  });
+
+const url = "/api/auth/signup";
 
 export default function SignUp() {
     const router = useRouter();
     const open = useDaumPostcodePopup();
     const [address, setAddress] = useState('');
 
-    const url = "http://localhost:3000/api/auth/signup";
+    const formik = useFormik({
+        initialValues: {
+          email: '',
+          password: '',
+          passwordConfirmation: '',
+          address: '',
+        },
+        validationSchema: validationSchema,
 
-    async function handleSubmit(event) {
-        event.preventDefault();
-        let x, y;
-        const data = new FormData(event.currentTarget);
+        onSubmit: (values) => {
+            submitSignup(values);
+        },
+      });
 
-        await convertAddress(address)
-            .then(res => {
-                x = res.x
-                y = res.y
-            });
-
-
-        const signupData = {
-            email: data.get('email'),
-            password: data.get('password'),
-            address: { fullAddress: address, x: x, y: y },
-        };
-
+    async function submitSignup(data) {
         const options = {
             method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(signupData)
+            headers: {'Content-Type': 'application/json',},
+            body: JSON.stringify(data)
         }
 
-        await fetch(url, options)
-            .then(res => res.json())
-            .then((data) => {
-                if (data) router.push('/signin');
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-
+        const res = await fetch(url, options);
+        if (!res.ok) {
+            const { error } = await res.json();
+            alert(error.message);
+            return;
+        }
+        router.push('/signin');
     };
 
-    function handleComplete(data) {
+    function handleAddressInput(data) {
         let fullAddress = data.address;
         let extraAddress = '';
 
@@ -69,12 +71,12 @@ export default function SignUp() {
             }
             fullAddress += extraAddress !== '' ? ` (${extraAddress})` : '';
         }
-
+        formik.values.address = fullAddress;
         setAddress(fullAddress);
     };
 
-    const handleClick = () => {
-        open({ onComplete: handleComplete });
+    const handleAddressPopup = () => {
+        open({ onComplete: handleAddressInput });
     };
 
     return (
@@ -91,7 +93,7 @@ export default function SignUp() {
             <Typography component="h1" variant="h5">
                 회원 가입
             </Typography>
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+            <Box component="form" noValidate onSubmit={formik.handleSubmit} sx={{ mt: 3 }}>
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <TextField
@@ -101,31 +103,54 @@ export default function SignUp() {
                             label="이메일"
                             name="email"
                             autoComplete="email"
+                            value={formik.values.email}
+                            onChange={formik.handleChange}
+                            error={formik.touched.email && Boolean(formik.errors.email)}
+                            helperText={formik.touched.email && formik.errors.email}
                         />
                     </Grid>
                     <Grid item xs={12}>
                         <TextField
-                            required
                             fullWidth
                             name="password"
-                            label="비밀번호"
+                            label="비밀번호(7글자 이상 입력해 주세요)"
                             type="password"
                             id="password"
                             autoComplete="new-password"
+                            value={formik.values.password}
+                            onChange={formik.handleChange}
+                            error={formik.touched.password && Boolean(formik.errors.password)}
+                            helperText={formik.touched.password && formik.errors.password}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            fullWidth
+                            name="passwordConfirmation"
+                            label="비밀번호 확인"
+                            type="password"
+                            id="passwordConfirmation"
+                            autoComplete="new-password"
+                            value={formik.values.passwordConfirmation}
+                            onChange={formik.handleChange}
+                            error={formik.touched.passwordConfirmation && Boolean(formik.errors.passwordConfirmation)}
+                            helperText={formik.touched.passwordConfirmation && formik.errors.passwordConfirmation}
                         />
                     </Grid>
                     <Grid item xs={12} sm={8}>
                         <TextField
-                            required
                             fullWidth
-                            name="주소"
+                            name="address"
                             label="주소"
                             id="address"
                             value={address}
+                            onChange={formik.handleChange}
+                            error={formik.touched.address && Boolean(formik.errors.address)}
+                            helperText={formik.touched.address && formik.errors.address}
                         />
                     </Grid>
                     <Grid item xs={12} sm={4}>
-                        <Button type='button' onClick={handleClick} variant="contained">
+                        <Button type='button' onClick={handleAddressPopup} variant="contained">
                             Open
                         </Button>
                     </Grid>
@@ -142,7 +167,7 @@ export default function SignUp() {
                 <Grid container justifyContent="flex-end">
                     <Grid item>
                         <Link href="/signin" variant="body2">
-                            Already have an account? Sign in
+                            로그인 페이지로 가기
                         </Link>
                     </Grid>
                 </Grid>
