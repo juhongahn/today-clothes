@@ -5,11 +5,17 @@ import { useRouter } from 'next/router';
 function Navbar() {
     const { data: session, status } = useSession()
     const router = useRouter();
+
+    async function handleSignOut() {
+        const data = await signOut({redirect: false, callbackUrl: "/signin"});
+        router.push(data.url);
+    }
+
     return (
         <nav className='header'>
             <h1 className='logo'>
                 <Link href='/' legacyBehavior>
-                    <a>Home</a>
+                    <a>오늘의 옷</a>
                 </Link>
             </h1>
             <ul className={`main-nav ${!session && status === "loading" ? 'loading' : 'loaded'}`}>
@@ -27,15 +33,14 @@ function Navbar() {
                 )}
                 {status === "authenticated" && (
                     <li>
-                        <Link href='/api/auth/signout' legacyBehavior>
+                        <button legacyBehavior>
                             <a
                                 onClick={e => {
-                                    e.preventDefault()
-                                    signOut({ redirect: true, callbackUrl: "/signin" })
+                                    handleSignOut();
                                 }}>
                                 Sign Out
                             </a>
-                        </Link>
+                        </button>
                     </li>
                 )}
             </ul>

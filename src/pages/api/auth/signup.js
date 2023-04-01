@@ -72,7 +72,7 @@ export default async function handler(req, res) {
         } catch (err) {
             return res.status(500).json({
                 error: {
-                    message: `잘못된 요청입니다`
+                    message: `회원가입을 진행하는데 에러가 발생했습니다`
                 }
             })
         }

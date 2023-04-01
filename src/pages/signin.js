@@ -5,7 +5,7 @@ import * as yup from 'yup';
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useState } from 'react';
-import { style } from '@mui/system';
+import Head from 'next/head'
 import {
     Grid,
     Box,
@@ -26,6 +26,8 @@ export default function SignIn() {
     const router = useRouter();
     const [signinError, setSigninError] = useState(false);
     const [errorMsg, setErrorMsg] = useState(false);
+    const [loading, setLoading] = useState(false);
+
     const formik = useFormik({
         initialValues: {
           email: '',
@@ -39,7 +41,7 @@ export default function SignIn() {
       });
 
     async function handleSignin(data) {
-
+        setLoading(true);
         const status = await signIn("credentials", {
             redirect: false,
             email: data.email,
@@ -58,20 +60,29 @@ export default function SignIn() {
     }
 
     return (
+        <>
+        <Head>
+            <title>로그인</title>
+        </Head>
+        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            </Avatar>
+
+            <Typography component="h1" variant="h5">
+                오늘의 옷
+            </Typography>
+
         <Box
             sx={{
                 marginTop: 8,
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
+                border: '1px solid #c6c6c6',
+                borderRadius: '10px',
+                padding: 4
             }}
         >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            </Avatar>
-
-            <Typography component="h1" variant="h5">
-                오늘의 옷
-            </Typography>
+            
             <Box component="form" onSubmit={formik.handleSubmit} sx={{ mt: 1 }}>
                 <TextField
                     margin="normal"
@@ -99,15 +110,17 @@ export default function SignIn() {
                     error={formik.touched.password && Boolean(formik.errors.password)}
                     helperText={formik.touched.password && formik.errors.password}
                 />
-                {signinError && <div className="error-msg">
-                    {errorMsg}
-                </div>}
+                {signinError &&
+                    <div className="error-msg">
+                        {errorMsg}
+                    </div>
+                }
                 <Button
-                    size="lg"
                     type="submit"
                     fullWidth
                     variant="contained"
                     sx={{ mt: 1, mb: 2 }}
+                    size="large"
                 >
                     로그인
                 </Button>
@@ -131,5 +144,6 @@ export default function SignIn() {
                     }
                 `}</style>
         </Box>
+        </>
     );
 }

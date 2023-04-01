@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { useSession } from "next-auth/react";
+import { authOptions } from '../pages/api/auth/[...nextauth]'
+import { getServerSession } from "next-auth/next"
+import Head from 'next/head'
 import Link from "next/link";
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button'
+import WeatherCard from '../components/WeatherCard'
 
-const url = "http://localhost:3000/api/fetch-weather";
+const url = "http://localhost:3000/api/weather";
 
 function makeScript(weatherData) {
   const { result } = weatherData;
@@ -15,25 +18,25 @@ function makeScript(weatherData) {
   return script;
 }
 
-export default function Home() {
-  const [loading, setLoading] = useState(true);
-  const { data: session, status } = useSession();
-  async function fetchWeather() {
-    const options = {
-      method: "POST",
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: session.user.email })
-    }
+export default function Home({ weatherData }) {
+  const weatherArray = weatherData.item;
+  const currentHour = new Date().getHours();
+  const currentWeatherArray = weatherArray.filter(weather => Number(weather.fcstTime.substr(0,2)) === currentHour)
 
-    let weatherData = await fetch(url, options)
-      .then(res => res.json())
-      .then(data => {
-        return data;
-      })
+  const skyObj = currentWeatherArray.find(weather => weather.category === 'SKY')
+  const pcpObj = currentWeatherArray.find(weather => weather.category === 'PCP')
+  const snoObj = currentWeatherArray.find(weather => weather.category === 'SNO')
+  const tmpObj = currentWeatherArray.find(weather => weather.category === 'TMP')
+  const wsdObj = currentWeatherArray.find(weather => weather.category === 'WSD')
 
-    await generate(weatherData);
+  const curWeatherObj = {
+    sky: skyObj,
+    pop: pcpObj,
+    sno: snoObj,
+    tmp: tmpObj,
+    wsd: wsdObj,
   }
-
+  console.log(curWeatherObj);
   async function generate(weatherData) {
     try {
       const response = await fetch("/api/generate", {
@@ -58,11 +61,14 @@ export default function Home() {
 
   return (
     <div>
+      <Head>
+            <title>오늘의 옷</title>
+        </Head>
       <Grid container spacing={2}>
         <Grid item xs={12} md={12}>
           <Button
             variant="contained"
-            onClick={fetchWeather}
+            fullWidth
           >
             오늘의 옷
           </Button>
@@ -73,7 +79,31 @@ export default function Home() {
         <Grid item xs={6}>
           <div>asdas</div>
         </Grid>
+
+        <Grid>
+          <WeatherCard weather={curWeatherObj}/>
+        </Grid>
       </Grid>
     </div>
   )
 }
+
+export async function getServerSideProps(context) {
+  const session = await getServerSession(context.req, context.res, authOptions)
+
+  const options = {
+    method: "POST",
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: session.user.email })
+  }
+  const response = await fetch(url, options);
+  const {data} = await response.json();
+
+  return {
+    props: {
+      weatherData: data,
+    }
+  }
+
+}
+

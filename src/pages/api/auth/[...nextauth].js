@@ -4,7 +4,7 @@ import connectMongo from "../../../../database/conn";
 import Users from "../../../../model/Schema";
 import { verifyPassword } from "../../../lib/auth";
 
-export default NextAuth({
+export const authOptions = {
     providers: [
         CredentialsProvider({
             name: "Credentials",
@@ -36,11 +36,11 @@ export default NextAuth({
             return session;
         },
     },
-    session: {
-        strategy: 'jwt'
-    },
-
+    // session: {
+    //     strategy: 'jwt'
+    // },
     secret: process.env.NEXTAUTH_SECRET,
+}
 
-})
+export default NextAuth(authOptions);
 

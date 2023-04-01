@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { clothes } from './../../public/clothes';
+import { clothes } from '../lib/clothes';
 import { DndContext } from '@dnd-kit/core';
 import Droppable from '../components/Droppable';
 import Draggable from '../components/Draggable';

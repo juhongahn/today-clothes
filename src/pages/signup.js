@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import Link from 'next/link'
+import Head from 'next/head'
 
 const validationSchema = yup.object({
     email: yup.string()
@@ -80,19 +81,28 @@ export default function SignUp() {
     };
 
     return (
+
+        <>
+        <Head>
+            <title>회원가입</title>
+        </Head>
+        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            </Avatar>
+            <Typography component="h1" variant="h5">
+                회원 가입
+            </Typography>
         <Box
             sx={{
                 marginTop: 8,
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
+                border: '1px solid #c6c6c6',
+                borderRadius: '10px',
+                padding: 4
             }}
         >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            </Avatar>
-            <Typography component="h1" variant="h5">
-                회원 가입
-            </Typography>
+            
             <Box component="form" noValidate onSubmit={formik.handleSubmit} sx={{ mt: 3 }}>
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
@@ -161,6 +171,7 @@ export default function SignUp() {
                     fullWidth
                     variant="contained"
                     sx={{ mt: 3, mb: 2 }}
+                    size="large"
                 >
                     회원 가입
                 </Button>
@@ -173,5 +184,6 @@ export default function SignUp() {
                 </Grid>
             </Box>
         </Box >
+        </>
     );
 }

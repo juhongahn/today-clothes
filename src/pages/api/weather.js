@@ -7,15 +7,15 @@ export default async function handler(req, res) {
 
     connectMongo().catch(error => res.json({
         error: {
-            message: `DB connetion error: ${error}`
+            message: `DB 연결에 실패했습니다`
         }
     }));
 
     if (req.method === 'POST') {
         const data = req.body;
-        if (!data) return res.status(404).json({
+        if (!data) return res.status(401).json({
             error: {
-                message: "Don't have form data"
+                message: "요청 권한이 없습니다"
             }
         });
 
@@ -25,35 +25,37 @@ export default async function handler(req, res) {
         const user = await Users.findOne({ email: email });
         if (!user) return res.status(422).json({
             error: {
-                message: "Not existing User"
+                message: "존재하지 않는 유저 입니다"
             }
         });
 
-        const encodedQurey = weatherUrl + '?' + getRequestURL(user.address.x, user.address.y, baseDate);
-        const todayWeatherArray = await fetch(encodedQurey, {
+        const encodedQureyUrl = weatherUrl + '?' + getRequestURL(user.address.x, user.address.y, baseDate);
+        const response = await fetch(encodedQureyUrl, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             },
         })
-            .then(res => res.json())
-            .then(data => {
-                const todayWeatherArray = data.response.body.items.item
-                    .filter(weather => weather.fcstDate === baseDate);
-                return todayWeatherArray;
-            })
-            .catch(error => res.status(500).json({
+        if (response.ok) {
+            const data = await response.json();
+            console.log(data)
+            const result = data.response.body.items;
+            // const todayWeatherArray = data.response.body.items.item
+            //     .filter(weather => weather.fcstDate === baseDate);
+            
+            // const weatherData = getWeatherData(todayWeatherArray);
+            res.status(200).json({
+                data: result,
+            });
+        } else {
+            const { error } = await response.json();
+            res.status(500).json({
                 error: {
-                    message: `Error occured: ${error}`
+                    message: '데이터를 요청하는데 실패 했습니다'
                 }
-            }));
-
-        const weatherData = getWeatherData(todayWeatherArray);
-        res.status(200).json({
-            result: weatherData,
-        })
-
+            })
+        }
     } else {
         res.status(500).json({
             error: {
@@ -73,19 +75,9 @@ function getWeatherData(todayWeatherArray) {
     // 최저기온
     let TMN = todayWeatherArray.find(element =>
         element.category === 'TMN'
-    );
+    ).fcstValue;
 
-    if (TMN === undefined) {
-        const fcstValArray = todayWeatherArray
-            .filter(weather => weather.category === 'TMP')
-            .map(weather => {
-                return weather.fcstValue;
-            });
-        TMN = Math.min.apply(null, fcstValArray);
-    } else {
-        TMN = TMN.fcstValue;
-    }
-
+    // 강수확률
     let POP = todayWeatherArray.find(element =>
         element.category === 'POP' && element.fcstValue > 0
     )
@@ -104,14 +96,19 @@ function getWeatherData(todayWeatherArray) {
 }
 
 /**
- * 오늘 기준 yyyymmdd 반환하는 함수 
+ * 오늘 yyyymmdd 반환하는 함수 
  * @returns '20230330'
  */
 function getBaseDate() {
-    const date = new Date();
-    const year = date.getFullYear();
-    const month = ("0" + (1 + date.getMonth())).slice(-2);
-    const day = ("0" + date.getDate()).slice(-2);
+    let date = new Date();
+    const hours = date.getHours();
+    if (hours < 2) {    // 02시 이전 이라면 전날 02시 자료를 사용해야한다. 
+        date.setDate(date.getDate() - 1)
+    }
+    
+    let year = date.getFullYear();
+    let month = ("0" + (1 + date.getMonth())).slice(-2);
+    let day = ("0" + date.getDate()).slice(-2);
     return year + month + day;
 }
 
@@ -127,7 +124,7 @@ function getRequestURL(x, y, baseDate) {
     const dataType = 'JSON';
 
     const base_date = baseDate;
-    const base_time = '0500'
+    const base_time = '0200'
     const nx = x;
     const ny = y;
     const query = `serviceKey=${serviceKey}&pageNo=${pageNo}&numOfRows=${numOfRows}&dataType=${dataType}&base_date=${base_date}&base_time=${base_time}&nx=${nx}&ny=${ny}`;
