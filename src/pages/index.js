@@ -12,6 +12,23 @@ import WeatherCard from '../components/WeatherCard'
 const url = "http://localhost:3000/api/weather";
 
 export default function Home({ weatherData }) {
+
+  const handlePlay = async () => {
+    console.log('called')
+
+      try {
+        await fetch('/api/generate-speech', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ text: 'hi!' }),
+        });
+      } catch (error) {
+        console.error(error);
+      }
+  };
+
   const weatherArray = weatherData.item;
 
   async function generate() {
@@ -48,7 +65,7 @@ export default function Home({ weatherData }) {
           <Button
             variant="contained"
             fullWidth
-            onClick={generate}
+            onClick={handlePlay}
           >
             오늘의 옷
           </Button>

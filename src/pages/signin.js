@@ -77,9 +77,11 @@ export default function SignIn() {
             </Head>
             
             <div className="signin-container">
-                    <Paper elevation={3} sx={{
+                    <Paper elevation={6} sx={{
                         width: '50%',
                         height: '70%',
+                        borderRadius: '15px',
+                        overflow: 'hidden'
                     }}>
                     <Grid container
                         justifyContent="center"
@@ -92,13 +94,18 @@ export default function SignIn() {
                             item
                             sm={4}
                             md={6.5}
-                            display={{ xs: "none", sm:'blcok', md:'block', lg: "block" }}
+                            display={{
+                                xs: "none", sm: 'blcok', md: 'block', lg: "block",
+                            }}
+                            sx={{
+                                backgroundColor: 'skyblue', height: '100%', 
+                            }}
                         >
                             <Lottie 
                                 loop
                                 animationData={lottieJson}
                                 play
-                                style={{ width: '100%', height: '100%' }}
+                                style={{width: '100%', height: '100%'}}
                             />
                         </Box>
                            
@@ -108,10 +115,7 @@ export default function SignIn() {
                                 <Typography variant="h3" gutterBottom sx={{textAlign: 'center',}}>
                                     오늘의 옷
                                 </Typography>
-                                <Typography variant="body1" gutterBottom sx={{textAlign: 'center',}}>
-                                    더 이상 날씨에 맞지 않는 옷으로 고생하지 마세요,
-                                    '오늘의 옷'이 날씨에 따라 하루 옷차림을 알려줍니다!   
-                                </Typography>
+                                
                             </ThemeProvider>
                                 
                                 <TextField
