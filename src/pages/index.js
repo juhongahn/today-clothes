@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { authOptions } from '../pages/api/auth/[...nextauth]'
 import { getServerSession } from "next-auth/next"
-import { getCurrentWeather, getWeatherScriptData } from '../lib/weatherUtils'
+import { getCurrentWeather, getWeatherScript } from '../lib/weatherUtils'
 import Head from 'next/head'
 import Link from "next/link";
 import Grid from '@mui/material/Grid';
@@ -13,7 +13,8 @@ const url = "http://localhost:3000/api/weather";
 
 export default function Home({ weatherData }) {
 
-  const handlePlay = async () => {
+  
+  const handlePlay = async (result) => {
     console.log('called')
 
       try {
@@ -22,17 +23,17 @@ export default function Home({ weatherData }) {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ text: 'hi!' }),
+          body: JSON.stringify({ text: result }),
         });
       } catch (error) {
         console.error(error);
       }
   };
-
   const weatherArray = weatherData.item;
 
   async function generate() {
-    const script = getWeatherScriptData(weatherArray);
+
+    const script = getWeatherScript(weatherArray);
 
     try {
       const response = await fetch("/api/generate", {
@@ -43,11 +44,11 @@ export default function Home({ weatherData }) {
         body: JSON.stringify({ sentence: script }),
       });
 
-      const data = await response.json();
+      const {result} = await response.json();
       if (response.status !== 200) {
         throw data.error || new Error(`Request failed with status ${response.status}`);
       }
-      console.log(data)
+      handlePlay(result);
     } catch (error) {
       // Consider implementing your own error handling logic here
       console.error(error);
@@ -65,7 +66,7 @@ export default function Home({ weatherData }) {
           <Button
             variant="contained"
             fullWidth
-            onClick={handlePlay}
+            onClick={generate}
           >
             오늘의 옷
           </Button>

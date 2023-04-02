@@ -10,17 +10,16 @@ export default async function handler(
     try {
         // Imports the Google Cloud client library
         // Import other required libraries
-        console.log('called')
         // Creates a client
         const client = new textToSpeech.TextToSpeechClient();
         // The text to synthesize
-        const text = 'hello, world!';
+        const { text } = req.body;
   
         // Construct the request
         const request = {
             input: { text: text },
             // Select the language and SSML voice gender (optional)
-            voice: { languageCode: 'en-US', ssmlGender: 'NEUTRAL' },
+            voice: { languageCode: 'ko-KR', name: 'ko-KR-Neural2-A' },
             // select the type of audio encoding
             audioConfig: { audioEncoding: 'MP3' },
         };
