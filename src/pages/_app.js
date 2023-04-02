@@ -7,11 +7,22 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
   return (
     
     <SessionProvider session={session}>
-      <Container fixed maxWidth="xs">
         <Layout>
           <Component {...pageProps} />
         </Layout>
-      </Container>
+        <style global jsx>{`
+          html,
+          body,
+          body > div:first-child,
+          div#__next,
+          div#__next > div{
+            padding: 0;
+            height: 100vh;
+            margin: 0px;
+          }
+            
+          `}</style> 
+
     </SessionProvider >
 
   )

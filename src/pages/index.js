@@ -60,9 +60,9 @@ export default function Home({ weatherData }) {
           <div>asdas</div>
         </Grid>
 
-        <Grid>
+        {/* <Grid>
           <WeatherCard weather={curWeatherObj}/>
-        </Grid>
+        </Grid> */}
       </Grid>
     </div>
   )
