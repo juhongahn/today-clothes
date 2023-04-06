@@ -1,5 +1,13 @@
 import * as React from 'react';
-import { Grid, Box, Typography, Avatar, Button, TextField } from '@mui/material';
+import {
+    Grid,
+    Box,
+    Typography,
+    Avatar,
+    Button,
+    TextField,
+    Container
+} from '@mui/material';
 import { useRouter } from 'next/router';
 import { useDaumPostcodePopup } from 'react-daum-postcode';
 import { useState } from 'react';
@@ -85,7 +93,8 @@ export default function SignUp() {
         <>
         <Head>
             <title>회원가입</title>
-        </Head>
+            </Head>
+        <Container maxWidth="sm">
         <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             </Avatar>
             <Typography component="h1" variant="h5">
@@ -183,7 +192,8 @@ export default function SignUp() {
                     </Grid>
                 </Grid>
             </Box>
-        </Box >
+            </Box >
+                </Container>
         </>
     );
 }

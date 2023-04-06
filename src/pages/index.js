@@ -18,23 +18,28 @@ export default function Home({ weatherData }) {
     console.log('called')
 
       try {
-        await fetch('/api/generate-speech', {
+        const response = await fetch('/api/generate-speech', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({ text: result }),
         });
+        const audioData = await response.arrayBuffer();
+        const audioContext = new AudioContext();
+        const audioBuffer = await audioContext.decodeAudioData(audioData);
+        const audioSource = audioContext.createBufferSource();
+        audioSource.buffer = audioBuffer;
+        audioSource.connect(audioContext.destination);
+        audioSource.start(0);
       } catch (error) {
         console.error(error);
       }
   };
+
   const weatherArray = weatherData.item;
-
   async function generate() {
-
     const script = getWeatherScript(weatherArray);
-
     try {
       const response = await fetch("/api/generate", {
         method: "POST",
@@ -43,7 +48,6 @@ export default function Home({ weatherData }) {
         },
         body: JSON.stringify({ sentence: script }),
       });
-
       const {result} = await response.json();
       if (response.status !== 200) {
         throw data.error || new Error(`Request failed with status ${response.status}`);
