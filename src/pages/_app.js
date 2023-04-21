@@ -16,7 +16,6 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
           div#__next,
           div#__next > div{
             padding: 0;
-            height: 100vh;
             margin: 0px;
           }
           `}</style> 

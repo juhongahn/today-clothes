@@ -6,7 +6,7 @@ import {
     Avatar,
     Button,
     TextField,
-    Container
+    Paper
 } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useDaumPostcodePopup } from 'react-daum-postcode';
@@ -15,6 +15,7 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import Link from 'next/link'
 import Head from 'next/head'
+import Image from 'next/image';
 
 const validationSchema = yup.object({
     email: yup.string()
@@ -91,109 +92,114 @@ export default function SignUp() {
     return (
 
         <>
-        <Head>
-            <title>회원가입</title>
-            </Head>
-        <Container maxWidth="sm">
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            </Avatar>
-            <Typography component="h1" variant="h5">
-                회원 가입
-            </Typography>
-        <Box
-            sx={{
-                marginTop: 8,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                border: '1px solid #c6c6c6',
-                borderRadius: '10px',
-                padding: 4
-            }}
-        >
-            
-            <Box component="form" noValidate onSubmit={formik.handleSubmit} sx={{ mt: 3 }}>
-                <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                        <TextField
-                            required
-                            fullWidth
-                            id="email"
-                            label="이메일"
-                            name="email"
-                            autoComplete="email"
-                            value={formik.values.email}
-                            onChange={formik.handleChange}
-                            error={formik.touched.email && Boolean(formik.errors.email)}
-                            helperText={formik.touched.email && formik.errors.email}
-                        />
+            <Head>
+                <title>오늘의 옷 : 회원가입</title>
+                </Head>
+            <Image
+                src="/image/signin_bg.jpg"
+                alt="로그인 배경 이미지"
+                fill
+                style={{
+                    opacity: 0.5,
+                    objectFit: 'cover',
+                    zIndex: -1,
+                }}
+            />
+            <Paper
+                elevation={6}
+                sx={{
+                    marginTop: 8,
+                    padding: 4,
+                    borderRadius: '15px',
+                    opacity: 0.8,
+                }}
+            >
+                <Box component="form" noValidate onSubmit={formik.handleSubmit} >
+                    <Typography variant="h3" gutterBottom sx={{textAlign: 'center',}}>
+                            오늘의 옷
+                        </Typography>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <TextField
+                                required
+                                fullWidth
+                                id="email"
+                                label="이메일"
+                                name="email"
+                                autoComplete="email"
+                                value={formik.values.email}
+                                onChange={formik.handleChange}
+                                error={formik.touched.email && Boolean(formik.errors.email)}
+                                helperText={formik.touched.email && formik.errors.email}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                fullWidth
+                                required
+                                name="password"
+                                label="비밀번호(7글자 이상 입력해 주세요)"
+                                type="password"
+                                id="password"
+                                autoComplete="new-password"
+                                value={formik.values.password}
+                                onChange={formik.handleChange}
+                                error={formik.touched.password && Boolean(formik.errors.password)}
+                                helperText={formik.touched.password && formik.errors.password}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                fullWidth
+                                required
+                                name="passwordConfirmation"
+                                label="비밀번호 확인"
+                                type="password"
+                                id="passwordConfirmation"
+                                autoComplete="new-password"
+                                value={formik.values.passwordConfirmation}
+                                onChange={formik.handleChange}
+                                error={formik.touched.passwordConfirmation && Boolean(formik.errors.passwordConfirmation)}
+                                helperText={formik.touched.passwordConfirmation && formik.errors.passwordConfirmation}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                fullWidth
+                                required
+                                name="address"
+                                label="주소"
+                                id="address"
+                                value={address}
+                                onChange={formik.handleChange}
+                                error={formik.touched.address && Boolean(formik.errors.address)}
+                                helperText={formik.touched.address && formik.errors.address}
+                                onClick={handleAddressPopup}
+                            />
+                        </Grid>
                     </Grid>
-                    <Grid item xs={12}>
-                        <TextField
+                    <Button
+                            type="submit"
                             fullWidth
-                            name="password"
-                            label="비밀번호(7글자 이상 입력해 주세요)"
-                            type="password"
-                            id="password"
-                            autoComplete="new-password"
-                            value={formik.values.password}
-                            onChange={formik.handleChange}
-                            error={formik.touched.password && Boolean(formik.errors.password)}
-                            helperText={formik.touched.password && formik.errors.password}
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField
-                            fullWidth
-                            name="passwordConfirmation"
-                            label="비밀번호 확인"
-                            type="password"
-                            id="passwordConfirmation"
-                            autoComplete="new-password"
-                            value={formik.values.passwordConfirmation}
-                            onChange={formik.handleChange}
-                            error={formik.touched.passwordConfirmation && Boolean(formik.errors.passwordConfirmation)}
-                            helperText={formik.touched.passwordConfirmation && formik.errors.passwordConfirmation}
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={8}>
-                        <TextField
-                            fullWidth
-                            name="address"
-                            label="주소"
-                            id="address"
-                            value={address}
-                            onChange={formik.handleChange}
-                            error={formik.touched.address && Boolean(formik.errors.address)}
-                            helperText={formik.touched.address && formik.errors.address}
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={4}>
-                        <Button type='button' onClick={handleAddressPopup} variant="contained">
-                            Open
+                            variant="contained"
+                            sx={{
+                                mt: 3,
+                                mb: 2,
+                                fontSize: '1.2vw'
+                            }}
+                            size="large"
+                        >
+                            회원가입
                         </Button>
+                    <Grid container justifyContent="flex-end">
+                        <Grid item>
+                            <Link href="/signin" variant="body2">
+                                로그인 페이지로 가기
+                            </Link>
+                        </Grid>
                     </Grid>
-                </Grid>
-
-                <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    sx={{ mt: 3, mb: 2 }}
-                    size="large"
-                >
-                    회원 가입
-                </Button>
-                <Grid container justifyContent="flex-end">
-                    <Grid item>
-                        <Link href="/signin" variant="body2">
-                            로그인 페이지로 가기
-                        </Link>
-                    </Grid>
-                </Grid>
-            </Box>
-            </Box >
-                </Container>
+                </Box>
+            </Paper >
         </>
     );
 }

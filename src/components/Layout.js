@@ -1,3 +1,4 @@
+import { Container } from "@mui/material";
 import Navbar from "./Navbar";
 import { useRouter } from 'next/router';
 
@@ -7,9 +8,13 @@ export default function Layout({children}) {
     return(
         <>
             { showNavbar && <Navbar />}
-            <div>
+            <Container
+                maxWidth="xs"
+                component="main"
+                disableGutters={true}
+            >
                 {children}
-            </div>
+            </Container>
         </>
     )
 }

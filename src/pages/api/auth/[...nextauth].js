@@ -21,26 +21,13 @@ export const authOptions = {
                 if (!checkPassword || result.email !== credentials.email) {
                     throw new Error("이메일과 비밀번호가 일치하지 않습니다.");
                 }
-
                 return result;
             }
         })
     ],
 
-    callbacks: {
-        async jwt({ token }) {
-            return token;
-        },
-        // 세션에 로그인한 유저 데이터 입력
-        async session({ session }) {
-            return session;
-        },
-    },
-    // session: {
-    //     strategy: 'jwt'
-    // },
+   
     secret: process.env.NEXTAUTH_SECRET,
 }
-
 export default NextAuth(authOptions);
 

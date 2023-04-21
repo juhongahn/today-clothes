@@ -80,9 +80,9 @@ export default function Home({ weatherData }) {
           <div>asdas</div>
         </Grid>
 
-        {/* <Grid>
-          <WeatherCard weather={curWeatherObj}/>
-        </Grid> */}
+        <Grid item>
+          <WeatherCard/>
+        </Grid>
       </Grid>
     </div>
   )

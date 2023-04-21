@@ -7,8 +7,6 @@ import { useRouter } from "next/router";
 import { useState } from 'react';
 import Head from 'next/head'
 import Image from "next/image";
-import Lottie from 'react-lottie-player'
-import lottieJson from '/public/backgroundLottie.json'
 import { createTheme,
         responsiveFontSizes,
         ThemeProvider,
@@ -17,7 +15,6 @@ import {
     Grid,
     Box,
     Typography,
-    Avatar,
     Button,
     TextField,
     Paper,
@@ -73,114 +70,87 @@ export default function SignIn() {
     return (
         <>
             <Head>
-                <title>로그인</title>
+                <title>오늘의 옷 : 로그인</title>
             </Head>
-            
-            <div className="signin-container">
-                    <Paper elevation={6} sx={{
-                        width: '50%',
-                        height: '70%',
-                        borderRadius: '15px',
-                        overflow: 'hidden'
-                    }}>
-                    <Grid container
-                        justifyContent="center"
-                        alignItems="center"
-                        sx={{
-                        height: '100%',
-                    }}>
-                        <Box
-                            component={Grid}
-                            item
-                            sm={4}
-                            md={6.5}
-                            display={{
-                                xs: "none", sm: 'blcok', md: 'block', lg: "block",
-                            }}
+                <Image
+                    src="/image/signin_bg.jpg"
+                    alt="로그인 배경 이미지"
+                    fill
+                    style={{
+                        opacity: 0.5,
+                        objectFit: 'cover',
+                        zIndex: -1,
+                    }}
+                />
+            <Paper
+                elevation={6}
+                sx={{
+                    borderRadius: '15px',
+                    mt: 15,
+                    opacity: 0.8,
+                }}>
+                    <Box component="form" onSubmit={formik.handleSubmit} sx={{ mt: 1, p:3 }}>
+                        <Typography variant="h3" gutterBottom sx={{textAlign: 'center',}}>
+                            오늘의 옷
+                        </Typography>
+                        <TextField
+                            margin="normal"
+                            fullWidth
+                            id="email"
+                            label="이메일"
+                            name="email"
+                            autoComplete="email"
+                            autoFocus
+                            value={formik.values.email}
+                            onChange={formik.handleChange}
+                            error={formik.touched.email && Boolean(formik.errors.email)}
+                            helperText={formik.touched.email && formik.errors.email}
+                        />
+                        <TextField
+                            margin="normal"
+                            fullWidth
+                            name="password"
+                            label="비밀번호"
+                            type="password"
+                            id="password"
+                            autoComplete="current-password"
+                            value={formik.values.password}
+                            onChange={formik.handleChange}
+                            error={formik.touched.password && Boolean(formik.errors.password)}
+                            helperText={formik.touched.password && formik.errors.password}
+                        />
+                        {signinError &&
+                            <div className="error-msg">
+                                {errorMsg}
+                            </div>
+                        }
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
                             sx={{
-                                backgroundColor: 'skyblue', height: '100%', 
+                                mt: 1,
+                                mb: 2,
+                                fontSize: '1.2vw'
                             }}
+                            size="large"
                         >
-                            <Lottie 
-                                loop
-                                animationData={lottieJson}
-                                play
-                                style={{width: '100%', height: '100%'}}
-                            />
-                        </Box>
-                           
-                        <Grid item xs={12} sm={8} md={5.5}>    
-                            <Box component="form" onSubmit={formik.handleSubmit} sx={{ mt: 1, p:3 }}>
-                            <ThemeProvider theme={theme}>
-                                <Typography variant="h3" gutterBottom sx={{textAlign: 'center',}}>
-                                    오늘의 옷
-                                </Typography>
-                                
-                            </ThemeProvider>
-                                
-                                <TextField
-                                    margin="normal"
-                                    fullWidth
-                                    id="email"
-                                    label="이메일"
-                                    name="email"
-                                    autoComplete="email"
-                                    autoFocus
-                                    value={formik.values.email}
-                                    onChange={formik.handleChange}
-                                    error={formik.touched.email && Boolean(formik.errors.email)}
-                                    helperText={formik.touched.email && formik.errors.email}
-                                />
-                                <TextField
-                                    margin="normal"
-                                    fullWidth
-                                    name="password"
-                                    label="비밀번호"
-                                    type="password"
-                                    id="password"
-                                    autoComplete="current-password"
-                                    value={formik.values.password}
-                                    onChange={formik.handleChange}
-                                    error={formik.touched.password && Boolean(formik.errors.password)}
-                                    helperText={formik.touched.password && formik.errors.password}
-                                />
-                                {signinError &&
-                                    <div className="error-msg">
-                                        {errorMsg}
-                                    </div>
-                                }
-                                <Button
-                                    type="submit"
-                                    fullWidth
-                                    variant="contained"
-                                    sx={{
-                                        mt: 1,
-                                        mb: 2,
-                                        background: 'skyblue',
-                                        fontSize: '1vw'
-                                         }}
-                                    size="large"
-                                >
-                                    로그인
-                                </Button>
-                                <Grid container>
-                                    <Grid item xs>
-                                        <Link href="#">
-                                            Forgot password?
-                                        </Link>
-                                    </Grid>
-                                    <Grid item>
-                                        <Link href="/signup">
-                                            회원 가입
-                                        </Link>
-                                    </Grid>
-                                </Grid>
-                            </Box>
-                        </Grid>  
-                    </Grid>
-                    </Paper>
-                
-            </div>
+                            로그인
+                        </Button>
+                        <Grid container>
+                            <Grid item xs>
+                                <Link href="#">
+                                    Forgot password?
+                                </Link>
+                            </Grid>
+                            <Grid item>
+                                <Link href="/signup">
+                                    회원 가입
+                                </Link>
+                            </Grid>
+                        </Grid>
+                    </Box>
+                </Paper>
             <style jsx>{`
                     .form-grid-container{
                         width: 60%;
@@ -191,7 +161,6 @@ export default function SignIn() {
                         height: 100%;
                         justify-content: center;
                         align-items: center;
-                        {/* background-color: rgb(249 250 251/var(--tw-bg-opacity)); */}
                     }
                     .error-msg{
                         font-size: 0.9vw;
