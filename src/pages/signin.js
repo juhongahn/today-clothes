@@ -191,8 +191,7 @@ export default function SignIn() {
                         height: 100%;
                         justify-content: center;
                         align-items: center;
-                        background: rgb(137,247,255);
-                        background: linear-gradient(0deg, rgba(137,247,255,1) 4%, rgba(132,202,255,1) 53%, rgba(73,150,255,1) 74%, rgba(0,112,255,1) 100%);
+                        {/* background-color: rgb(249 250 251/var(--tw-bg-opacity)); */}
                     }
                     .error-msg{
                         font-size: 0.9vw;

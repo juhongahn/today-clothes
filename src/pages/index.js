@@ -12,10 +12,8 @@ import WeatherCard from '../components/WeatherCard'
 const url = "http://localhost:3000/api/weather";
 
 export default function Home({ weatherData }) {
-
   
   const handlePlay = async (result) => {
-    console.log('called')
 
       try {
         const response = await fetch('/api/generate-speech', {

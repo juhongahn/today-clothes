@@ -1,4 +1,3 @@
-import Container from '@mui/material/Container';
 import { SessionProvider } from "next-auth/react"
 import Layout from '@/components/Layout';
 import '../components/Navbar.css'
@@ -20,9 +19,7 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
             height: 100vh;
             margin: 0px;
           }
-            
           `}</style> 
-
     </SessionProvider >
 
   )
