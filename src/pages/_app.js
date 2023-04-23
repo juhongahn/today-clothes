@@ -35,7 +35,11 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
 						margin: 0px;
 						height: 100%;
 					}
-				
+					a {
+						text-decoration: none;
+						font-size: 0.9rem;
+						color: grey;
+					}
 				`}</style>
 			</div>
 		</SessionProvider >
