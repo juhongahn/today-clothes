@@ -21,10 +21,10 @@ import {
 
 const validationSchema = yup.object({
     email: yup.string()
-      .required('이메일을 입력해 주세요'),
+        .required('이메일을 입력해 주세요'),
     password: yup.string()
-      .required('비밀번호를 입력해 주세요'),
-  });
+        .required('비밀번호를 입력해 주세요'),
+});
 
 export default function SignIn() {
     const router = useRouter();
@@ -37,15 +37,15 @@ export default function SignIn() {
 
     const formik = useFormik({
         initialValues: {
-          email: '',
-          password: '',
+            email: '',
+            password: '',
         },
         validationSchema: validationSchema,
 
         onSubmit: (values) => {
             handleSignin(values);
         },
-      });
+    });
 
     async function handleSignin(data) {
         setLoading(true);
@@ -78,68 +78,73 @@ export default function SignIn() {
                     mt: 15,
                     opacity: 0.8,
                 }}>
-                    <Box component="form" onSubmit={formik.handleSubmit} sx={{ mt: 1, p:3 }}>
-                        <Typography variant="h3" gutterBottom sx={{textAlign: 'center',}}>
-                            오늘의 옷
-                        </Typography>
-                        <TextField
-                            margin="normal"
-                            fullWidth
-                            id="email"
-                            label="이메일"
-                            name="email"
-                            autoComplete="email"
-                            autoFocus
-                            value={formik.values.email}
-                            onChange={formik.handleChange}
-                            error={formik.touched.email && Boolean(formik.errors.email)}
-                            helperText={formik.touched.email && formik.errors.email}
-                        />
-                        <TextField
-                            margin="normal"
-                            fullWidth
-                            name="password"
-                            label="비밀번호"
-                            type="password"
-                            id="password"
-                            autoComplete="current-password"
-                            value={formik.values.password}
-                            onChange={formik.handleChange}
-                            error={formik.touched.password && Boolean(formik.errors.password)}
-                            helperText={formik.touched.password && formik.errors.password}
-                        />
-                        {signinError &&
-                            <div className="error-msg">
-                                {errorMsg}
-                            </div>
-                        }
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            sx={{
-                                mt: 1,
-                                mb: 2,
-                                fontSize: '1.2vw'
-                            }}
-                            size="large"
-                        >
-                            로그인
-                        </Button>
-                        <Grid container>
-                            <Grid item xs>
-                                <Link href="#">
-                                    Forgot password?
-                                </Link>
-                            </Grid>
-                            <Grid item>
-                                <Link href="/signup">
-                                    회원 가입
-                                </Link>
-                            </Grid>
+                <Box component="form" onSubmit={formik.handleSubmit} sx={{ mt: 1, p: 3 }}>
+                    <Typography variant="h3"
+                        gutterBottom
+                        sx={{
+                            textAlign: 'center',
+                            fontWeight: 'bold',
+                        }}>
+                        오늘의 옷
+                    </Typography>
+                    <TextField
+                        margin="normal"
+                        fullWidth
+                        id="email"
+                        label="이메일"
+                        name="email"
+                        autoComplete="email"
+                        autoFocus
+                        value={formik.values.email}
+                        onChange={formik.handleChange}
+                        error={formik.touched.email && Boolean(formik.errors.email)}
+                        helperText={formik.touched.email && formik.errors.email}
+                    />
+                    <TextField
+                        margin="normal"
+                        fullWidth
+                        name="password"
+                        label="비밀번호"
+                        type="password"
+                        id="password"
+                        autoComplete="current-password"
+                        value={formik.values.password}
+                        onChange={formik.handleChange}
+                        error={formik.touched.password && Boolean(formik.errors.password)}
+                        helperText={formik.touched.password && formik.errors.password}
+                    />
+                    {signinError &&
+                        <div className="error-msg">
+                            {errorMsg}
+                        </div>
+                    }
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        sx={{
+                            mt: 1,
+                            mb: 2,
+                            fontSize: '1.2rem',
+                        }}
+                        size="large"
+                    >
+                        로그인
+                    </Button>
+                    <Grid container>
+                        <Grid item xs>
+                            <Link href="#">
+                                Forgot password?
+                            </Link>
                         </Grid>
-                    </Box>
-                </Paper>
+                        <Grid item>
+                            <Link href="/signup">
+                                회원 가입
+                            </Link>
+                        </Grid>
+                    </Grid>
+                </Box>
+            </Paper>
             <style jsx>{`
                     .form-grid-container{
                         width: 60%;

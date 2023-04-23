@@ -7,7 +7,7 @@ function Navbar() {
     const router = useRouter();
 
     async function handleSignOut() {
-        const data = await signOut({redirect: false, callbackUrl: "/signin"});
+        const data = await signOut({ redirect: false, callbackUrl: "/signin" });
         router.push(data.url);
     }
 

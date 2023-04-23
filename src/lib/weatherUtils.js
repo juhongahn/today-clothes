@@ -6,33 +6,38 @@ export function getDayWeather(weatherArray) {
         weatherArray.filter(weather => weather.fcstTime === '1300');
     const eveningWeatherArray =
         weatherArray.filter(weather => weather.fcstTime === '1800');
-    
+
     /**
      * 시간 당 필요한 날씨 정보
      * 기온, 강수확률, 풍속, 구름, 적설량
      * TMP, POP, WSD, SKY, SNO
      */
+    const {
+        TMPObj: mTMPObj,
+        POPObj: mPOPObj,
+        WSDObj: mWSDObj,
+        SKYObj: mSKYObj,
+        SNOObj: mSNOObj,
+        PTYObj: mPTYObj,
+    } = getWeatherCodeObj(morningWeatherArray);
 
-    const mTMPObj = morningWeatherArray.find(weather => weather.category === 'TMP');
-    const mPOPObj = morningWeatherArray.find(weather => weather.category === 'POP');
-    const mWSDObj = morningWeatherArray.find(weather => weather.category === 'WSD');
-    const mSKYObj = morningWeatherArray.find(weather => weather.category === 'SKY');
-    const mSNOObj = morningWeatherArray.find(weather => weather.category === 'SNO');
-    const mPTYObj = morningWeatherArray.find(weather => weather.category === 'PTY');
+    const {
+        TMPObj: nTMPObj,
+        POPObj: nPOPObj,
+        WSDObj: nWSDObj,
+        SKYObj: nSKYObj,
+        SNOObj: nSNOObj,
+        PTYObj: nPTYObj,
+    } = getWeatherCodeObj(noonWeatherArray);
 
-    const nTMPObj = noonWeatherArray.find(weather => weather.category === 'TMP');
-    const nPOPObj = noonWeatherArray.find(weather => weather.category === 'POP');
-    const nWSDObj = noonWeatherArray.find(weather => weather.category === 'WSD');
-    const nSKYObj = noonWeatherArray.find(weather => weather.category === 'SKY');
-    const nSNOObj = noonWeatherArray.find(weather => weather.category === 'SNO');
-    const nPTYObj = noonWeatherArray.find(weather => weather.category === 'PTY');
-
-    const eTMPObj = eveningWeatherArray.find(weather => weather.category === 'TMP');
-    const ePOPObj = eveningWeatherArray.find(weather => weather.category === 'POP');
-    const eWSDObj = eveningWeatherArray.find(weather => weather.category === 'WSD');
-    const eSKYObj = eveningWeatherArray.find(weather => weather.category === 'SKY');
-    const eSNOObj = eveningWeatherArray.find(weather => weather.category === 'SNO');
-    const ePTYObj = eveningWeatherArray.find(weather => weather.category === 'PTY');
+    const {
+        TMPObj: eTMPObj,
+        POPObj: ePOPObj,
+        WSDObj: eWSDObj,
+        SKYObj: eSKYObj,
+        SNOObj: eSNOObj,
+        PTYObj: ePTYObj,
+    } = getWeatherCodeObj(eveningWeatherArray);
 
     const mWeatherObj = {
         tmp: mTMPObj,
@@ -63,7 +68,7 @@ export function getDayWeather(weatherArray) {
 
 export function getCurrentWeather(weatherArray) {
     const currentHour = new Date().getHours();
-    const currentWeatherArray = weatherArray.filter(weather => Number(weather.fcstTime.substr(0,2)) === currentHour)
+    const currentWeatherArray = weatherArray.filter(weather => Number(weather.fcstTime.substr(0, 2)) === currentHour)
 
     const skyObj = currentWeatherArray.find(weather => weather.category === 'SKY')
     const pcpObj = currentWeatherArray.find(weather => weather.category === 'PCP')
@@ -78,70 +83,149 @@ export function getCurrentWeather(weatherArray) {
         tmp: tmpObj,
         wsd: wsdObj,
     }
-    
+
     return curWeatherObj;
 }
 
 export function getWeatherScript(weatherArray) {
 
-    const wsdArray = weatherArray.filter(weather => weather.category === 'WSD');
-    const snoArray = weatherArray.filter(weather => weather.category === 'SNO');
-    const popArray = weatherArray.filter(weather => weather.category === 'POP');
+    const weatherObjArray = getDayWeather(weatherArray);
+    const morningWeatherObj = weatherObjArray[0];
+    const noonWeatherObj = weatherObjArray[1];
+    const eveningWeatherObj = weatherObjArray[2];
+
     
-    // get WSD avg
-    let wsdCount = 0;
-    let avgWSD = 0;
+    /**
+     * 평균 강수확률, 적설량 구한는 로직
+     */
+    // get WSD avg 
+    // let wsdCount = 0;
+    // let avgWSD = 0;
 
-    const sumWSD = wsdArray.map(weather => {
-        if (weather.fcstValue > 0) {
-        wsdCount++;
-        return weather.fcstValue
-        }
-    }).reduce((sum, currValue) => Number(sum) + Number(currValue));
-    if (wsdCount > 0) {
-        avgWSD = Math.round(sumWSD / wsdCount * 10) / 10;
-    }
+    // const sumWSD = wsdArray.map(weather => {
+    //     if (weather.fcstValue > 0) {
+    //         wsdCount++;
+    //         return weather.fcstValue
+    //     }
+    // }).reduce((sum, currValue) => Number(sum) + Number(currValue));
+    // if (wsdCount > 0) {
+    //     avgWSD = Math.round(sumWSD / wsdCount * 10) / 10;
+    // }
 
-    // get sno avg
-    let snoCount = 0;
+    // // get sno avg
+    // let snoCount = 0;
 
-    const avgSNO = snoArray.filter(weather => typeof weather.fcstValue !== 'string').map(weather => {
-        snoCount++;
-        return weather.fcstValue;
-    }).length === 0 ? 0 : Math.round((snoArray.filter(weather => typeof weather.fcstValue !== 'string').map(weather => {
-        snoCount++;
-        return weather.fcstValue;
-    }).reduce((sum, currValue) => Number(sum) + Number(currValue)) / snoCount) * 10) / 10;
+    // const avgSNO = snoArray.filter(weather => typeof weather.fcstValue !== 'string').map(weather => {
+    //     snoCount++;
+    //     return weather.fcstValue;
+    // }).length === 0 ? 0 : Math.round((snoArray.filter(weather => typeof weather.fcstValue !== 'string').map(weather => {
+    //     snoCount++;
+    //     return weather.fcstValue;
+    // }).reduce((sum, currValue) => Number(sum) + Number(currValue)) / snoCount) * 10) / 10;
 
-    const POP = popArray.find(weather => weather.fcstValue > 0) === undefined ? 0 : popArray.find(weather => weather.fcstValue > 0).fcstValue;
-    const TMN = weatherArray.find(weather => weather.category === 'TMN').fcstValue;
-    const TMX = weatherArray.find(weather => weather.category === 'TMX').fcstValue;
+    // const POP = popArray.find(weather => weather.fcstValue > 0) === undefined ? 0 : popArray.find(weather => weather.fcstValue > 0).fcstValue;
+    // const TMN = weatherArray.find(weather => weather.category === 'TMN').fcstValue;
+    // const TMX = weatherArray.find(weather => weather.category === 'TMX').fcstValue;
 
     const scriptWeatherData = {
-
-        result: {
-            WSD: avgWSD,
-            SNO: avgSNO,
-            POP: POP,
-            TMN: TMN,
-            TMX: TMX
-        }
+        result: [
+            { morning: morningWeatherObj },
+            { noon: noonWeatherObj },
+            { evening: eveningWeatherObj },
+        ]
     }
+
     
     const script = makeScript(scriptWeatherData)
     return script;
 }
 
 function makeScript(weatherData) {
-
     const { result } = weatherData;
-    const script = `오늘 하루 최고 기온은 ${result.TMX}도, 최저 기온은 ${result.TMN}도야. 평균 풍속은 ${result.WSD}/ms이고 하루 중
-    강수 확률은 ${result.POP}%야. 그리고 평균 적설량은 ${result.SNO}야. 
-    이 날씨에 맞게 하루 동안 입을 옷차림을 추천해줘. 설명 할 땐, '트렌치 코트', '울 코트' 처럼 옷의 종류로 설명해줬으면 좋겠고, '린넨, 가죽, 데님, 등등 '날씨에 어울리는 옷의 소재 또한 설명해줬으면 좋겠어.
-    `;
+    /**
+     * 시간 당 필요한 날씨 정보
+     * 기온, 강수확률, 풍속, 구름, 적설량
+     * TMP, POP, WSD, SKY, SNO
+     */
+
+    // 08시
+    const {
+        TMP: mTMP,
+        POP: mPOP,
+        WSD: mWSD,
+        SKY: mSKY,
+        PTY: mPTY,
+    } = getWeatherCodeFcstValueObj(result[0].morning);
+
+    // 13시
+    const {
+        TMP: nTMP,
+        POP: nPOP,
+        WSD: nWSD,
+        SKY: nSKY,
+        PTY: nPTY,
+    } = getWeatherCodeFcstValueObj(result[1].noon);
+
+    // 18시
+    const {
+        TMP: eTMP,
+        POP: ePOP,
+        WSD: eWSD,
+        SKY: eSKY,
+        PTY: ePTY,
+    } = getWeatherCodeFcstValueObj(result[2].evening);
+
+    /**
+     * 필요한 날씨 정보
+     * 기온, 강수확률, 풍속, 구름, 적설량
+     * TMP, POP, WSD, SKY, SNO
+     */
+    const script = 
+        `오늘 아침의 기온은 ${mTMP}도, 강수확률은 ${mPOP}%, 풍속은 ${mWSD}/ms, 하늘은 ${convertSkyCodeToStr(mSKY)} ${convertPtyCodeToStr(mPTY)}
+        그리고 점심은 기온 ${nTMP}도, 강수확률은 ${nPOP}%, 풍속은 ${nWSD}/ms, 하늘은 ${convertSkyCodeToStr(nSKY)} ${convertPtyCodeToStr(nPTY)}
+        저녁은 기온 ${eTMP}도, 강수확률은 ${ePOP}%, 풍속은 ${eWSD}/ms, 하늘은 ${convertSkyCodeToStr(eSKY)} ${convertPtyCodeToStr(ePTY)}.
+        오늘 날씨를 토대로 하루동안 입을 옷차림을 추천해줄래?`
     return script;
-  }
+}
+
+function getWeatherCodeFcstValueObj(weatherObj) {
+    return {
+        TMP: weatherObj.tmp.fcstValue,
+        POP: weatherObj.pop.fcstValue,
+        WSD: weatherObj.wsd.fcstValue,
+        SKY: weatherObj.sky.fcstValue,
+        PTY: weatherObj.pty.fcstValue,
+    }
+}
 
 
+function getWeatherCodeObj(weatherArray) {
+    return {
+        TMPObj: weatherArray.find(weather => weather.category === 'TMP'),
+        POPObj: weatherArray.find(weather => weather.category === 'POP'),
+        WSDObj: weatherArray.find(weather => weather.category === 'WSD'),
+        SKYObj: weatherArray.find(weather => weather.category === 'SKY'),
+        SNOObj: weatherArray.find(weather => weather.category === 'SNO'),
+        PTYObj: weatherArray.find(weather => weather.category === 'PTY'),
+    }
+}
 
+function convertSkyCodeToStr(skyFcstVal) {
+    if (skyFcstVal == 0 || skyFcstVal == 1)
+        return '맑아';
+    else if (skyFcstVal == 2 || skyFcstVal == 3)
+        return '구름이 많아';
+    else {
+        return '흐려';
+    }
+}
 
+function convertPtyCodeToStr(ptyFcstVal) {
+    if (ptyFcstVal == 1 || ptyFcstVal == 2 || ptyFcstVal == 4)
+        return '그리고 비가와';
+    else if (ptyFcstVal == 3)
+        return '그리고 눈이와'
+    else if (ptyFcstVal == 0)
+        return '';
+        
+}

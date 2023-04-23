@@ -17,17 +17,17 @@ import Head from 'next/head'
 
 const validationSchema = yup.object({
     email: yup.string()
-      .email('유효한 이메일을 입력해 주세요')
-      .required('이메일을 입력해 주세요'),
+        .email('유효한 이메일을 입력해 주세요')
+        .required('이메일을 입력해 주세요'),
     password: yup.string()
-      .min(7, '7글자 이상 입력해 주세요')
-      .required('비밀번호를 입력해 주세요'),
+        .min(7, '7글자 이상 입력해 주세요')
+        .required('비밀번호를 입력해 주세요'),
     passwordConfirmation: yup.string()
-      .required('비밀번호를 입력해 주세요')
-      .oneOf([yup.ref('password'), null], '비밀번호와 일치하지 않습니다'),
+        .required('비밀번호를 입력해 주세요')
+        .oneOf([yup.ref('password'), null], '비밀번호와 일치하지 않습니다'),
     address: yup.string()
-      .required('주소를 입력해 주세요')
-  });
+        .required('주소를 입력해 주세요')
+});
 
 const url = "/api/auth/signup";
 
@@ -38,22 +38,22 @@ export default function SignUp() {
 
     const formik = useFormik({
         initialValues: {
-          email: '',
-          password: '',
-          passwordConfirmation: '',
-          address: '',
+            email: '',
+            password: '',
+            passwordConfirmation: '',
+            address: '',
         },
         validationSchema: validationSchema,
 
         onSubmit: (values) => {
             submitSignup(values);
         },
-      });
+    });
 
     async function submitSignup(data) {
         const options = {
             method: "POST",
-            headers: {'Content-Type': 'application/json',},
+            headers: { 'Content-Type': 'application/json', },
             body: JSON.stringify(data)
         }
 
@@ -93,7 +93,7 @@ export default function SignUp() {
         <>
             <Head>
                 <title>오늘의 옷 : 회원가입</title>
-                </Head>
+            </Head>
             <Paper
                 elevation={6}
                 sx={{
@@ -104,9 +104,14 @@ export default function SignUp() {
                 }}
             >
                 <Box component="form" noValidate onSubmit={formik.handleSubmit} >
-                    <Typography variant="h3" gutterBottom sx={{textAlign: 'center',}}>
-                            오늘의 옷
-                        </Typography>
+                    <Typography variant="h3"
+                        gutterBottom
+                        sx={{
+                            textAlign: 'center',
+                            fontWeight: 'bold',
+                        }}>
+                        오늘의 옷
+                    </Typography>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <TextField
@@ -169,18 +174,18 @@ export default function SignUp() {
                         </Grid>
                     </Grid>
                     <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            sx={{
-                                mt: 3,
-                                mb: 2,
-                                fontSize: '1.2vw'
-                            }}
-                            size="large"
-                        >
-                            회원가입
-                        </Button>
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        sx={{
+                            mt: 3,
+                            mb: 2,
+                            fontSize: '1.2rem'
+                        }}
+                        size="large"
+                    >
+                        회원가입
+                    </Button>
                     <Grid container justifyContent="flex-end">
                         <Grid item>
                             <Link href="/signin" variant="body2">
