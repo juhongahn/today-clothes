@@ -107,7 +107,7 @@ export default function WeatherCard({ weather, address }) {
 				backgroundColor: '#85c6f8',
 				padding: '20px 0px 20px 0px',
 				borderRadius: '15px',
-				marginTop: '10px',
+				marginTop: '30px',
 			}}>
 			<div className="address-box" style={{
 				textAlign: 'center',

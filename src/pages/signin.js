@@ -30,7 +30,6 @@ export default function SignIn() {
     const router = useRouter();
     const [signinError, setSigninError] = useState(false);
     const [errorMsg, setErrorMsg] = useState(false);
-    const [loading, setLoading] = useState(false);
 
     let theme = createTheme();
     theme = responsiveFontSizes(theme);
@@ -48,7 +47,6 @@ export default function SignIn() {
     });
 
     async function handleSignin(data) {
-        setLoading(true);
         const status = await signIn("credentials", {
             redirect: false,
             email: data.email,
@@ -157,7 +155,7 @@ export default function SignIn() {
                         align-items: center;
                     }
                     .error-msg{
-                        font-size: 0.9vw;
+                        font-size: 0.9rem;
                         color: red;
                     }
                 `}</style>

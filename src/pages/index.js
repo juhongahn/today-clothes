@@ -6,15 +6,24 @@ import { Grid, Button, Paper } from '@mui/material';
 import WeatherCard from '../components/WeatherCard'
 import { useSession } from "next-auth/react"
 import { useState, useEffect } from 'react';
-
+import { createTheme, ThemeProvider  } from '@mui/material/styles';
+import { purple, yellow } from '@mui/material/colors';
 const url = "http://localhost:3000/api/weather";
+
+const theme = createTheme({
+	palette: {
+		primary: {
+			main: yellow[500],
+		},
+	}
+});
 
 export default function Home({ weatherData }) {
 	const { data: session, status } = useSession();
 	const [address, setAddress] = useState("");
 	const weatherArray = weatherData.item;
 	const [gptScript, setGptScript] = useState();
-
+	
 	useEffect(() => {
 		if (status === 'authenticated')
 			setAddress(session.address);
@@ -71,15 +80,26 @@ export default function Home({ weatherData }) {
 			<Head>
 				<title>오늘의 옷</title>
 			</Head>
-			<Grid container spacing={2}>
-				<Grid item xs={12} md={12}>
-					<Button
-						variant="contained"
-						fullWidth
-						onClick={generate}
-					>
-						오늘의 옷 보기
-					</Button>
+			{status === 'authenticated' && <WeatherCard address={address} weather={weatherArray} />}
+
+			<Grid container>
+				<Grid item xs={12} md={12} mt={2}>
+					<ThemeProvider theme={theme}>
+						<Button
+							variant="contained"
+							fullWidth
+							onClick={generate}
+							size='large'
+							sx={{
+								fontSize: '1.2rem',
+								fontWeight: 'bold',
+								borderRadius: '10px',
+								color: 'white',
+							}}
+						>
+							오늘의 옷 보기
+						</Button>
+					</ThemeProvider>
 				</Grid>
 
 				{/* <Grid item xs={6}>
@@ -97,8 +117,9 @@ export default function Home({ weatherData }) {
 						margin: '20px 0 20px 0',
 						background: '#F1ECE9',
 						wordBreak: 'break-word',
-						padding: '5px 10px 5px 10px',
+						padding: '10px 20px 20px 20px',
 						borderRadius: '8px',
+						lineHeight: '1.5rem'
 					}}>
 
 					<p>오늘의 옷: </p>
@@ -106,7 +127,6 @@ export default function Home({ weatherData }) {
 				</Paper>
 			}
 
-			{status === 'authenticated' && <WeatherCard address={address} weather={weatherArray} />}
 			<style jsx>{`
 				p {
 					font-weight: bold;

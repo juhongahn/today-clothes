@@ -4,19 +4,17 @@ ul {
     list-style: none;
 }
 
-h2,
-h3,
-a {
-    color: #34495e;
-}
-
-a {
-    text-decoration: none;
+.logo-box {
+    display: flex;
+    align-items: center;
 }
 
 .logo {
     margin: 0;
     font-size: 1.45em;
+    font-weight: bold;
+    padding: 0px 0px 0px 20px;
+    text-align: center;
 }
 
 .main-nav {
@@ -24,40 +22,15 @@ a {
     margin-top: 5px;
 }
 
-.logo a,
-.main-nav a {
-    padding: 10px 15px;
-    text-transform: uppercase;
-    text-align: center;
-    display: block;
-}
-
-.main-nav a {
-    color: #34495e;
-    font-size: 0.99em;
-}
-
-.main-nav a:hover {
-    color: #718daa;
-}
 
 .header {
     display: flex;
     justify-content: space-between;
     padding-top: 0.5em;
     padding-bottom: 0.5em;
-    background-color: #f4f4f4;
-    -webkit-box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.75);
-    -moz-box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.75);
-    box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.75);
-}
-
-.loading {
-    opacity: 0;
-    transition: all 0.2s ease-in;
-}
-
-.loaded {
-    opacity: 1;
-    transition: all 0.2s ease-in;
+    border-radius: 0px 0px 10px 10px;
+    background-color: white;
+    -webkit-box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.75);
+    box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.75);
 }
