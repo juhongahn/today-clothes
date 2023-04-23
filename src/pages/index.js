@@ -1,20 +1,26 @@
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { authOptions } from '../pages/api/auth/[...nextauth]'
-import { getServerSession } from "next-auth/next"
-import { getCurrentWeather, getWeatherScript } from '../lib/weatherUtils'
-import Head from 'next/head'
-import Link from "next/link";
-import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button'
+import { authOptions } from '../pages/api/auth/[...nextauth]';
+import { getServerSession } from "next-auth/next";
+import { getWeatherScript } from '../lib/weatherUtils';
+import Head from 'next/head';
+import { Grid, Button } from '@mui/material';
 import WeatherCard from '../components/WeatherCard'
+import { useSession } from "next-auth/react"
+import { useState, useEffect } from 'react';
 
 const url = "http://localhost:3000/api/weather";
 
 export default function Home({ weatherData }) {
-  
-  const handlePlay = async (result) => {
+  const { data: session, status } = useSession();
+  const [address, setAddress] = useState("");
+  const weatherArray = weatherData.item;
 
+  useEffect(() => {
+    if (status === 'authenticated') {
+      setAddress(session.address);
+    }
+  }, [status]);
+
+  const handlePlay = async (result) => {
       try {
         const response = await fetch('/api/generate-speech', {
           method: 'POST',
@@ -35,7 +41,6 @@ export default function Home({ weatherData }) {
       }
   };
 
-  const weatherArray = weatherData.item;
   async function generate() {
     const script = getWeatherScript(weatherArray);
     try {
@@ -61,8 +66,8 @@ export default function Home({ weatherData }) {
   return (
     <div>
       <Head>
-            <title>오늘의 옷</title>
-        </Head>
+          <title>오늘의 옷</title>
+      </Head>
       <Grid container spacing={2}>
         <Grid item xs={12} md={12}>
           <Button
@@ -73,17 +78,15 @@ export default function Home({ weatherData }) {
             오늘의 옷
           </Button>
         </Grid>
-        <Grid item xs={6}>
+        {/* <Grid item xs={6}>
           <Link href="/my-closet">옷장</Link>
         </Grid>
         <Grid item xs={6}>
           <div>asdas</div>
-        </Grid>
-
-        <Grid item>
-          <WeatherCard/>
-        </Grid>
+        </Grid> */}
       </Grid>
+      {status === 'authenticated' && <WeatherCard address={address} weather={weatherArray}/>}
+      
     </div>
   )
 }
@@ -98,7 +101,6 @@ export async function getServerSideProps(context) {
   }
   const response = await fetch(url, options);
   const {data} = await response.json();
-
   return {
     props: {
       weatherData: data,

@@ -18,6 +18,7 @@ export default async function handler(req, res) {
                 message: "폼을 완성해 주세요"
             }
         });
+        console.log(data);
         const { email, password, address, passwordConfirmation } = data;
         
         /* 유효성 검사 */
@@ -48,14 +49,14 @@ export default async function handler(req, res) {
         const hashedPassword = await hashPassword(password);
 
         try {
-            const res = await convertAddress(address);
+            const convertedAddress = await convertAddress(address);
             const addressObj = {
                 fullAddress: address,
-                x: res.x,
-                y: res.y,
+                x: convertedAddress.x,
+                y: convertedAddress.y,
             }
-
-            Users.create({ email, password: hashedPassword, addressObj })
+            console.log(addressObj)
+            Users.create({ email, password: hashedPassword, address: addressObj })
                 .then(() => {
                     return res.status(201).json({
                         success: 'ok',

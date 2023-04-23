@@ -6,10 +6,9 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useState } from 'react';
 import Head from 'next/head'
-import Image from "next/image";
-import { createTheme,
-        responsiveFontSizes,
-        ThemeProvider,
+import {
+    createTheme,
+    responsiveFontSizes,
 } from '@mui/material/styles';
 import {
     Grid,
@@ -72,16 +71,6 @@ export default function SignIn() {
             <Head>
                 <title>오늘의 옷 : 로그인</title>
             </Head>
-                <Image
-                    src="/image/signin_bg.jpg"
-                    alt="로그인 배경 이미지"
-                    fill
-                    style={{
-                        opacity: 0.5,
-                        objectFit: 'cover',
-                        zIndex: -1,
-                    }}
-                />
             <Paper
                 elevation={6}
                 sx={{

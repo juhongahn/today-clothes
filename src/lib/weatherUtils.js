@@ -1,3 +1,66 @@
+export function getDayWeather(weatherArray) {
+
+    const morningWeatherArray =
+        weatherArray.filter(weather => weather.fcstTime === '0800');
+    const noonWeatherArray =
+        weatherArray.filter(weather => weather.fcstTime === '1300');
+    const eveningWeatherArray =
+        weatherArray.filter(weather => weather.fcstTime === '1800');
+    
+    /**
+     * 시간 당 필요한 날씨 정보
+     * 기온, 강수확률, 풍속, 구름, 적설량
+     * TMP, POP, WSD, SKY, SNO
+     */
+
+    const mTMPObj = morningWeatherArray.find(weather => weather.category === 'TMP');
+    const mPOPObj = morningWeatherArray.find(weather => weather.category === 'POP');
+    const mWSDObj = morningWeatherArray.find(weather => weather.category === 'WSD');
+    const mSKYObj = morningWeatherArray.find(weather => weather.category === 'SKY');
+    const mSNOObj = morningWeatherArray.find(weather => weather.category === 'SNO');
+    const mPTYObj = morningWeatherArray.find(weather => weather.category === 'PTY');
+
+    const nTMPObj = noonWeatherArray.find(weather => weather.category === 'TMP');
+    const nPOPObj = noonWeatherArray.find(weather => weather.category === 'POP');
+    const nWSDObj = noonWeatherArray.find(weather => weather.category === 'WSD');
+    const nSKYObj = noonWeatherArray.find(weather => weather.category === 'SKY');
+    const nSNOObj = noonWeatherArray.find(weather => weather.category === 'SNO');
+    const nPTYObj = noonWeatherArray.find(weather => weather.category === 'PTY');
+
+    const eTMPObj = eveningWeatherArray.find(weather => weather.category === 'TMP');
+    const ePOPObj = eveningWeatherArray.find(weather => weather.category === 'POP');
+    const eWSDObj = eveningWeatherArray.find(weather => weather.category === 'WSD');
+    const eSKYObj = eveningWeatherArray.find(weather => weather.category === 'SKY');
+    const eSNOObj = eveningWeatherArray.find(weather => weather.category === 'SNO');
+    const ePTYObj = eveningWeatherArray.find(weather => weather.category === 'PTY');
+
+    const mWeatherObj = {
+        tmp: mTMPObj,
+        pop: mPOPObj,
+        wsd: mWSDObj,
+        sky: mSKYObj,
+        sno: mSNOObj,
+        pty: mPTYObj,
+    }
+    const nWeatherObj = {
+        tmp: nTMPObj,
+        pop: nPOPObj,
+        wsd: nWSDObj,
+        sky: nSKYObj,
+        pty: nPTYObj,
+        sno: nSNOObj,
+    }
+    const eWeatherObj = {
+        tmp: eTMPObj,
+        pop: ePOPObj,
+        wsd: eWSDObj,
+        sky: eSKYObj,
+        pty: ePTYObj,
+        sno: eSNOObj,
+    }
+    return new Array(mWeatherObj, nWeatherObj, eWeatherObj);
+}
+
 export function getCurrentWeather(weatherArray) {
     const currentHour = new Date().getHours();
     const currentWeatherArray = weatherArray.filter(weather => Number(weather.fcstTime.substr(0,2)) === currentHour)
@@ -57,11 +120,11 @@ export function getWeatherScript(weatherArray) {
     const scriptWeatherData = {
 
         result: {
-        WSD: avgWSD,
-        SNO: avgSNO,
-        POP: POP,
-        TMN: TMN,
-        TMX: TMX
+            WSD: avgWSD,
+            SNO: avgSNO,
+            POP: POP,
+            TMN: TMN,
+            TMX: TMX
         }
     }
     

@@ -7,12 +7,12 @@ export default function Layout({children}) {
     const showNavbar = !(router.pathname === '/signin' || router.pathname === '/signup');
     return(
         <>
-            { showNavbar && <Navbar />}
             <Container
                 maxWidth="xs"
                 component="main"
                 disableGutters={true}
             >
+                { showNavbar && <Navbar />}
                 {children}
             </Container>
         </>

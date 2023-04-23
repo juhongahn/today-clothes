@@ -39,7 +39,7 @@ export default async function handler(req, res) {
         })
         if (response.ok) {
             const data = await response.json();
-            console.log(data)
+            console.log(data);
             const result = data.response.body.items;
             // const todayWeatherArray = data.response.body.items.item
             //     .filter(weather => weather.fcstDate === baseDate);

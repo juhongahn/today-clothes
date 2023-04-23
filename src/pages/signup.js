@@ -3,7 +3,6 @@ import {
     Grid,
     Box,
     Typography,
-    Avatar,
     Button,
     TextField,
     Paper
@@ -15,7 +14,6 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import Link from 'next/link'
 import Head from 'next/head'
-import Image from 'next/image';
 
 const validationSchema = yup.object({
     email: yup.string()
@@ -69,6 +67,7 @@ export default function SignUp() {
     };
 
     function handleAddressInput(data) {
+
         let fullAddress = data.address;
         let extraAddress = '';
 
@@ -95,16 +94,6 @@ export default function SignUp() {
             <Head>
                 <title>오늘의 옷 : 회원가입</title>
                 </Head>
-            <Image
-                src="/image/signin_bg.jpg"
-                alt="로그인 배경 이미지"
-                fill
-                style={{
-                    opacity: 0.5,
-                    objectFit: 'cover',
-                    zIndex: -1,
-                }}
-            />
             <Paper
                 elevation={6}
                 sx={{
@@ -171,6 +160,7 @@ export default function SignUp() {
                                 label="주소"
                                 id="address"
                                 value={address}
+                                disabled
                                 onChange={formik.handleChange}
                                 error={formik.touched.address && Boolean(formik.errors.address)}
                                 helperText={formik.touched.address && formik.errors.address}
