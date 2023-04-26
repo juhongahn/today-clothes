@@ -57,8 +57,7 @@ export default function SignIn() {
         if (status.ok) {
             router.push('/');
         } else {
-            //TOOD: 로그인 폼에 에러 표시.
-            console.log(status);
+            
             setErrorMsg(status.error);
             setSigninError(true);
         }

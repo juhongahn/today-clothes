@@ -18,7 +18,7 @@ export default async function handler(req, res) {
                 message: "폼을 완성해 주세요"
             }
         });
-        console.log(data);
+
         const { email, password, address, passwordConfirmation } = data;
         
         /* 유효성 검사 */
@@ -55,7 +55,7 @@ export default async function handler(req, res) {
                 x: convertedAddress.x,
                 y: convertedAddress.y,
             }
-            console.log(addressObj)
+            
             Users.create({ email, password: hashedPassword, address: addressObj })
                 .then(() => {
                     return res.status(201).json({

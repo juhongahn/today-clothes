@@ -7,7 +7,8 @@ import WeatherCard from '../components/WeatherCard'
 import { useSession } from "next-auth/react"
 import { useState, useEffect } from 'react';
 import { createTheme, ThemeProvider  } from '@mui/material/styles';
-import { purple, yellow } from '@mui/material/colors';
+import { yellow } from '@mui/material/colors';
+
 const url = "http://localhost:3000/api/weather";
 
 const theme = createTheme({
@@ -69,7 +70,7 @@ export default function Home({ weatherData }) {
 			setGptScript(result);
 			handlePlay(result);
 		} catch (error) {
-			// Consider implementing your own error handling logic here
+			
 			console.error(error);
 			alert(error.message);
 		}
