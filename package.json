@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@dnd-kit/core": "^6.0.8",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@google-cloud/text-to-speech": "^4.2.1",
