@@ -2,7 +2,13 @@ import { authOptions } from '../pages/api/auth/[...nextauth]';
 import { getServerSession } from "next-auth/next";
 import { getWeatherScript } from '../lib/weatherUtils';
 import Head from 'next/head';
-import { Grid, Button, Paper } from '@mui/material';
+import {
+	Grid,
+	Button,
+	Paper,
+	Backdrop,
+	CircularProgress
+} from '@mui/material';
 import WeatherCard from '../components/WeatherCard'
 import { useSession } from "next-auth/react"
 import { useState, useEffect } from 'react';
@@ -24,7 +30,8 @@ export default function Home({ weatherData }) {
 	const [address, setAddress] = useState("");
 	const weatherArray = weatherData.item;
 	const [gptScript, setGptScript] = useState();
-	
+	const [backdrop, setBackdrop] = useState(false);
+
 	useEffect(() => {
 		if (status === 'authenticated')
 			setAddress(session.address);
@@ -53,6 +60,8 @@ export default function Home({ weatherData }) {
 	};
 
 	async function generate() {
+		setBackdrop(true);
+
 		const script = getWeatherScript(weatherArray);
 		try {
 			const response = await fetch("/api/generate", {
@@ -67,6 +76,7 @@ export default function Home({ weatherData }) {
 			if (response.status !== 200) {
 				throw data.error || new Error(`Request failed with status ${response.status}`);
 			}
+			setBackdrop(false);
 			setGptScript(result);
 			handlePlay(result);
 		} catch (error) {
@@ -82,7 +92,14 @@ export default function Home({ weatherData }) {
 				<title>오늘의 옷</title>
 			</Head>
 			{status === 'authenticated' && <WeatherCard address={address} weather={weatherArray} />}
-
+			<div>
+				<Backdrop
+					sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+					open={backdrop}
+				>
+					<CircularProgress color="inherit" />
+				</Backdrop>
+			</div>
 			<Grid container>
 				<Grid item xs={12} md={12} mt={2}>
 					<ThemeProvider theme={theme}>

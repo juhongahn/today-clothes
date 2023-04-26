@@ -1,6 +1,4 @@
-import Link from 'next/link'
-import { signIn, signOut, useSession } from 'next-auth/react'
-import { useRouter } from 'next/router';
+import { signOut, useSession } from 'next-auth/react'
 import { useState } from 'react';
 import {
     IconButton,
@@ -11,7 +9,6 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 
 function Navbar() {
     const { data: session, status } = useSession()
-    const router = useRouter();
 
     const [anchorEl, setAnchorEl] = useState(null);
 
@@ -44,6 +41,9 @@ function Navbar() {
                             aria-haspopup="true"
                             onClick={handleMenu}
                             color="inherit"
+                            sx={{
+                                paddingRight: '20px'
+                            }}
                         >
                         <AccountCircle />
                         </IconButton>
