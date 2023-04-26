@@ -11,6 +11,7 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
 			<div style={{
 				heigth: '100%',
 				overflow: 'auto',
+				position: 'relative',
 			}}>
 				<Image
 					src="/image/signin_bg.jpg"

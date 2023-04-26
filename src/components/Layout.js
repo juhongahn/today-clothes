@@ -11,6 +11,10 @@ export default function Layout({ children }) {
                 maxWidth="xs"
                 component="main"
                 disableGutters={true}
+                sx={{
+                    width: '100%',
+                    height: '100%',
+                }}
             >
                 {showNavbar && <Navbar />}
                 {children}

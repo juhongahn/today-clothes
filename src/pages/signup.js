@@ -51,6 +51,8 @@ export default function SignUp() {
     });
 
     async function submitSignup(data) {
+        console.time('signUp');
+
         const options = {
             method: "POST",
             headers: { 'Content-Type': 'application/json', },
@@ -63,6 +65,8 @@ export default function SignUp() {
             alert(error.message);
             return;
         }
+        console.timeEnd('signUp');
+
         router.push('/signin');
     };
 
@@ -90,14 +94,13 @@ export default function SignUp() {
 
     return (
 
-        <>
+        <div className="signup-container">
             <Head>
                 <title>오늘의 옷 : 회원가입</title>
             </Head>
             <Paper
                 elevation={6}
                 sx={{
-                    marginTop: 8,
                     padding: 4,
                     borderRadius: '15px',
                     opacity: 0.8,
@@ -195,6 +198,14 @@ export default function SignUp() {
                     </Grid>
                 </Box>
             </Paper >
-        </>
+            <style jsx>{`
+                .signup-container{
+                            height: 100%;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                        }
+                `}</style>
+        </div>
     );
 }

@@ -47,14 +47,14 @@ export default function SignIn() {
     });
 
     async function handleSignin(data) {
-
+        console.time('signin');
         const status = await signIn("credentials", {
             redirect: false,
             email: data.email,
             password: data.password,
             callbackUrl: "/"
         });
-
+        console.timeEnd('signin');
         if (status.ok) {
             router.push('/');
         } else {
@@ -65,7 +65,7 @@ export default function SignIn() {
     }
 
     return (
-        <>
+        <div className="signin-container">
             <Head>
                 <title>오늘의 옷 : 로그인</title>
             </Head>
@@ -73,7 +73,6 @@ export default function SignIn() {
                 elevation={6}
                 sx={{
                     borderRadius: '15px',
-                    mt: 15,
                     opacity: 0.8,
                 }}>
                 <Box component="form" onSubmit={formik.handleSubmit} sx={{ mt: 1, p: 3 }}>
@@ -144,21 +143,22 @@ export default function SignIn() {
                 </Box>
             </Paper>
             <style jsx>{`
+                    .signin-container{
+                        height: 100%;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                    }
                     .form-grid-container{
                         width: 60%;
                         height: 60%;
                     }
-                    .signin-container{
-                        display: flex;
-                        height: 100%;
-                        justify-content: center;
-                        align-items: center;
-                    }
+                    
                     .error-msg{
                         font-size: 0.9rem;
                         color: red;
                     }
                 `}</style>
-        </>
+        </div>
     );
 }

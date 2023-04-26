@@ -5,11 +5,13 @@ import { convertAddress } from '@/lib/addressConvert';
 
 export default async function handler(req, res) {
 
-    connectMongo().catch(() => res.status(500).json({
-        error: {
-            message: `DB 연결에 실패했습니다`
-        }
-    }));
+    connectMongo().catch(() => {
+        return res.status(500).json({
+            error: {
+                message: `DB 연결에 실패했습니다`
+            }
+        })}
+    );
 
     if (req.method === 'POST') {
         const data = req.body;
@@ -56,7 +58,7 @@ export default async function handler(req, res) {
                 y: convertedAddress.y,
             }
             
-            Users.create({ email, password: hashedPassword, address: addressObj })
+            await Users.create({ email, password: hashedPassword, address: addressObj })
                 .then(() => {
                     return res.status(201).json({
                         success: 'ok',
