@@ -15,7 +15,6 @@ import { useState, useEffect } from 'react';
 import { createTheme, ThemeProvider  } from '@mui/material/styles';
 import { yellow } from '@mui/material/colors';
 
-const url = "http://localhost:3000/api/weather";
 
 const theme = createTheme({
 	palette: {
@@ -157,7 +156,7 @@ export default function Home({ weatherData }) {
 
 export async function getServerSideProps(context) {
 	const session = await getServerSession(context.req, context.res, authOptions)
-
+	const url = process.env.WEATHER_REQ_URL +"/api/weather";
 	const options = {
 		method: "POST",
 		headers: { 'Content-Type': 'application/json' },

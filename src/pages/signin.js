@@ -47,6 +47,10 @@ export default function SignIn() {
     });
 
     async function handleSignin(data) {
+
+        let startTime = performance.now(); // 측정 시작
+        console.log('측정 시작.');
+        
         const status = await signIn("credentials", {
             redirect: false,
             email: data.email,
@@ -55,7 +59,11 @@ export default function SignIn() {
         });
 
         if (status.ok) {
-            router.push('/');
+            let endTime = performance.now(); // 측정 종료
+            console.log('측정 종료.');
+            console.log(`걸린 작업 시간은 총 ${endTime - startTime} 밀리초입니다.`);
+
+            //router.push('/');
         } else {
             
             setErrorMsg(status.error);
