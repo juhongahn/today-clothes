@@ -11,6 +11,8 @@ export const authOptions = {
 
             /** signin() 함수가 호출되면 authorize 메서드가 호출된다. */
             async authorize(credentials, req) {
+                console.time('signin');
+
                 connectMongo().catch(error => { error: "Connection Failed" });
                 // 유저 체크
                 const result = await Users.findOne({ email: credentials.email })
@@ -25,6 +27,8 @@ export const authOptions = {
                     email: result.email,
                     address: result.address.fullAddress,
                 }
+                console.timeEnd('signin');
+
                 return user;
             }
         })

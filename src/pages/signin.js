@@ -54,9 +54,8 @@ export default function SignIn() {
             password: data.password,
             callbackUrl: "/"
         });
-        console.timeEnd('signin');
         if (status.ok) {
-            router.push('/');
+            router.push('/', undefined, { shallow: true });
         } else {
             
             setErrorMsg(status.error);
