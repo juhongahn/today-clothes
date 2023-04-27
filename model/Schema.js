@@ -1,4 +1,4 @@
-import mongoose, { Schema, model, models } from 'mongoose';
+import { Schema, model, models } from 'mongoose';
 
 // user 스키마
 const userSchema = new Schema({
@@ -18,6 +18,5 @@ const userSchema = new Schema({
     }
 });
 
-// To use schema definition, need to convert our userSchema into a Model.
-const Users = models.users || model('users', userSchema);
+const Users = models?.users ?? model('users', userSchema);
 export default Users;

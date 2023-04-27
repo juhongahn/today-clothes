@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Link from 'next/link';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -57,7 +56,6 @@ export default function SignIn() {
         if (status.ok) {
             router.push('/', undefined, { shallow: true });
         } else {
-            
             setErrorMsg(status.error);
             setSigninError(true);
         }

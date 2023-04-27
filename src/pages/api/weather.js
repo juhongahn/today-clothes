@@ -40,10 +40,6 @@ export default async function handler(req, res) {
         if (response.ok) {
             const data = await response.json();
             const result = data.response.body.items;
-            // const todayWeatherArray = data.response.body.items.item
-            //     .filter(weather => weather.fcstDate === baseDate);
-            
-            // const weatherData = getWeatherData(todayWeatherArray);
             res.status(200).json({
                 data: result,
             });
@@ -56,6 +52,7 @@ export default async function handler(req, res) {
             })
         }
     } else {
+        res.setHeader('Allow', ['POST'])
         res.status(500).json({
             error: {
                 message: "HTTP method not vaild only POST Accepted"

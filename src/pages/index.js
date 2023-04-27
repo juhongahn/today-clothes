@@ -24,16 +24,32 @@ const theme = createTheme({
 	}
 });
 
-export default function Home({ weatherData }) {
+export default function Home() {
 	const { data: session, status } = useSession();
 	const [address, setAddress] = useState("");
-	const weatherArray = weatherData.item;
+	//const weatherArray = weatherData.item;
+	const [weatherArray, setWeatherArray] = useState([]);
 	const [gptScript, setGptScript] = useState();
 	const [backdrop, setBackdrop] = useState(false);
 
 	useEffect(() => {
-		if (status === 'authenticated')
-			setAddress(session.address);
+		if (status === 'authenticated') {
+			const fetchWeather = async () => {
+				setAddress(session.address);
+				if (status === 'authenticated') { 
+					console.log(status)
+					const options = {
+						method: "POST",
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify({ email: session.user.email })
+					}
+					const response = await fetch('/api/weather', options);
+					const { data } = await response.json();
+					setWeatherArray(data.item);
+				}
+			}
+			fetchWeather();
+		}
 	}, [status]);
 
 	async function handlePlay(result) {
@@ -90,7 +106,9 @@ export default function Home({ weatherData }) {
 			<Head>
 				<title>오늘의 옷</title>
 			</Head>
-			{status === 'authenticated' && <WeatherCard address={address} weather={weatherArray} />}
+			{status === 'authenticated' && 
+				weatherArray.length > 0 &&
+				<WeatherCard address={address} weather={weatherArray} />}
 			<div>
 				<Backdrop
 					sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
