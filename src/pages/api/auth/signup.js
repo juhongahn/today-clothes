@@ -62,7 +62,7 @@ export default async function handler(req, res) {
                 .then(() => {
                     return res.status(201).json({
                         success: 'ok',
-                        message: 'Success creating User'
+                        message: '성공적으로 생성했습니다'
                     })
                 })
                 .catch(() => {
@@ -77,15 +77,16 @@ export default async function handler(req, res) {
                 error: {
                     message: `회원가입을 진행하는데 에러가 발생했습니다`
                 }
-            })
+            });
         }
 
     }
     else {
+        res.setHeader('Allow', ['POST']);
         res.status(500).json({
             error: {
-                message: "HTTP method not vaild only POST Accepted"
+                message: "POST 메서드만 유효합니다"
             }
-        })
+        });
     }
 }

@@ -50,8 +50,6 @@ export default function SignUp() {
     });
 
     async function submitSignup(data) {
-        console.time('signUp');
-
         const options = {
             method: "POST",
             headers: { 'Content-Type': 'application/json', },
@@ -64,8 +62,6 @@ export default function SignUp() {
             alert(error.message);
             return;
         }
-        console.timeEnd('signUp');
-
         router.push('/signin');
     };
 

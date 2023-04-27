@@ -46,7 +46,6 @@ export default function SignIn() {
     });
 
     async function handleSignin(data) {
-        console.time('signin');
         const status = await signIn("credentials", {
             redirect: false,
             email: data.email,

@@ -6,6 +6,8 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 export default async function handler(req, res) {
+    const sentence = req.body.sentence;
+    
     if (!configuration.apiKey) {
         return res.status(500).json({
             error: {
@@ -13,7 +15,6 @@ export default async function handler(req, res) {
             }
         });
     }
-    const sentence = req.body.sentence;
     try {
         const completion = await openai.createChatCompletion({
             model: "gpt-3.5-turbo",

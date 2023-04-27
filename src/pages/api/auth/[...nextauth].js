@@ -23,7 +23,11 @@ export const authOptions = {
                 }
                 const user = {
                     email: result.email,
-                    address: result.address.fullAddress,
+                    address: {
+                        fullAddress: result.address.fullAddress,
+                        x: result.address.x,
+                        y: result.address.y,
+                    },
                 }
                 return user;
             }

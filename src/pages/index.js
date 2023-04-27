@@ -1,7 +1,3 @@
-import { authOptions } from '../pages/api/auth/[...nextauth]';
-import { getServerSession } from "next-auth/next";
-import { getWeatherScript } from '../lib/weatherUtils';
-import Head from 'next/head';
 import {
 	Grid,
 	Button,
@@ -9,12 +5,19 @@ import {
 	Backdrop,
 	CircularProgress
 } from '@mui/material';
+import {
+	getWeatherScript,
+	getRequestURL,
+	getBaseDate,
+} from '../lib/weatherUtils';
+import Head from 'next/head';
+import { authOptions } from '../pages/api/auth/[...nextauth]';
+import { getServerSession } from "next-auth/next";
 import WeatherCard from '../components/WeatherCard'
 import { useSession } from "next-auth/react"
 import { useState, useEffect } from 'react';
 import { createTheme, ThemeProvider  } from '@mui/material/styles';
 import { yellow } from '@mui/material/colors';
-
 
 const theme = createTheme({
 	palette: {
@@ -24,32 +27,16 @@ const theme = createTheme({
 	}
 });
 
-export default function Home() {
+export default function Home({ weatherData }) {
+	const weatherArray = weatherData.item;
 	const { data: session, status } = useSession();
 	const [address, setAddress] = useState("");
-	//const weatherArray = weatherData.item;
-	const [weatherArray, setWeatherArray] = useState([]);
 	const [gptScript, setGptScript] = useState();
 	const [backdrop, setBackdrop] = useState(false);
 
 	useEffect(() => {
-		if (status === 'authenticated') {
-			const fetchWeather = async () => {
-				setAddress(session.address);
-				if (status === 'authenticated') { 
-					console.log(status)
-					const options = {
-						method: "POST",
-						headers: { 'Content-Type': 'application/json' },
-						body: JSON.stringify({ email: session.user.email })
-					}
-					const response = await fetch('/api/weather', options);
-					const { data } = await response.json();
-					setWeatherArray(data.item);
-				}
-			}
-			fetchWeather();
-		}
+		if (status === 'authenticated')
+			setAddress(session.address.fullAddress);
 	}, [status]);
 
 	async function handlePlay(result) {
@@ -76,7 +63,6 @@ export default function Home() {
 
 	async function generate() {
 		setBackdrop(true);
-
 		const script = getWeatherScript(weatherArray);
 		try {
 			const response = await fetch("/api/generate", {
@@ -95,7 +81,7 @@ export default function Home() {
 			setGptScript(result);
 			handlePlay(result);
 		} catch (error) {
-			
+			setBackdrop(false);
 			console.error(error);
 			alert(error.message);
 		}
@@ -161,7 +147,6 @@ export default function Home() {
 					{gptScript}
 				</Paper>
 			}
-
 			<style jsx>{`
 				p {
 					font-weight: bold;
@@ -172,20 +157,32 @@ export default function Home() {
 	)
 }
 
+
 export async function getServerSideProps(context) {
-	const session = await getServerSession(context.req, context.res, authOptions)
-	const url = process.env.WEATHER_REQ_URL +"/api/weather";
-	const options = {
-		method: "POST",
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ email: session.user.email })
-	}
-	const response = await fetch(url, options);
-	const { data } = await response.json();
-	return {
-		props: {
-			weatherData: data,
+	const weatherUrl = process.env.WEATHER_URL;
+	const session = await getServerSession(context.req, context.res, authOptions);
+	const baseDate = getBaseDate();
+	const encodedQureyUrl = weatherUrl + '?' + getRequestURL(session.address.x, session.address.y, baseDate);
+
+	const response = await fetch(encodedQureyUrl, {
+		method: "GET",
+		headers: {
+			'Content-Type': 'application/json',
+			'Accept': 'application/json'
+		},
+	})
+
+	if (response.ok) {
+		const data = await response.json();
+		const result = data.response.body.items;
+		return {
+			props: {
+				weatherData: result,
+			}
 		}
+	} else {
+		// getServerSideProps 안에서 던진 에러는 500.js 페이지 또는 _error.js 컴포넌트를 불러온다.
+		throw new Error("날씨 데이터를 가져오는데 문제가 발생했습니다.");
 	}
 
 }
