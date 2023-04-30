@@ -80,13 +80,12 @@ export default async function handler(req, res) {
                 },
                 { "role": "user", "content": sentence },
             ],
-            temperature: 0.3,
+            temperature: 0.2,
             max_tokens: 500,
 
         });
         res.status(200).json({ result: completion.data.choices[0].message.content });
     } catch (error) {
-        
         if (error.response) {
             console.error(error.response.status, error.response.data);
             return res.status(error.response.status).json(error.response.data);

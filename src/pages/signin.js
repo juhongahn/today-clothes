@@ -126,9 +126,7 @@ export default function SignIn() {
                     </Button>
                     <Grid container>
                         <Grid item xs>
-                            <Link href="#">
-                                Forgot password?
-                            </Link>
+                            
                         </Grid>
                         <Grid item>
                             <Link href="/signup">

@@ -11,8 +11,8 @@ import { useDaumPostcodePopup } from 'react-daum-postcode';
 import { useState } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import Link from 'next/link'
-import Head from 'next/head'
+import Link from 'next/link';
+import Head from 'next/head';
 
 const validationSchema = yup.object({
     email: yup.string()
@@ -186,7 +186,7 @@ export default function SignUp() {
                     </Button>
                     <Grid container justifyContent="flex-end">
                         <Grid item>
-                            <Link href="/signin" variant="body2">
+                            <Link href="/signin">
                                 로그인 페이지로 가기
                             </Link>
                         </Grid>

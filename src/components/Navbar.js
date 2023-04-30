@@ -6,10 +6,11 @@ import {
     Menu,
 } from '@mui/material'
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import { useRouter } from 'next/router';
 
 function Navbar() {
     const { data: session, status } = useSession()
-
+    const router = useRouter();
     const [anchorEl, setAnchorEl] = useState(null);
 
     const handleMenu = (event) => {
@@ -21,7 +22,8 @@ function Navbar() {
     };
 
     async function handleSignout() {
-        await signOut({ redirect: true});
+        await signOut({ redirect: false });
+        router.push('/signin');
     }
 
     return (

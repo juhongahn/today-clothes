@@ -48,7 +48,8 @@ export default function Home({ weatherData }) {
 				},
 				body: JSON.stringify({ text: result }),
 			});
-
+			if (response.status !== 200)
+				throw new Error("오디오를 재생 중 문제가 생겼습니다.");
 			const audioData = await response.arrayBuffer();
 			const audioContext = new AudioContext();
 			const audioBuffer = await audioContext.decodeAudioData(audioData);
@@ -57,7 +58,7 @@ export default function Home({ weatherData }) {
 			audioSource.connect(audioContext.destination);
 			audioSource.start(0);
 		} catch (error) {
-			console.error(error);
+			alert(error.message);
 		}
 	};
 
@@ -72,17 +73,15 @@ export default function Home({ weatherData }) {
 				},
 				body: JSON.stringify({ sentence: script }),
 			});
-
 			const { result } = await response.json();
 			if (response.status !== 200) {
-				throw data.error || new Error(`Request failed with status ${response.status}`);
+				throw new Error(`요청 중 문제가 발생했습니다.`);
 			}
 			setBackdrop(false);
 			setGptScript(result);
 			handlePlay(result);
 		} catch (error) {
 			setBackdrop(false);
-			console.error(error);
 			alert(error.message);
 		}
 	}
@@ -122,14 +121,6 @@ export default function Home({ weatherData }) {
 						</Button>
 					</ThemeProvider>
 				</Grid>
-
-				{/* <Grid item xs={6}>
-					<Link href="/my-closet">옷장</Link>
-					</Grid>
-					<Grid item xs={6}>
-					<div>asdas</div>
-					</Grid> */}
-
 			</Grid>
 			{gptScript &&
 				<Paper
@@ -163,7 +154,6 @@ export async function getServerSideProps(context) {
 	const session = await getServerSession(context.req, context.res, authOptions);
 	const baseDate = getBaseDate();
 	const encodedQureyUrl = weatherUrl + '?' + getRequestURL(session.address.x, session.address.y, baseDate);
-
 	const response = await fetch(encodedQureyUrl, {
 		method: "GET",
 		headers: {
