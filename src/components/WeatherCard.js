@@ -93,8 +93,10 @@ function CardData({ time, tmp, pop, wsd, sky, pty }) {
 }
 
 export default function WeatherCard({ weather, address }) {
-
+	console.time('data')
 	const weatherObjArray = getDayWeather(weather);
+	console.timeEnd('data')
+
 	const morningWeatherObj = weatherObjArray[0];
 	const noonWeatherObj = weatherObjArray[1];
 	const eveningWeatherObj = weatherObjArray[2];

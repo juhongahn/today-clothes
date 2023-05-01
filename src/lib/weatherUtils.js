@@ -88,7 +88,6 @@ export function getCurrentWeather(weatherArray) {
 }
 
 export function getWeatherScript(weatherArray) {
-
     const weatherObjArray = getDayWeather(weatherArray);
     const morningWeatherObj = weatherObjArray[0];
     const noonWeatherObj = weatherObjArray[1];
@@ -135,8 +134,7 @@ export function getWeatherScript(weatherArray) {
         ]
     }
 
-    
-    const script = makeScript(scriptWeatherData)
+    const script = makeScript(scriptWeatherData);
     return script;
 }
 

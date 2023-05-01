@@ -150,6 +150,7 @@ export default function Home({ weatherData }) {
 
 
 export async function getServerSideProps(context) {
+	console.time('weather');
 	const weatherUrl = process.env.WEATHER_URL;
 	const session = await getServerSession(context.req, context.res, authOptions);
 	const baseDate = getBaseDate();
@@ -165,6 +166,7 @@ export async function getServerSideProps(context) {
 	if (response.ok) {
 		const data = await response.json();
 		const result = data.response.body.items;
+		console.timeEnd('weather');
 		return {
 			props: {
 				weatherData: result,
