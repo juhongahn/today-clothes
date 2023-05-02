@@ -6,12 +6,7 @@ import Error from '../pages/_error'
 
 export default function Layout({ children }) {
     const router = useRouter();
-    const [isError, setIsError] = useState(false);
-    useEffect(() => {
-        if (router.pathname === '/_error') {
-            setIsError(true);
-        }
-    })
+    
     const showNavbar = !(router.pathname === '/signin' || router.pathname === '/signup');
     return (
         <Container
