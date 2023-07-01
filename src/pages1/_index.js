@@ -11,7 +11,7 @@ import {
 	getBaseDate,
 } from '../lib/weatherUtils';
 import Head from 'next/head';
-import { authOptions } from '../pages/api/auth/[...nextauth]';
+import { authOptions } from './api/auth/[...nextauth]';
 import { getServerSession } from "next-auth/next";
 import WeatherCard from '../components/WeatherCard'
 import { useSession } from "next-auth/react"

@@ -1,0 +1,26 @@
+.navbar {
+    background-color: white;
+    border-bottom: 1px solid#d4d4d8;
+    width: 100vw;
+    z-index: 100;
+    padding: 1rem 0;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 680px;
+    margin: 0 auto;
+}
+
+.link {
+    text-decoration: none;
+    color: black;
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+.link p {
+    margin: 0;
+}
