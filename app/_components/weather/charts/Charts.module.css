@@ -1,0 +1,118 @@
+.charts {
+  position: relative;
+}
+
+.container {
+  width: 100%;
+  overflow: hidden;
+}
+
+.chartContainer {
+  position: relative;
+}
+
+.chartContainer::after {
+  content: "";
+  position: absolute;
+  border-radius: 1rem;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 5%;
+
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 1)
+  );
+  pointer-events: none;
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 10;
+  color: #8f8f8f;
+  background-color: white;
+  border-radius: 100%;
+  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+    0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+}
+
+.arrow:hover {
+  color: black;
+  cursor: pointer;
+}
+
+.leftButton {
+  left: -30px;
+}
+
+.rightButton {
+  right: -30px;
+}
+
+.chart {
+  transition: ease-in-out 1s;
+}
+
+.slideButton {
+  position: absolute;
+  top: 50%;
+  right: -10px;
+  z-index: 100;
+}
+
+.tab {
+  display: flex;
+  justify-content: space-evenly;
+  position: relative;
+}
+
+.tab::before {
+  content: "";
+  position: absolute;
+  display: block;
+  left: 0px;
+  right: 0px;
+  bottom: 0;
+  height: 1px;
+  background-color: #ecf0f2;
+  z-index: 10;
+}
+
+.tabItem {
+  font-size: 1.2rem;
+  padding: 1rem .5rem;
+  text-align: center;
+  color: #8f8f8f;
+  position: relative;
+}
+
+.tabItem:hover {
+  cursor: pointer;
+  color: #000000
+}
+
+.selectedItem {
+  color: #000000
+}
+
+.selectedItem::after{
+  content: "";
+  position: absolute;
+  display: block;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2.5px;
+  background-color: #000000;
+  z-index: 10;
+}
+
+.chartLoading {
+  height: 180px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
