@@ -1,0 +1,47 @@
+.notFound {
+  width: 680px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 2rem 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 0 1px #e3e5e8, 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.header h1 {
+  margin: 0.6rem;
+  font-size: 2.5rem;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #8f8f8f;
+}
+
+.href {
+  color: white;
+  font-weight: 600;
+}
+
+.footer {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.button {
+    width: 50%;
+}
