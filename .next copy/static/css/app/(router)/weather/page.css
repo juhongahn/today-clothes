@@ -1,0 +1,824 @@
+/*!********************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[2].oneOf[8].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[2].oneOf[8].use[3]!./app/_components/ui/Backdrop.module.css ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************/
+.Backdrop_backdrop__DuoyQ {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 100;
+}
+
+/*!*******************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[2].oneOf[8].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[2].oneOf[8].use[3]!./app/_components/recommendation/RecommendationModal.module.css ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************************************************/
+.RecommendationModal_modal__jFBU7 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 480px;
+  display: flex;
+  flex-direction: column;
+  pointer-events: auto;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 0.3rem;
+  outline: 0;
+  margin: 0 auto;
+  z-index: 101;
+}
+
+.RecommendationModal_header__5Pp47 {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  border-bottom: 1px solid #e9ecef;
+  border-top-left-radius: 0.3rem;
+  border-top-right-radius: 0.3rem;
+}
+
+.RecommendationModal_header__5Pp47 > h5 {
+  margin: 0;
+  font-size: 1.45rem;
+}
+
+.RecommendationModal_close__ww2z9 {
+  cursor: pointer;
+  background-color: transparent;
+  border: 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #000;
+  text-shadow: 0 1px 0 #fff;
+  opacity: 0.5;
+}
+
+.RecommendationModal_script__zeDiO {
+  overflow: scroll;
+  max-height: 300px;
+  overflow-x: hidden;
+  padding: 0.5rem;
+}
+
+.RecommendationModal_body__vH1zw {
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.RecommendationModal_label__Zmq87 {
+  color: #212529;
+  text-align: left;
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.RecommendationModal_buttons__1p7_c {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.RecommendationModal_value__fsUux {
+  flex-grow: 1;
+  text-align: center;
+  font-size: 1rem;
+  border-radius: 0.3rem;
+  padding: 0.3rem;
+  flex-basis: 80px;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+  border: 1px solid #ced7df;
+}
+
+.RecommendationModal_nothing__hDXod {
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+.RecommendationModal_selectednothing__OarnO {
+  background-color: #6c757d7a;
+  border-color: #6c757d6d;
+}
+
+.RecommendationModal_male__DpkSV {
+  background-color: #75c2f6;
+  border-color: #589fe5;
+}
+
+.RecommendationModal_selectedmale__acLM1 {
+  background-color: #75c2f653;
+  border-color: #589ee55e;
+}
+
+.RecommendationModal_female__oTpQU {
+  background-color: #f79bd3;
+  border-color: #ee84b8;
+}
+
+.RecommendationModal_selectedfemale__CscUH {
+  background-color: #f79bd47e;
+  border-color: #ee84b754;
+}
+
+.RecommendationModal_springWarm__XDZhh {
+  background-color: #c8e4b2;
+  border-color: #9ed2be;
+}
+
+.RecommendationModal_selectedspringWarm__VrDw3 {
+  background-color: #c8e4b271;
+  border-color: #9ed2be77;
+}
+
+.RecommendationModal_summerCool__B78hS {
+  background-color: #91c8e4;
+  border-color: #749bc2;
+}
+
+.RecommendationModal_selectedsummerCool__aaGtC {
+  background-color: #91c8e478;
+  border-color: #749bc26b;
+}
+
+.RecommendationModal_fallWarm__qBq06 {
+  background-color: #f2be22;
+  border-color: #f29727;
+}
+
+.RecommendationModal_selectedfallWarm__tFJ6_ {
+  background-color: #f2be2282;
+  border-color: #f297277e;
+}
+
+.RecommendationModal_winterCool__iJtUH {
+  background-color: #19376d;
+  border-color: #0b2447;
+}
+
+.RecommendationModal_selectedwinterCool__PX36f {
+  background-color: #19366d87;
+  border-color: #0b244781;
+}
+
+.RecommendationModal_footer__uO8wW {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.RecommendationModal_action__AmwAi {
+  border-radius: 0.3rem;
+  border: 1px solid #212529;
+  padding: 0.45rem 0.6rem;
+  cursor: pointer;
+}
+
+.RecommendationModal_cancel__nixrz {
+  border-color: #6c757d;
+  color: #000;
+}
+
+.RecommendationModal_cancel__nixrz:hover {
+  background-color: #6c757d;
+  color: white;
+}
+
+.RecommendationModal_confirm__uspfT {
+  border-color: #007bff;
+  color: #007bff;
+}
+
+.RecommendationModal_confirm__uspfT:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+@keyframes RecommendationModal_moveUp__3WoA4 {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(0%);
+  }
+}
+
+/*!*******************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[2].oneOf[8].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[2].oneOf[8].use[3]!./app/_components/weather/currentWeather/item/CurrentWeatherItem.module.css ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************************************************************/
+.CurrentWeatherItem_container__mxsp0 {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.CurrentWeatherItem_body__Za4mW {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.CurrentWeatherItem_graphic__bSmMn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.CurrentWeatherItem_temperature__ElGfk {
+  font-size: 3rem;
+  font-weight: bold;
+}
+
+.CurrentWeatherItem_minmax__q_22j {
+  font-size: 0.9rem;
+  color: #70757a;
+}
+
+.CurrentWeatherItem_info__8cFED {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.CurrentWeatherItem_description__2DVEQ {
+  font-size: 1.2rem;
+  font-weight: 500;
+  text-align: end;
+  color:#70757a;
+}
+
+.CurrentWeatherItem_forcasts__BgnkB {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color:#70757a;
+}
+
+.CurrentWeatherItem_footer__wS8W6 {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.CurrentWeatherItem_loading__T_Meh {
+  height: 4rem;
+}
+
+.CurrentWeatherItem_skeleton__knrs4 {
+  opacity: .7;
+  animation: CurrentWeatherItem_skeleton-loading__INcPt 1s linear infinite alternate;
+}
+
+.CurrentWeatherItem_skeletonImg__pgCr1 {
+  width: 140px;
+  height: 4rem;
+  border-radius: .5rem;
+}
+
+.CurrentWeatherItem_skeletonText__qeFNY {
+  width: 6rem;
+  height: .8rem;
+  margin-bottom: 0.4rem;
+  border-radius: .1rem;
+}
+
+.CurrentWeatherItem_skeletonText__qeFNY:last-child {
+  margin-bottom: 0.6rem;
+}
+
+.CurrentWeatherItem_skeletonDescription__9c_VK {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.CurrentWeatherItem_skeletonDate__51DCE {
+  width: 8rem;
+  height: 1rem;
+  margin-bottom: 0.5rem;
+  border-radius: .1rem;
+}
+
+.CurrentWeatherItem_skeletonDes__wU_kb {
+  width: 5rem;
+  height: .7rem;
+  margin-block: 0;
+  border-radius: .1rem;
+}
+
+
+
+@keyframes CurrentWeatherItem_skeleton-loading__INcPt {
+  0% {
+    background-color: hsl(201, 18%, 85%);
+  }
+  100% {
+    background-color: hsl(200, 20%, 95%);
+  }
+}
+
+/*!*******************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[2].oneOf[8].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[2].oneOf[8].use[3]!./app/_components/ui/Loading.module.css ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************************/
+.Loading_loading__AZTN4 {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+/*!**********************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[2].oneOf[8].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[2].oneOf[8].use[3]!./app/_components/weather/currentWeather/CurrentWeather.module.css ***!
+  \**********************************************************************************************************************************************************************************************************************************************************************************************************/
+.CurrentWeather_container__MN7KK {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-top: 1rem;
+}
+
+.CurrentWeather_footer__aZ6or {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.CurrentWeather_fItem__P9nF3 {
+  padding: 0.3rem 0.8rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: 0.3rem;
+  flex-grow: 1;
+}
+
+.CurrentWeather_fItem__P9nF3 p {
+  text-align: center;
+}
+
+.CurrentWeather_label__7o3kt {
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.CurrentWeather_value__gbuwM {
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.CurrentWeather_default__2lFla {
+  display: flex;
+  background-color: white;
+  box-shadow: 0 0 0 1px #e3e5e8, 0 1px 2px 0 rgba(0,0,0,.04);
+  justify-content: center;
+  align-items: center;
+  min-height: 36px;
+}
+
+.CurrentWeather_normal__yrCbL {
+  background-color: #ebfae8;
+  border: 1px solid #d6efd0;
+}
+
+.CurrentWeather_normal__yrCbL p:nth-child(2) {
+  color: #00c73c;
+}
+
+.CurrentWeather_good__139br {
+  background-color: #ebf7ff;
+  border: 1px solid #d8e9f5;
+}
+
+.CurrentWeather_good__139br p:nth-child(2) {
+  color: #34a0ff;
+}
+
+.CurrentWeather_caution__kdF4v {
+  background-color: #ffefd4;
+  border: 1px solid #FFE0AC;
+}
+
+.CurrentWeather_caution__kdF4v p:nth-child(2) {
+  color: #ffa603;
+}
+
+.CurrentWeather_bad__bGVQp {
+  background-color: #ffebeb;
+  border: 1px solid #f5d8d8;
+}
+
+.CurrentWeather_bad__bGVQp p:nth-child(2) {
+  color: #ff3434;
+}
+
+.CurrentWeather_sunrise__74uea {
+  background-color: #fefcda;
+  border: 1px solid #f4f2cc;
+}
+
+.CurrentWeather_sunrise__74uea p:nth-child(2) {
+  color: #ff9f00;
+}
+
+.CurrentWeather_sunset__8Lf9o {
+  background-color: #bea9de;
+  border: 1px solid #d8d0e3;
+}
+
+.CurrentWeather_sunset__8Lf9o p:nth-child(2) {
+  color: #6f4dbf;
+}
+
+/*!******************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[2].oneOf[8].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[2].oneOf[8].use[3]!./app/_components/ui/Button.module.css ***!
+  \******************************************************************************************************************************************************************************************************************************************************************************/
+.Button_button__jUUTd {
+  width: 100%;
+  display: inline-block;
+  font-weight: 400;
+  cursor: pointer;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  border: 1px solid transparent;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: 0.25rem;
+}
+
+.Button_primary__NlNUI {
+  border: 1px solid #007bff;
+  background-color: #007bff;
+  color: #ffffff;
+}
+
+
+.Button_primary__NlNUI:disabled{
+  color: #fff;
+  pointer-events: none;
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+  opacity: 0.65;
+}
+
+.Button_primary__NlNUI:hover {
+  color: #fff;
+  background-color: #0b5ed7;
+  border-color: #0a58ca;
+}
+
+.Button_secondary__R_f5B {
+  background-color: #ffeb3b;
+  border-color: #ffeb3b;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.Button_secondary__R_f5B:hover {
+  color: #fff;
+  background-color: rgb(225, 207, 51);
+  border-color: rgb(225, 207, 51);
+}
+
+.Button_success__VWsTz {
+  background-color: #28a745;
+  border-color: #28a745;
+  color: #ffffff;
+}
+
+.Button_success__VWsTz:hover {
+  color: #fff;
+  background-color: #157347;
+  border-color: #146c43;
+}
+
+.Button_danger__zEXiI {
+  background-color: #dc3545;
+  border-color: #dc3545;
+  color: #ffffff;
+}
+
+.Button_danger__zEXiI:hover {
+  color: #fff;
+  background-color: #bb2d3b;
+  border-color: #b02a37;
+}
+
+.Button_sm__tFWPi {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  border-radius: 0.2rem;
+}
+
+.Button_md__YEr52 {
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  border-radius: 0.25rem;
+}
+
+.Button_lg__PBDcD {
+  padding: 0.5rem 1rem;
+  font-size: 1.25rem;
+  border-radius: 0.3rem;
+}
+
+.Button_lg__PBDcD > div {
+  height: 1.875rem;
+}
+
+/*!************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[2].oneOf[8].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[2].oneOf[8].use[3]!./app/_components/weather/charts/WeatherChart.module.css ***!
+  \************************************************************************************************************************************************************************************************************************************************************************************************/
+.WeatherChart_weatherChart__uFMDM {
+  position: relative;
+}
+
+.WeatherChart_container__KU_EA {
+  width: 100%;
+  overflow: hidden;
+}
+
+.WeatherChart_arrow__IidId {
+  position: absolute;
+  top: 50%;
+  z-index: 1000;
+  color: #8f8f8f;
+  background-color: white;
+  border-radius: 100%;
+  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+    0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+}
+
+.WeatherChart_arrow__IidId:hover {
+  color: black;
+  cursor: pointer;
+}
+
+.WeatherChart_leftButton__BD0up {
+  left: -30px;
+}
+
+.WeatherChart_rightButton__lQlKm {
+  right: -30px;
+}
+
+.WeatherChart_chart__zdypm {
+  transition: ease-in-out 1s;
+}
+
+.WeatherChart_slideButton__fCYhq {
+  position: absolute;
+  top: 50%;
+  right: -10px;
+  z-index: 100;
+}
+
+.WeatherChart_line__5g7Rs {
+  stroke: #e5e9ef;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: WeatherChart_line-animation__Huyr0 1s linear forwards;
+  stroke-width: 2;
+  stroke-linecap: round;
+  z-index: -100;
+}
+
+.WeatherChart_image__5ya9S {
+  animation: WeatherChart_opacity-animation__g9r71 1s;
+}
+
+.WeatherChart_tmp__Jxi3t {
+  font-size: 0.7rem;
+  animation: WeatherChart_opacity-animation__g9r71 1s;
+  fill: #242424;
+  font-weight: 500;
+}
+
+.WeatherChart_pcp__Rn4u8 {
+  font-size: 0.7rem;
+  animation: WeatherChart_opacity-animation__g9r71 1s;
+  font-weight: 500;
+}
+
+.WeatherChart_legend__PV97G {
+  font-size: .7rem;
+  padding: 1rem 0 0 .4rem;
+  color: #8f8f8f;
+}
+
+.WeatherChart_time___3sDI {
+  fill: #8f8f8f;
+  font-size: 0.75rem;
+  animation: WeatherChart_opacity-animation__g9r71 1s;
+}
+
+.WeatherChart_labelItem__m8iXF {
+  fill: transparent;
+}
+
+.WeatherChart_labelItem__m8iXF:hover {
+  fill: #e5e9ef;
+  cursor: pointer;
+  opacity: 0.3;
+}
+
+@keyframes WeatherChart_line-animation__Huyr0 {
+  from {
+    stroke-dashoffset: 100;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes WeatherChart_opacity-animation__g9r71 {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/*!******************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[2].oneOf[8].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[2].oneOf[8].use[3]!./app/_components/weather/charts/Charts.module.css ***!
+  \******************************************************************************************************************************************************************************************************************************************************************************************/
+.Charts_charts__Oz9Jt {
+  position: relative;
+}
+
+.Charts_container__zErYh {
+  width: 100%;
+  overflow: hidden;
+}
+
+.Charts_chartContainer__GaY3x {
+  position: relative;
+}
+
+.Charts_chartContainer__GaY3x::after {
+  content: "";
+  position: absolute;
+  border-radius: 1rem;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 5%;
+
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 1)
+  );
+  pointer-events: none;
+}
+
+.Charts_arrow__aLdX4 {
+  position: absolute;
+  top: 50%;
+  z-index: 10;
+  color: #8f8f8f;
+  background-color: white;
+  border-radius: 100%;
+  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+    0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+}
+
+.Charts_arrow__aLdX4:hover {
+  color: black;
+  cursor: pointer;
+}
+
+.Charts_leftButton__Pa_6D {
+  left: -30px;
+}
+
+.Charts_rightButton__R_kWt {
+  right: -30px;
+}
+
+.Charts_chart___Im8S {
+  transition: ease-in-out 1s;
+}
+
+.Charts_slideButton__XTDyW {
+  position: absolute;
+  top: 50%;
+  right: -10px;
+  z-index: 100;
+}
+
+.Charts_tab__0Ebf2 {
+  display: flex;
+  justify-content: space-evenly;
+  position: relative;
+}
+
+.Charts_tab__0Ebf2::before {
+  content: "";
+  position: absolute;
+  display: block;
+  left: 0px;
+  right: 0px;
+  bottom: 0;
+  height: 1px;
+  background-color: #ecf0f2;
+  z-index: 10;
+}
+
+.Charts_tabItem__xLybt {
+  font-size: 1.2rem;
+  padding: 1rem .5rem;
+  text-align: center;
+  color: #8f8f8f;
+  position: relative;
+}
+
+.Charts_tabItem__xLybt:hover {
+  cursor: pointer;
+  color: #000000
+}
+
+.Charts_selectedItem__TjKEg {
+  color: #000000
+}
+
+.Charts_selectedItem__TjKEg::after{
+  content: "";
+  position: absolute;
+  display: block;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2.5px;
+  background-color: #000000;
+  z-index: 10;
+}
+/*!************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[2].oneOf[8].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[2].oneOf[8].use[3]!./app/_components/weather/Weather.module.css ***!
+  \************************************************************************************************************************************************************************************************************************************************************************************/
+.Weather_weather__luWSb {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid #77b6e6;
+  background-color: #85c6f8;
+  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+    0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+  border-radius: 0.5rem;
+}
+
+.Weather_header__yDwa1 {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 1rem;
+  height: 2rem;
+  position: relative;
+}
+
+.Weather_clothButton__aggfz {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.Weather_body__YVwBC {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.Weather_header__yDwa1 > p {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  margin: 0;
+}
+
+.Weather_card__SiDF_ {
+  border-radius: 0.5rem;
+  background-color: white;
+  padding: 0 1rem 1rem 1rem;
+  box-shadow: 0 0 0 1px #e3e5e8, 0 1px 2px 0 rgba(0,0,0,.04);
+  position: relative;
+}

@@ -1,0 +1,29 @@
+/*!**********************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[2].oneOf[8].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[2].oneOf[8].use[3]!./app/_components/navbar/NavBar.module.css ***!
+  \**********************************************************************************************************************************************************************************************************************************************************************************/
+.NavBar_navbar__c_dKy {
+    background-color: white;
+    border-bottom: 1px solid#d4d4d8;
+    width: 100vw;
+    z-index: 100;
+    padding: 1rem 0;
+}
+
+.NavBar_container__9mqXR {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 680px;
+    margin: 0 auto;
+}
+
+.NavBar_link__Uq8Ll {
+    text-decoration: none;
+    color: black;
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+.NavBar_link__Uq8Ll p {
+    margin: 0;
+}

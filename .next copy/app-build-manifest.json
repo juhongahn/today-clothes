@@ -1,0 +1,20 @@
+{
+  "pages": {
+    "/(router)/error": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(router)/error.js"
+    ],
+    "/(router)/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(router)/layout.js"
+    ],
+    "/(router)/weather/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/(router)/weather/page.css",
+      "static/chunks/app/(router)/weather/page.js"
+    ]
+  }
+}
