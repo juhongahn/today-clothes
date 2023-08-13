@@ -7,6 +7,7 @@ import {
   MutableRefObject,
   Suspense,
   lazy,
+  useReducer,
 } from "react";
 import { useAppSelector } from "../../../_hooks/redux_hooks";
 import { MdKeyboardArrowRight } from "@react-icons/all-files/md/MdKeyboardArrowRight";
@@ -16,6 +17,7 @@ import WeatherChart from "./WeatherChart";
 import type { Weather } from "../../../_types/types";
 import Loading from "../../ui/Loading";
 import styles from "./Charts.module.css";
+import useSlideNext, { SLIDE_TYPE } from "../../../_hooks/useSlideNext";
 
 const HumidityChart = lazy(() => import("./HumidityChart"));
 const PercipitationChart = lazy(() => import("./PercipitationChart"));
@@ -32,79 +34,23 @@ const ChartList: ChartType[] = [
 ];
 
 const Charts = () => {
-  const weathers = useAppSelector(selectWeatherList);
+  const data = useTimeMatchedWeather();
+  const [slideHandler, chartRef, containerRef, slideState] = useSlideNext();
   const [selectedChart, setSelectedChart] = useState<ChartType>({
     type: "weather",
     value: "날씨",
   });
-  const [xPos, setXPos] = useState<number>(0);
-  const [isButtonDisabled, setIsButtonDisabled] = useState<{
-    left: boolean;
-    right: boolean;
-  }>({ left: true, right: false });
-
-  const chartRef = useRef<any>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const currentDate = new Date().getTime();
-  const data = weathers.filter(
-    (weather) => weather.dt >= currentDate && isAllValueContained(weather)
-  );
-
   const selectChart = (chart: ChartType) => {
-    setXPos(0);
-    setIsButtonDisabled({ left: true, right: false });
+    slideHandler(SLIDE_TYPE.SLIDE_INITIALIZE);
     setSelectedChart(chart);
-  };
-
-  useEffect(() => {
-    if (chartRef.current) {
-      const chartWidth = chartRef.current.container.offsetWidth;
-      const offset = containerRef.current.offsetWidth;
-      chartRef.current.container.style.transform = `translateX(${xPos}px)`;
-      if (Math.abs(xPos) + offset >= chartWidth - 20) {
-        setIsButtonDisabled((prev) => {
-          return {
-            left: prev.left,
-            right: true,
-          };
-        });
-      } else if (xPos === 0) {
-        setIsButtonDisabled((prev) => {
-          return {
-            left: true,
-            right: prev.right,
-          };
-        });
-      } else if (
-        Math.abs(xPos) > 0 &&
-        Math.abs(xPos) + offset < chartWidth - 20
-      ) {
-        setIsButtonDisabled(() => {
-          return {
-            left: false,
-            right: false,
-          };
-        });
-      }
-    }
-  }, [xPos]);
-
-  const slideRight = () => {
-    const offset = containerRef.current.offsetWidth;
-    setXPos((prev) => prev - offset);
-  };
-
-  const slideLeft = () => {
-    const offset = containerRef.current.offsetWidth;
-    setXPos((prev) => prev + offset);
   };
 
   return (
     <div className={styles.charts}>
-      {!isButtonDisabled.left && (
+      {!slideState.isButtonDisabled.left && (
         <MdKeyboardArrowLeft
           size={30}
-          onClick={slideLeft}
+          onClick={slideHandler.bind(null, SLIDE_TYPE.SLIDE_LEFT)}
           className={`${styles.arrow} ${styles.leftButton}`}
         />
       )}
@@ -127,15 +73,24 @@ const Charts = () => {
           {renderChart(selectedChart.type, data, chartRef)}
         </div>
       </div>
-      {!isButtonDisabled.right && (
+      {!slideState.isButtonDisabled.right && (
         <MdKeyboardArrowRight
-          onClick={slideRight}
+          onClick={slideHandler.bind(null, SLIDE_TYPE.SLIDE_RIGHT)}
           size={30}
           className={`${styles.arrow} ${styles.rightButton}`}
         />
       )}
     </div>
   );
+};
+
+const useTimeMatchedWeather = (): Weather[] => {
+  const weathers = useAppSelector(selectWeatherList);
+  const currentDate = new Date().getTime();
+  const data = weathers.filter(
+    (weather) => weather.dt >= currentDate && isAllValueContained(weather)
+  );
+  return data;
 };
 
 const renderChart = (
