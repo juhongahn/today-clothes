@@ -67,27 +67,9 @@ export const GET = async (req: Request) => {
       );
     }
     const today = new Date(date);
-    const tommorow = new Date();
-    tommorow.setDate(today.getDate() + 1);
-
-    const dayAfterTommorow = new Date();
-    dayAfterTommorow.setDate(tommorow.getDate() + 1);
-
-    const twoDaysAfterTommorow = new Date();
-    twoDaysAfterTommorow.setDate(dayAfterTommorow.getDate() + 1);
-
-    const formattedToday = dateFormatter(today);
-    const formmatedTommorow = dateFormatter(tommorow);
-    const formmatedDayAfterTommorow = dateFormatter(dayAfterTommorow);
-    const formmatedTwoDaysAfterTommorow = dateFormatter(twoDaysAfterTommorow);
-
-    const setteledResults = await Promise.allSettled([
-      fetcher(lat, lon, formattedToday),
-      fetcher(lat, lon, formmatedTommorow),
-      fetcher(lat, lon, formmatedDayAfterTommorow),
-      fetcher(lat, lon, formmatedTwoDaysAfterTommorow),
-    ]);
-
+    const setteledResults = await Promise.allSettled(
+      createPromiseList(today, 4, lat, lon)
+    );
     const results = convertXMLToJSON(setteledResults);
     return NextResponse.json({ data: results }, { status: 200 });
   } catch (error: unknown) {
@@ -123,13 +105,32 @@ const convertXMLToJSON = (inputPSRList: PromiseSettledResult<string>[]) => {
   return results;
 };
 
+const createPromiseList = (
+  startDate: Date,
+  targetDays: number,
+  lat: string,
+  lon: string
+) => {
+  const dateList: Date[] = [startDate];
+  for (let i = 0; i < targetDays; i++) {
+    const nextDate = new Date();
+    nextDate.setDate(dateList[i].getDate() + 1);
+    dateList.push(nextDate);
+  }
+
+  const promiseList = dateList.map((date) => {
+    const formattedDay = dateFormatter(date);
+    return fetcher(lat, lon, formattedDay);
+  });
+
+  return promiseList;
+};
+
 const fetcher = async (lat: string, lon: string, date: string) => {
   const query = `${RISE_SET_URL}?serviceKey=${SERVICE_KEY}&locdate=${date}&longitude=${lon}&latitude=${lat}&dnYn=Y`;
   const response = await appFetch(query, {
     method: "GET",
-    headers: {
-      "Cache-Control": "no-store",
-    },
+    cache: "no-store",
   });
   return response.text();
 };
