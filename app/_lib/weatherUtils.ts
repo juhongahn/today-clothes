@@ -65,7 +65,7 @@ export function getWeatherRequestURL(lat: string, lon: string, hours: number) {
   const serviceKey: string = process.env.SERVICE_KEY;
   const date = new Date();
   const pageNo: number = 1;
-  const numOfRows: number = 610;
+  const numOfRows: number = 1000;
   const dataType: string = "JSON";
 
   const baseDate: string = getBaseDate(REQ_TYPE.WEATHER, date);
