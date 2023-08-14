@@ -70,7 +70,7 @@ const Charts = () => {
           ))}
         </div>
         <div className={styles.chartContainer}>
-          {renderChart(selectedChart.type, data, chartRef)}
+          {renderChart(selectedChart.type, data, chartRef, 614 * 4)}
         </div>
       </div>
       {!slideState.isButtonDisabled.right && (
@@ -96,7 +96,8 @@ const useTimeMatchedWeather = (): Weather[] => {
 const renderChart = (
   selectedChart: string,
   data: Weather[],
-  chartRef: MutableRefObject<any>
+  chartRef: MutableRefObject<any>,
+  width: number,
 ) => {
   const size = { width: 32, height: 32 };
   switch (selectedChart) {
@@ -104,7 +105,7 @@ const renderChart = (
       return (
         <>
           {data.length > 0 ? (
-            <WeatherChart weathers={data} ref={chartRef} />
+            <WeatherChart weathers={data} ref={chartRef} width={width} />
           ) : (
             <div className={styles.chartLoading}>
               <Loading size={size} />
@@ -121,7 +122,7 @@ const renderChart = (
             </div>
           }
         >
-          <HumidityChart weathers={data} ref={chartRef} />
+          <HumidityChart weathers={data} ref={chartRef} width={width}/>
         </Suspense>
       );
     case "percipitation":
@@ -133,7 +134,7 @@ const renderChart = (
             </div>
           }
         >
-          <PercipitationChart weathers={data} ref={chartRef} />
+          <PercipitationChart weathers={data} ref={chartRef} width={width}/>
         </Suspense>
       );
   }

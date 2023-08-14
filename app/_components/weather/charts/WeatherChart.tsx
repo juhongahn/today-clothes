@@ -16,6 +16,7 @@ import styles from "./WeatherChart.module.css";
 
 interface WeatherChartProps {
   weathers: Weather[];
+  width: number;
 }
 
 const WeatherChart = forwardRef<any, WeatherChartProps>(function WeatherChart(
@@ -26,7 +27,7 @@ const WeatherChart = forwardRef<any, WeatherChartProps>(function WeatherChart(
   return (
     <>
       <LineChart
-        width={615 * 3}
+        width={props.width}
         height={200}
         data={weathers}
         margin={{ top: 50, right: 20, bottom: 0, left: 20 }}

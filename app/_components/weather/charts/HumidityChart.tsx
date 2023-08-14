@@ -7,6 +7,7 @@ import styles from "./WeatherChart.module.css";
 
 interface HumidityChartProps {
   weathers: Weather[];
+  width: number;
 }
 
 const HumidityChart = forwardRef<any, HumidityChartProps>(function HumidityChart(props, ref) {
@@ -14,7 +15,7 @@ const HumidityChart = forwardRef<any, HumidityChartProps>(function HumidityChart
   return (
     <>
       <BarChart
-        width={615 * 3}
+        width={props.width}
         height={180}
         data={weathers}
         ref={ref}

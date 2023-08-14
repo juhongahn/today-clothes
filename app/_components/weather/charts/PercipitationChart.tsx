@@ -7,6 +7,7 @@ import styles from "./WeatherChart.module.css";
 
 interface PercipitationChartProps {
   weathers: Weather[];
+  width: number;
 }
 
 const PercipitationChart = forwardRef<any, PercipitationChartProps>(
@@ -16,7 +17,7 @@ const PercipitationChart = forwardRef<any, PercipitationChartProps>(
       <>
         <p className={styles.legend}>강수확률 (%) | 강수량 (mm)</p>
         <BarChart
-          width={615 * 3}
+          width={props.width}
           height={180}
           data={weathers}
           ref={ref}
