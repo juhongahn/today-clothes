@@ -1,14 +1,13 @@
 .img {
   z-index: -100;
   opacity: .5;
-  position: relative;
 }
 
 .container {
   width: 680px;
   margin: 0 auto;
   padding-top: 3.5rem;
-  margin-top: 10vh;
+  margin-top: 8vh;
 }
 
 
