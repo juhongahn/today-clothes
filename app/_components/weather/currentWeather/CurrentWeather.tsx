@@ -15,6 +15,7 @@ import Loading from "../../ui/Loading";
 const CurrentWeather = () => {
   return (
     <div className={styles.container}>
+      <h2>일간 예보</h2>
       <CurrentWeatherItem />
       <div className={styles.footer}>
         <Badges />
