@@ -5,6 +5,7 @@ import uvReducer from "./_reducers/uvReducer";
 import dustReducer from "./_reducers/dustReducer";
 import localReducer from "./_reducers/localReducer";
 import risesetReducer from "./_reducers/risesetReducer";
+import midTermForcastReducer from "./_reducers/midTermForcastReducer";
 
 export const store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ export const store = configureStore({
     dust: dustReducer,
     local: localReducer,
     riseset: risesetReducer,
+    midTermForcast: midTermForcastReducer,
   },
 });
 export type RootState = ReturnType<typeof store.getState>;

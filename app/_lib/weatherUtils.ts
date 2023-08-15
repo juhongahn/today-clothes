@@ -61,15 +61,19 @@ export function getBaseDate(req: REQ_TYPE, date: Date): string {
  * @param {경도} lon
  * @returns 단기예보 api 요청 주소 반환
  */
-export function getWeatherRequestURL(lat: string, lon: string, hours: number) {
+export function getWeatherRequestURL(lat: string, lon: string) {
   const serviceKey: string = process.env.SERVICE_KEY;
   const date = new Date();
+  date.setDate(date.getDate() - 1);
   const pageNo: number = 1;
   const numOfRows: number = 1000;
   const dataType: string = "JSON";
 
-  const baseDate: string = getBaseDate(REQ_TYPE.WEATHER, date);
-  const baseTime: string = getNearPredictionTime(hours);
+  // const baseDate: string = getBaseDate(REQ_TYPE.WEATHER, date);
+  // const baseTime: string = getNearPredictionTime(hours);
+  const baseDate: string = dateFormatter(date)
+  const baseTime: string = "2300";
+
   const { x: nx, y: ny } = dfs_xy_conv("toXY", lat, lon);
 
   return `serviceKey=${serviceKey}&pageNo=${pageNo}&numOfRows=${numOfRows}&dataType=${dataType}&base_date=${baseDate}&base_time=${baseTime}&nx=${nx}&ny=${ny}`;

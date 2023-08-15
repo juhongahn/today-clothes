@@ -1,8 +1,14 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  createAsyncThunk,
+  PayloadAction,
+  createSelector,
+} from "@reduxjs/toolkit";
 import { RootState, getInitialComparisonTime } from "../store";
 import { Weather } from "../_types/types";
 import { appFetch } from "../_helpers/custom-fetch/fetchWrapper";
 import { FAILED, FULFILLED, LOADING } from "../_helpers/constants/constants";
+import { dateFormatter } from "../_lib/weatherUtils";
 
 export const fetchWeathers = createAsyncThunk(
   "weatherSlice/fetchWeathers",
@@ -68,4 +74,47 @@ export const selectCurrentWeather = (state: RootState) =>
   state.weather.weatherList.find(
     (weather) => weather.dt === getInitialComparisonTime()
   );
+
+export const selectThreeDaysForcast = createSelector(
+  [selectWeatherList],
+  (weathers) => {
+    const amPmWeatherObj = {};
+    const currentDate = new Date();
+
+    weathers.forEach((weather) => {
+      const comparisonDate = new Date(weather.dt);
+      if (comparisonDate.getDate() === currentDate.getDate()) {
+        const comparisonHours = comparisonDate.getHours();
+        if (comparisonHours === 7 || comparisonHours === 14) {
+          const keyDate = dateFormatter(currentDate);
+          if (!amPmWeatherObj[keyDate]) {
+            amPmWeatherObj[keyDate] = {};
+          }
+          if (comparisonHours === 7) {
+            amPmWeatherObj[keyDate]["am"] = weather;
+          } else {
+            amPmWeatherObj[keyDate]["pm"] = weather;
+            currentDate.setDate(currentDate.getDate() + 1);
+          }
+        }
+      }
+    });
+
+    const result: {
+      fcstDate: string;
+      am: Weather;
+      pm: Weather;
+    }[] = [];
+
+    for (const fcstDate in amPmWeatherObj) {
+      const { am, pm } = amPmWeatherObj[fcstDate];
+      result.push({
+        fcstDate,
+        am,
+        pm,
+      });
+    }
+    return result;
+  }
+);
 export default weatherSlice.reducer;

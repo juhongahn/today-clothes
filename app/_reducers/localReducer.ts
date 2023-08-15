@@ -4,6 +4,7 @@ import { fetchUV } from "./uvReducer";
 import type { Local } from "../_types/types";
 import { appFetch } from "../_helpers/custom-fetch/fetchWrapper";
 import { FAILED, FULFILLED, LOADING } from "../_helpers/constants/constants";
+import { fetchMidTermForcast } from "./midTermForcastReducer";
 
 export const fetchLocal = createAsyncThunk(
   "localSlice/fetchLocal",
@@ -19,6 +20,11 @@ export const fetchLocal = createAsyncThunk(
     );
     const { data } = await response.json();
     thunkAPI.dispatch(fetchUV(data[1].code)); // 행정 코드를 기반으로 UV 데이터 요청
+    const midTermForcastParams = {
+      si: data[1].region_2depth_name.split(" ")[0],
+      do: data[1].region_1depth_name,
+    };
+    thunkAPI.dispatch(fetchMidTermForcast(midTermForcastParams));
     return data;
   }
 );

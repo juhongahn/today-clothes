@@ -11,6 +11,7 @@ import Button from "../ui/Button";
 import Charts from "./charts/Charts";
 import styles from "./Weather.module.css";
 import { RootState } from "../../store";
+import WeeklyForcast from "./weeklyForcast/WeeklyForcast";
 
 const Weather = () => {
   const local = useAppSelector(selectLocal);
@@ -49,6 +50,9 @@ const Weather = () => {
         </div>
         <div className={`${styles.card} ${styles.chart}`}>
           <Charts />
+        </div>
+        <div className={styles.card}>
+        <WeeklyForcast />
         </div>
       </div>
       {isModalShow &&

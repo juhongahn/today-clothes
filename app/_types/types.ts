@@ -40,8 +40,8 @@ export type Weather = {
     VVV: string;
     WAV: string;
     WSD: string;
-    TMX?: string,
-    TMN?: string,
+    TMX: string,
+    TMN: string,
   };
 };
 

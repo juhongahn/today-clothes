@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { getWeatherRequestURL } from "../../_lib/weatherUtils";
-import { appFetch, handleError } from "../../_helpers/custom-fetch/fetchWrapper";
+import {
+  appFetch,
+  handleError,
+} from "../../_helpers/custom-fetch/fetchWrapper";
 import { HttpError } from "../../_helpers/error-class/HttpError";
 import { Weather } from "../../_types/types";
 
@@ -23,11 +26,7 @@ export const GET = async (req: Request) => {
         )
       );
     }
-    const query = `${WEATHER_URL}?${getWeatherRequestURL(
-      lat,
-      lon,
-      parseInt(hours)
-    )}`;
+    const query = `${WEATHER_URL}?${getWeatherRequestURL(lat, lon)}`;
     const response = await appFetch(query, {
       method: "GET",
       cache: "no-store",
@@ -65,10 +64,8 @@ const groupHourlyFcstValue = (weatherItems: any, minMaxList): Weather[] => {
   weatherItems.forEach((item) => {
     const { fcstDate, fcstTime, fcstValue, category } = item;
     const unixTime = convertToUnixTime(fcstDate, fcstTime);
-    const existingData = transformedData.find(
-      (data) => data.dt === unixTime
-    );
-    const dailyMinMax = minMaxList.find(data => data.fcstDate === fcstDate);
+    const existingData = transformedData.find((data) => data.dt === unixTime);
+    const { TMX, TMN } = minMaxList.find((data) => data.fcstDate === fcstDate) || {};
     if (existingData) {
       existingData.value[category.toUpperCase()] = fcstValue;
     } else {
@@ -76,8 +73,8 @@ const groupHourlyFcstValue = (weatherItems: any, minMaxList): Weather[] => {
         dt: unixTime,
         value: {
           [category.toUpperCase()]: fcstValue,
-          TMX: dailyMinMax.TMX,
-          TMN: dailyMinMax.TMN,
+          TMX: TMX ? TMX : "",
+          TMN: TMN ? TMN : "",
         },
       };
       transformedData.push(newData);
@@ -88,31 +85,26 @@ const groupHourlyFcstValue = (weatherItems: any, minMaxList): Weather[] => {
 };
 
 const getMinMaxTemperaturesList = (items) => {
-  const groupedByDate = {};
-
-  // 날짜별 TMP 리스트 만들기.
-  items.forEach(item => {
-    if (item.category === "TMP") {
-      if (!groupedByDate[item.fcstDate]) {
-        groupedByDate[item.fcstDate] = [];
+  const tmnxObjByDate = {};
+  items.forEach((item) => {
+    if (item.category === "TMX" || item.category === "TMN") {
+      if (!tmnxObjByDate[item.fcstDate]) {
+        tmnxObjByDate[item.fcstDate] = {};
       }
-      groupedByDate[item.fcstDate].push(parseInt(item.fcstValue));
+      tmnxObjByDate[item.fcstDate][item.category] = parseInt(item.fcstValue);
     }
   });
-
   const result = [];
-  for (const fcstDate in groupedByDate) {
-    const values = groupedByDate[fcstDate];
-    const min = Math.min(...values);
-    const max = Math.max(...values);
+  for (const fcstDate in tmnxObjByDate) {
+    const {TMN, TMX} = tmnxObjByDate[fcstDate];
     result.push({
       fcstDate,
-      TMX: max,
-      TMN: min
+      TMX,
+      TMN
     });
   }
   return result;
-}
+};
 
 const convertToUnixTime = (fcstDate: string, fcstTime: string) => {
   const year = parseInt(fcstDate.substring(0, 4));
