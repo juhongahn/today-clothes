@@ -8,10 +8,7 @@ export const metadata = {
   description: "오늘 날씨에 따라 AI가 추천하는 옷을 알려드립니다.",
 };
 
-
-const RootLayout = ({ children, }: {
-  children: React.ReactNode
-}) => {
+const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="ko">
       <body>
@@ -24,7 +21,9 @@ const RootLayout = ({ children, }: {
           priority
         />
         <NavBar />
+        <div className={styles.layout}>
           <div className={styles.container}>{children}</div>
+        </div>
       </body>
     </html>
   );
