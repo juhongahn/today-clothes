@@ -1,0 +1,46 @@
+.card {
+  border: 1px solid #eaeef2;
+  border-radius: 6px;
+  color: #202020;
+  padding-bottom: 0.5rem;
+}
+
+.card:hover {
+  cursor: pointer;
+}
+
+.card:hover .graphic {
+  width: 360px;
+}
+
+.card:last-child .graphic{
+  width: 360px;
+}
+
+.graphic {
+  width: 280px;
+  height: 300px;
+  position: relative;
+  margin-bottom: 0.5rem;
+  transition: width 0.3s ease-in-out;
+}
+
+.image {
+  object-fit: cover;
+  border-radius: 6px 6px 0 0;
+}
+
+.des {
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #8f8f8f;
+  text-overflow: ellipsis;
+}
+
+.title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: black;
+  margin-bottom: 0.3rem;
+}
