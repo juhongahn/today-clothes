@@ -3,11 +3,8 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "../_hooks/redux_hooks";
-import { fetchWeathers } from "../_reducers/weatherReducer";
-import { fetchDust } from "../_reducers/dustReducer";
-import { fetchLocal } from "../_reducers/localReducer";
-import { fetchRiseset } from "../_reducers/risesetReducer";
 import Weather from "./weather/Weather";
+import useCoords from "../_hooks/useCoords";
 
 const WeatherWrapper = () => {
   const dispatch = useAppDispatch();
@@ -18,17 +15,18 @@ const WeatherWrapper = () => {
     if (strCoords) {
       const coords: { latitude: number; longitude: number } =
         JSON.parse(strCoords);
-      dispatch(fetchWeathers(coords));
-      dispatch(fetchLocal(coords));
-      dispatch(fetchRiseset(coords));
-      dispatch(fetchDust(coords));
+      useCoords(coords, dispatch);
     } else {
       alert("위치 엑세스를 허용 해주세요.");
       router.push("/");
     }
   }, []);
 
-  return <Weather />;
+  return (
+    <>
+      <Weather />
+    </>
+  );
 };
 
 export default WeatherWrapper;

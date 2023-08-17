@@ -1,0 +1,14 @@
+.page {
+  display: flex;
+  gap: 3rem;
+}
+
+.weather {
+  width: 680px;
+}
+
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
