@@ -23,7 +23,7 @@ const WeatherWrapper = () => {
       dispatch(fetchRiseset(coords));
       dispatch(fetchDust(coords));
     } else {
-      alert("위치 엑세스를 허용 해주세요.")
+      alert("위치 엑세스를 허용 해주세요.");
       router.push("/");
     }
   }, []);

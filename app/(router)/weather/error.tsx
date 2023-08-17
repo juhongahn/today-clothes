@@ -24,6 +24,7 @@ export default function Error({
         <Image
           src={"/statics/images/404.png"}
           alt="404 not found"
+          priority
           width={128}
           height={128}
         />
@@ -34,10 +35,8 @@ export default function Error({
       </div>
       <div className={styles.footer}>
         <div className={styles.button}>
-          <Button variant="success" size="md">
-            <Link className={styles.href} href="/">
+          <Button variant="success" size="md" onClick={reset}>
               다시 시도하기
-            </Link>
           </Button>
           <Button variant="primary" size="md">
             <Link className={styles.href} href="/">

@@ -1,15 +1,15 @@
-"use client"
-
-import { Provider } from "react-redux";
-import { store } from "../../store";
-import WeatherWrapper from "../../_components/WeatherWrapper";
-
+import SearchSection from "../../_components/searchWeather/SearchSection";
+import Wrapper from "./Wrapper";
+import TourWrapper from "../../_components/tour/TourWrapper";
 
 const Page = () => {
   return (
-    <Provider store={store}>
-      <WeatherWrapper />
-    </Provider>
+    <>
+      <Wrapper />
+      <SearchSection />
+      {/* @ts-expect-error Async Server Component */}
+      <TourWrapper />
+    </>
   );
 };
 
