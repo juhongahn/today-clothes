@@ -23,7 +23,7 @@ const WeeklyForcast = () => {
             })}
             {weeklyForcast &&
               weeklyForcast.map((mtforcast, idx) => {
-                return <WeeklyForcastItem mtForcast={mtforcast} key={idx} />;
+                return <WeeklyForcastItem key={idx} mtForcast={mtforcast}/>;
               })}
           </ul>
         </div>

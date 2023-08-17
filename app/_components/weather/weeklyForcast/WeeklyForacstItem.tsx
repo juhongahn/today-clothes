@@ -3,17 +3,16 @@ import { MidTermForcast } from "../../../api/mid-term-forcast/route";
 import styles from "./WeeklyForcast.module.css";
 
 interface WeeklyForcastItemProps {
-  key: number;
   mtForcast: MidTermForcast;
 }
 
-const WeeklyForcastItem = ({ key, mtForcast }: WeeklyForcastItemProps) => {
+const WeeklyForcastItem = ({ mtForcast }: WeeklyForcastItemProps) => {
   const amImgProps = getImageSource(mtForcast.fcst.weatherForcast.wfAM);
   const pmImgProps = getImageSource(mtForcast.fcst.weatherForcast.wfPM);
   return (
-    <li key={key} className={styles.weekItem}>
-      <div className={styles.fcstDate}>{renderDate(mtForcast.dt)}</div>
-      <div className={styles.fcst}>
+    <li className={styles.weekItem}>
+      <div className={`${styles.fcstDate} ${styles.contents}`}>{renderDate(mtForcast.dt)}</div>
+      <div className={`${styles.fcst} ${styles.contents}`}>
         <div className={styles.time}>
           <div className={styles.pop}>
             <p className={styles.label}>오전</p>
@@ -33,7 +32,7 @@ const WeeklyForcastItem = ({ key, mtForcast }: WeeklyForcastItemProps) => {
           </div>
         </div>
       </div>
-      <div className={styles.hltemp}>
+      <div className={`${styles.hltemp} ${styles.contents}`}>
         <p>
           <span className={styles.lowT}>{mtForcast.hlTemperature.tmn}°</span>
           <span className={styles.slash}>/ </span>

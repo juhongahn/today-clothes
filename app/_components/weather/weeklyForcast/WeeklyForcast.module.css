@@ -3,7 +3,7 @@
 }
 
 .header h2 {
-  margin: 1rem 0 1.8rem 0;
+  margin: 0 0 1.8rem 0;
 }
 
 .forcastUL {
@@ -79,4 +79,60 @@
   color: red;
   font-weight: 600;
   font-size: 1.1rem;
+}
+
+@media screen and (max-width: 680px) {
+  .forcastUL {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 0;
+  }
+  .contents {
+    flex-grow: 1;
+  }
+  .fcstDate {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .fcst {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .hltemp {
+    display: flex;
+    justify-content: center;
+  }
+
+  .day {
+    font-weight: 600;
+    font-size: 1.2rem;
+    text-align: center;
+  }
+
+  .date {
+    font-size: 1rem;
+  }
+
+  .label {
+    font-size: 1rem;
+  }
+
+  .popvalue {
+    font-size: 1rem;
+  }
+
+  .lowT {
+    color: blue;
+    font-weight: 600;
+    font-size: 1.3rem;
+  }
+
+  .hotT {
+    color: red;
+    font-weight: 600;
+    font-size: 1.4rem;
+  }
 }
