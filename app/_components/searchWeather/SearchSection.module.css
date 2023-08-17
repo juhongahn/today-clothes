@@ -9,13 +9,38 @@
 
 .header {
   margin-bottom: 0.8rem;
+}
+
+.form {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  z-index: 3;
+  border: 1px solid #e8ebee;
+  background: #fff;
+  border-radius: 6px;
 }
 
 .title h3 {
   margin: 0;
+  padding: 0.5rem 0 0.8rem 0;
+}
+
+.input {
+  background-color: transparent;
+  border: none;
+  margin: 0;
+  color: rgba(0, 0, 0, 0.87);
+  outline: none;
+  display: flex;
+  width: 100%;
+  padding: 0.5rem;
+}
+
+.searchButton {
+  background-color: transparent;
+  border: none;
+  border-radius: 0 8px 8px 0;
+  padding: 0 12px;
+  cursor: pointer;
 }
 
 .keywords {
