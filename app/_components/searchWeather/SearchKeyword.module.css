@@ -1,0 +1,9 @@
+.keyword {
+    padding: 0.4rem 0.8rem;
+    background-color: rgba(255,255,255,.7);
+    border: solid 1px #eaeced;
+    border-radius: 3px;
+    font-size: 0.85rem;
+    color: #404040;
+    border-radius: 5px;
+}

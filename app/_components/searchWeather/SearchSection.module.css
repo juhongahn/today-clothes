@@ -1,0 +1,27 @@
+.searchSection {
+  border-radius: 6px;
+  background-color: white;
+  border: 1px solid #e8ebee;
+  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.03);
+  padding: 1rem;
+  width: 400px;
+}
+
+.header {
+  margin-bottom: 0.8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title h3 {
+  margin: 0;
+}
+
+.keywords {
+  display: flex;
+  gap: 0.8rem;
+  row-gap: 0.5rem;
+  column-gap: 0.5rem;
+  flex-wrap: wrap;
+}
