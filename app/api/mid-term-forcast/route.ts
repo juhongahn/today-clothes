@@ -30,12 +30,10 @@ export const GET = async (req: Request) => {
     }
     const hlRegId = getRegIdBySiName(hlRegion);
     const wfRegId = getRegionCodeByRegionName(wfRegion);
-    console.log(wfRegId)
     const baseDate = new Date();
     const tmFc = requestDateFormmator(baseDate);
     const hlTemperatureQuery = `${MID_TERM_HL_TEMERATURE_FORCAST_URL}?serviceKey=${SERVICE_KEY}&pageNo=1&numOfRows=10&dataType=json&regId=${hlRegId}&tmFc=${tmFc}`;
     const fcstQuery = `${MID_TERM_MID_FCST_FORCAST_URL}?serviceKey=${SERVICE_KEY}&pageNo=1&numOfRows=10&dataType=json&regId=${wfRegId}&tmFc=${tmFc}`;
-    console.log(fcstQuery)
     const hlTempData = hlTemperatureFetcher(hlTemperatureQuery);
     const fcstData = fcstFetcher(fcstQuery);
     const [hlTemperature, fcst] = await Promise.all([hlTempData, fcstData]);
@@ -95,7 +93,6 @@ const parsingMidTermForcastData = (
 
   baseDateCopy.setDate(baseDateCopy.getDate() + 3);
   for (let i = 3; i <= 10; i++) {
-    console.log(fcstItem[`wf${i}Am`])
     const formattedItem = {
       dt: responseDateFormmator(baseDateCopy),
       hlTemperature: {
