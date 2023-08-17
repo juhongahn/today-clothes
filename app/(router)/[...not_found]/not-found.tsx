@@ -10,6 +10,7 @@ const NotFound = () => {
         <Image
           src={"/statics/images/404.png"}
           alt="404 not found"
+          priority
           width={128}
           height={128}
         />
