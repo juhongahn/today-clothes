@@ -70,8 +70,8 @@ export const GET = async (req: Request) => {
     });
     // 공공 데이터 포털에서 에러 발생시 xml을 내려준다.
     if (
-      response.headers.get("Content-Type") === "application/xml" ||
-      response.headers.get("Content-Type") === "text/xml"
+      response.headers.get("Content-Type").includes("application/xml") ||
+      response.headers.get("Content-Type").includes("text/xml")
     ) {
       throw new HttpError(
         "서버 에러가 발생했습니다.",
