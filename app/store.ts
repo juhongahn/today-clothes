@@ -6,6 +6,7 @@ import dustReducer from "./_reducers/dustReducer";
 import localReducer from "./_reducers/localReducer";
 import risesetReducer from "./_reducers/risesetReducer";
 import midTermForcastReducer from "./_reducers/midTermForcastReducer";
+import tourReducer from "./_reducers/tourReducer";
 
 export const store = configureStore({
   reducer: {
@@ -15,6 +16,7 @@ export const store = configureStore({
     local: localReducer,
     riseset: risesetReducer,
     midTermForcast: midTermForcastReducer,
+    tour: tourReducer,
   },
 });
 export type RootState = ReturnType<typeof store.getState>;
