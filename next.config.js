@@ -8,8 +8,8 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'cdn.visitkorea.or.kr',
+        protocol: 'http',
+        hostname: 'tong.visitkorea.or.kr',
         port: '',
       },
     ],
