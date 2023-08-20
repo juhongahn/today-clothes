@@ -1,0 +1,18 @@
+.badge {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  justify-content: center;
+  background: #fff;
+  border: 1px solid #dadce0;
+  box-sizing: border-box;
+  border-radius: 20px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.selected {
+  color: white;
+  background-color: #85c6f8;
+  border-color:#77b6e6;
+}

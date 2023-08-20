@@ -9,11 +9,13 @@
   cursor: pointer;
 }
 
-.card:hover .graphic {
+.card:hover .graphic,
+.card:hover .des {
   width: 360px;
 }
 
-.card:last-child .graphic{
+.card:last-child .graphic,
+.card:last-child .des {
   width: 360px;
 }
 
@@ -31,11 +33,20 @@
 }
 
 .des {
+  width: 280px;
   text-align: center;
   font-size: 0.9rem;
   font-weight: 400;
   color: #8f8f8f;
-  text-overflow: ellipsis;
+  padding: 0 1rem;
+  transition: width 0.3s ease-in-out;
+}
+
+.des > p:nth-child(2) {
+  display: block; /* 블록태그로 만들어준다 */
+  text-overflow: ellipsis; /* 말줄임 css */
+  white-space: nowrap; /*글자를 한줄로 모아준다*/
+  overflow: hidden;
 }
 
 .title {
