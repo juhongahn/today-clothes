@@ -14,12 +14,12 @@ export async function POST(req: NextRequest) {
   const payload: OpenAIStreamPayload = {
     model: "gpt-3.5-turbo",
     messages: messages,
-    temperature: 0.25,
+    temperature: 0.3,
     presence_penalty: 0,
     top_p: 1,
     frequency_penalty: 0,
     stream: true,
-    max_tokens: 600,
+    max_tokens: 1000,
     n: 1,
   };
 
