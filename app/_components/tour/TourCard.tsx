@@ -19,13 +19,19 @@ interface TourCardProps {
 
 const TourCard = ({ key, tour, cardSelectHandler }: TourCardProps) => {
   return (
-    <div key={key} className={styles.card} onClick={cardSelectHandler.bind(null, tour)}>
+    <div
+      key={key}
+      className={styles.card}
+      onClick={cardSelectHandler.bind(null, tour)}
+    >
       <div className={styles.graphic}>
         <Image
           className={styles.image}
           src={tour.image}
           fill
+          sizes="100%"
           alt="여행지 이미지"
+          priority
         />
       </div>
       <div className={styles.des}>

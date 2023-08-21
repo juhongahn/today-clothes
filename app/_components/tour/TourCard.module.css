@@ -43,9 +43,9 @@
 }
 
 .des > p:nth-child(2) {
-  display: block; /* 블록태그로 만들어준다 */
-  text-overflow: ellipsis; /* 말줄임 css */
-  white-space: nowrap; /*글자를 한줄로 모아준다*/
+  display: block;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   overflow: hidden;
 }
 
