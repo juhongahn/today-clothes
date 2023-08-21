@@ -10,6 +10,7 @@ import useCoords from "../../_hooks/useCoords";
 import { useAppDispatch, useAppSelector } from "../../_hooks/redux_hooks";
 import Badge from "./tourBadge/Badge";
 import { fetchTour, selectTourList } from "../../_reducers/tourReducer";
+import TourCardLoading from "./Loading";
 
 type BadgeType = {
   id: string;
@@ -116,7 +117,7 @@ const Tour = () => {
             />
           )}
           <div className={styles.cards} ref={cardsRef}>
-            {tourList &&
+            {tourList.length > 0 ?
               tourList.map((tour, idx) => {
                 return (
                   <TourCard
@@ -125,7 +126,9 @@ const Tour = () => {
                     cardSelectHandler={cardSelectHandler}
                   />
                 );
-              })}
+              })
+              : <TourCardLoading />
+            }
           </div>
           {tourList.length > 0 && cardsButtonState.right && (
             <MdKeyboardArrowRight
