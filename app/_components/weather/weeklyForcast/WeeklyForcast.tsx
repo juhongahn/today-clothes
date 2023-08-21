@@ -27,7 +27,7 @@ const WeeklyForcast = () => {
               weeklyForcast.map((mtforcast, idx) => {
                 return <WeeklyForcastItem key={idx} mtForcast={mtforcast} />;
               })}
-            {threeDaysForcast.length === 0 && weeklyForcast.length === 0 && (
+            {(threeDaysForcast.length === 0 || weeklyForcast.length === 0) && (
               <WeeklyForcastLoading />
             )}
           </ul>
