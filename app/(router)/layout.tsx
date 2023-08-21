@@ -1,7 +1,14 @@
+import { IBM_Plex_Sans_KR } from "next/font/google";
 import NavBar from "../_components/navbar/NavBar";
 import Image from "next/image";
 import styles from "./main.module.css";
 import "./globals.css";
+
+const ibm_plex_sans_kr = IBM_Plex_Sans_KR({
+  weight: ["100" , "200" , "300" , "400" , "500" , "600" , "700"],
+  display: "swap",
+  subsets: ["latin"],
+});
 
 export const metadata = {
   title: "오늘의 옷",
@@ -10,7 +17,7 @@ export const metadata = {
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <html lang="ko">
+    <html lang="ko" className={ibm_plex_sans_kr.className}>
       <body>
         <div id="modal-portal"></div>
         <Image
