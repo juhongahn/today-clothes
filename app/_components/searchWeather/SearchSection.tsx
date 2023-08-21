@@ -9,31 +9,53 @@ import styles from "./SearchSection.module.css";
 import { FaSearchLocation } from "@react-icons/all-files/fa/FaSearchLocation";
 
 const mock = [
-  "의령 날씨",
+  "서울 날씨",
   "제주 날씨",
   "대구 날씨",
-  "서울 날씨",
   "부산 날씨",
   "강원 날씨",
   "속초 날씨",
+  "의령 날씨",
 ];
 
 const SearchSection = () => {
   const dispatch = useAppDispatch();
-  const [input, setInput] = useState<string>("");
+  const [inputAddress, setInputAddress] = useState<string>("");
+  const [notFoundError, setNotFoundError] = useState<string>("");
 
-  const keywordClickHandler = async (keyword: string) => {
-    handleSubmit(keyword, dispatch);
-  };
-  const submitHandler = (
+  const handleSubmit = async (
     event:
       | React.KeyboardEvent<HTMLInputElement>
-      | React.MouseEvent<HTMLButtonElement, MouseEvent>
+      | React.MouseEvent<Element, MouseEvent>,
+    keyword?: string
   ) => {
     event.preventDefault();
-    handleSubmit(input, dispatch);
-    setInput("");
+    try {
+      if (!inputAddress && !keyword) {
+        throw new Error("주소를 입력해 주세요.");
+      }
+      const address = trimAddress(keyword ? keyword : inputAddress);
+      const { x, y } = await getXY(address);
+      const coords = {
+        latitude: parseFloat(y),
+        longitude: parseFloat(x),
+      };
+      useCoords(coords, dispatch);
+      setNotFoundError("");
+    } catch (error) {
+      setNotFoundError(error.message);
+    } finally {
+      setInputAddress("")
+    }
   };
+
+  const keywordClickHandler = (
+    event: React.MouseEvent<Element, MouseEvent>,
+    keyword: string
+  ) => {
+    handleSubmit(event, keyword);
+  };
+
   return (
     <div className={styles.searchSection}>
       <div className={styles.header}>
@@ -43,33 +65,31 @@ const SearchSection = () => {
         <div className={styles.form}>
           <input
             type="text"
+            value={inputAddress}
             className={styles.input}
-            onChange={(event) => setInput(event.target.value)}
+            placeholder="주소를 입력해 주세요."
+            onChange={(event) => setInputAddress(event.target.value)}
             onKeyDown={(event) => {
               if (event.key === "Enter" && !event.shiftKey) {
-                submitHandler(event);
+                handleSubmit(event);
               }
             }}
           />
           <button
             className={styles.searchButton}
             onClick={(event) => {
-              event.preventDefault();
-              handleSubmit(input, dispatch);
+              handleSubmit(event);
             }}
           >
             <FaSearchLocation size={18} color="#5f6368ff" />
           </button>
         </div>
+        {notFoundError && <p className={styles.error}>{notFoundError}</p>}
       </div>
       <div className={styles.body}>
         <div className={styles.keywords}>
           {mock.map((keyword, idx) => (
-            <SearchKeyword
-              key={idx}
-              region={keyword}
-              keywordClickHandler={keywordClickHandler.bind(null, keyword)}
-            />
+            <SearchKeyword key={idx} region={keyword} onClick={keywordClickHandler} />
           ))}
         </div>
       </div>
@@ -77,23 +97,28 @@ const SearchSection = () => {
   );
 };
 
-const handleSubmit = async (inputStr: string, dispatch) => {
-  const { x, y } = await getXY(inputStr);
-  const coords = {
-    latitude: parseFloat(y),
-    longitude: parseFloat(x),
-  };
-  useCoords(coords, dispatch);
-};
-
 export const getXY = async (address: string) => {
   try {
-    const response = await appFetch(`api/address-search?address=${address}`);
+    const response = await appFetch(`api/address-search`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accecpt: "application/json",
+      },
+      body: JSON.stringify(address),
+    });
     const { data } = await response.json();
+    console.log(data)
     return data[0];
   } catch (error) {
-    // TODO: Error handling
+    throw new Error("주소를 찾을 수 없습니다.");
   }
+};
+
+export const trimAddress = (inputAddressText: string) => {
+  const keyword = "날씨";
+  const modifiedText = inputAddressText.replace(keyword, "");
+  return modifiedText.trim();
 };
 
 export default SearchSection;

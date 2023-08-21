@@ -42,11 +42,10 @@ interface SearchResponse {
   documents: Document[];
   meta: Meta;
 }
-export const GET = async (req: Request) => {
-  const { searchParams } = new URL(req.url);
-  const address = searchParams.get("address");
+export const POST = async (req: Request) => {
+  const inputAddress = await req.json();
   try {
-    if (!address) {
+    if (!inputAddress) {
       throw new HttpError(
         "잘못된 요청 파라미터 입니다.",
         NextResponse.json(
@@ -55,6 +54,7 @@ export const GET = async (req: Request) => {
         )
       );
     }
+    const address = trimAddress(inputAddress);
     const requestParam = address.split(" ")[0];
     const response = await appFetch(
       `${KAKAO_LOCAL_URL}?query=${requestParam}`,
@@ -67,10 +67,24 @@ export const GET = async (req: Request) => {
       }
     );
     const data: SearchResponse = await response.json();
-    console.log(data);
     const { documents } = data;
+    if (documents.length === 0) {
+      throw new HttpError(
+        "요청하신 주소를 찾을 수 없습니다.",
+        NextResponse.json(
+          { error: "요청하신 주소를 찾을 수 없습니다." },
+          { status: 404 }
+        )
+      );
+    }
     return NextResponse.json({ data: documents }, { status: 200 });
   } catch (error: unknown) {
     handleError(error, NextResponse.json);
   }
+};
+
+const trimAddress = (inputAddressText: string) => {
+  const keyword = "날씨";
+  const modifiedText = inputAddressText.replace(keyword, "");
+  return modifiedText.trim();
 };
