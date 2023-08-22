@@ -5,7 +5,7 @@ import styles from "./main.module.css";
 import "./globals.css";
 
 const ibm_plex_sans_kr = IBM_Plex_Sans_KR({
-  weight: ["100" , "200" , "300" , "400" , "500" , "600" , "700"],
+  weight: ["100", "200", "300", "400", "500", "600", "700"],
   display: "swap",
   subsets: ["latin"],
 });
@@ -28,9 +28,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           priority
         />
         <NavBar />
-        <div className={styles.layout}>
-          <div className={styles.container}>{children}</div>
-        </div>
+        <section className={styles.container}>{children}</section>
       </body>
     </html>
   );

@@ -1,59 +1,92 @@
 .geolocation {
   display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-  padding: 1rem 1.5rem;
+  margin: 8rem auto;
+  width: 70%;
   background-color: white;
-  box-shadow: 0 0 0 1px #e3e5e8, 0 1px 2px 0 rgba(0, 0, 0, 0.04);
-  border-radius: 1rem;
+  padding: 1rem 2rem;
+  border-radius: 10px;
+  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+    0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
 }
 
-.header h1 {
-  text-align: center;
-  margin: 0.5rem;
+.script {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 1rem;
 }
 
-.body {
-  min-height: 100px;
+.item {
+  flex-grow: 1;
 }
 
-.body .error {
+.error {
   font-size: 1.2rem;
   font-weight: 600;
   margin: auto auto;
 }
 
-.body p {
-  font-size: 1rem;
-  font-weight: 500;
-  margin-bottom: 0.4rem;
-}
-
-.body .title {
-  text-align: center;
-  font-size: 1.4rem;
+.title {
+  font-size: 1.8rem;
   font-weight: 600;
-  margin-bottom: 1rem;
-}
-
-.description {
-  margin-bottom: 1rem;
 }
 
 .description span {
   font-weight: 600;
+  font-size: 2.2rem;
 }
 
-.description:last-child {
-  line-height: 1.8;
+.lottie {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.jumbo {
+  margin-bottom: 1rem;
+}
+.jumbo p {
+  font-size: 1.8rem;
+  line-height: 2.8rem;
 }
 
-.footer p {
-  width: 100%;
-  text-align: center;
-  margin-top: 0.5rem;
+.emphasis {
+  margin: 0.5rem 0 0.6rem 0;
+  font-size: 2.5rem;
+  font-weight: 600;
+}
+
+.small {
   font-size: 0.9rem;
+  line-height: 1.3rem;
+  margin-bottom: 1rem;
+}
+
+.manual {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
   color: #8f8f8f;
+  text-align: center;
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+}
+
+.red {
+  color: red;
+}
+
+.blue {
+  color: blue;
+}
+
+.green {
+  color: green;
+}
+
+.gray {
+  color: indigo;
 }
 
 @media screen and (max-width: 680px) {

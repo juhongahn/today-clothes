@@ -1,5 +1,3 @@
-"use client";
-
 import Geolocation from "../_components/geolocation/Geolocation";
 
 const Page = () => {
