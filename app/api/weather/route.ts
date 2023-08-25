@@ -1,11 +1,40 @@
 import { NextResponse } from "next/server";
-import { getWeatherRequestURL } from "../../_lib/weatherUtils";
+import { advanceTime, dateFormatter1 } from "../../_lib/weatherUtils";
 import {
   appFetch,
   handleError,
 } from "../../_helpers/custom-fetch/fetchWrapper";
 import { HttpError } from "../../_helpers/error-class/HttpError";
-import { Weather } from "../../_types/types";
+import { dfs_xy_conv } from "../../_lib/gridConverter";
+
+interface ForecastItem {
+  baseDate: string;
+  baseTime: string;
+  category: string;
+  fcstDate: string;
+  fcstTime: string;
+  fcstValue: string;
+  nx: number;
+  ny: number;
+}
+
+interface ForecastResponse {
+  response: {
+    header: {
+      resultCode: string;
+      resultMsg: string;
+    };
+    body: {
+      dataType: string;
+      items: {
+        item: ForecastItem[];
+      };
+      pageNo: number;
+      numOfRows: number;
+      totalCount: number;
+    };
+  };
+}
 
 const WEATHER_URL =
   "https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst";
@@ -26,8 +55,18 @@ export const GET = async (req: Request) => {
         )
       );
     }
-    const query = `${WEATHER_URL}?${getWeatherRequestURL(lat, lon)}`;
-    const response = await appFetch(query, {
+    const currentDate = new Date();
+    const fetchURL = makeWeatherRequestURL(
+      WEATHER_URL,
+      currentDate,
+      1,
+      1000,
+      "JSON",
+      "2300",
+      lat,
+      lon
+    );
+    const response = await appFetch(fetchURL, {
       method: "GET",
       cache: "no-store",
       headers: {
@@ -48,24 +87,35 @@ export const GET = async (req: Request) => {
         )
       );
     }
-    const data = await response.json();
+    const data = (await response.json()) as ForecastResponse;
     const items = data.response.body.items.item;
-    const minMaxTemperatureList = getMinMaxTemperaturesList(items);
-    const result = groupHourlyFcstValue(items, minMaxTemperatureList);
+    const minMaxTemperatureList = makeHotLowTemperatureList(items);
+    const result = groupHLTempWithHourlyFcstValue(items, minMaxTemperatureList);
     return NextResponse.json({ data: result }, { status: 200 });
   } catch (error: unknown) {
     handleError(error, NextResponse.json);
   }
 };
 
-const groupHourlyFcstValue = (weatherItems: any, minMaxList): Weather[] => {
-  const transformedData = [];
+const groupHLTempWithHourlyFcstValue = (
+  weatherItems: ForecastItem[],
+  minMaxList: ForecastWithTemperature
+) => {
+  const transformedData = [] as {
+    dt: number;
+    value: {
+      [x: string]: string | number;
+      TMX: number;
+      TMN: number;
+    };
+  }[];
 
   weatherItems.forEach((item) => {
     const { fcstDate, fcstTime, fcstValue, category } = item;
     const unixTime = convertToUnixTime(fcstDate, fcstTime);
     const existingData = transformedData.find((data) => data.dt === unixTime);
-    const { TMX, TMN } = minMaxList.find((data) => data.fcstDate === fcstDate) || {};
+    const { TMX, TMN } =
+      minMaxList.find((data) => data.fcstDate === fcstDate) || {};
     if (existingData) {
       existingData.value[category.toUpperCase()] = fcstValue;
     } else {
@@ -73,8 +123,8 @@ const groupHourlyFcstValue = (weatherItems: any, minMaxList): Weather[] => {
         dt: unixTime,
         value: {
           [category.toUpperCase()]: fcstValue,
-          TMX: TMX ? TMX : "",
-          TMN: TMN ? TMN : "",
+          TMX,
+          TMN,
         },
       };
       transformedData.push(newData);
@@ -84,8 +134,15 @@ const groupHourlyFcstValue = (weatherItems: any, minMaxList): Weather[] => {
   return transformedData;
 };
 
-const getMinMaxTemperaturesList = (items) => {
-  const tmnxObjByDate = {};
+type HotLowTemperature = {
+  [fcstDate: string]: {
+    TMX?: number;
+    TMN?: number;
+  };
+};
+
+const extractHotLowTemperature = (items: ForecastItem[]) => {
+  const tmnxObjByDate = {} as HotLowTemperature;
   items.forEach((item) => {
     if (item.category === "TMX" || item.category === "TMN") {
       if (!tmnxObjByDate[item.fcstDate]) {
@@ -94,13 +151,24 @@ const getMinMaxTemperaturesList = (items) => {
       tmnxObjByDate[item.fcstDate][item.category] = parseInt(item.fcstValue);
     }
   });
-  const result = [];
+  return tmnxObjByDate;
+};
+
+type ForecastWithTemperature = {
+  fcstDate: string;
+  TMX?: number;
+  TMN?: number;
+}[];
+
+const makeHotLowTemperatureList = (items: ForecastItem[]) => {
+  const tmnxObjByDate = extractHotLowTemperature(items);
+  const result = [] as ForecastWithTemperature;
   for (const fcstDate in tmnxObjByDate) {
-    const {TMN, TMX} = tmnxObjByDate[fcstDate];
+    const { TMN, TMX } = tmnxObjByDate[fcstDate];
     result.push({
       fcstDate,
       TMX,
-      TMN
+      TMN,
     });
   }
   return result;
@@ -120,4 +188,21 @@ const convertToUnixTime = (fcstDate: string, fcstTime: string) => {
   const unixTime = date.getTime();
 
   return unixTime;
+};
+
+const makeWeatherRequestURL = (
+  baseURL: string,
+  currentDate: Date,
+  pageNo: number,
+  numOfRows: number,
+  dataType: string,
+  baseTime: string,
+  lat: string,
+  lon: string
+) => {
+  const serviceKey: string = process.env.SERVICE_KEY;
+  const targetDate = advanceTime(currentDate, -1);
+  const { x: nx, y: ny } = dfs_xy_conv("toXY", lat, lon);
+  const baseDate = dateFormatter1(targetDate, "");
+  return `${baseURL}?serviceKey=${serviceKey}&pageNo=${pageNo}&numOfRows=${numOfRows}&dataType=${dataType}&base_date=${baseDate}&base_time=${baseTime}&nx=${nx}&ny=${ny}`;
 };

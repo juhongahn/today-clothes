@@ -2,7 +2,7 @@ import { dfs_xy_conv } from "./gridConverter.js";
 import { REQ_TYPE } from "../_types/types";
 
 /**
- * 
+ *
  * @returns baseTime (Str)
  */
 function getNearPredictionTime(hours: number): string {
@@ -56,34 +56,18 @@ export function getBaseDate(req: REQ_TYPE, date: Date): string {
   else return year + "-" + month + "-" + day; // 미세먼지 데이터의 경우 yyyy-mm-dd 형식으로 반환
 }
 
-/**
- * @param {위도} lat
- * @param {경도} lon
- * @returns 단기예보 api 요청 주소 반환
- */
-export function getWeatherRequestURL(lat: string, lon: string) {
-  const serviceKey: string = process.env.SERVICE_KEY;
-  const date = new Date();
-  date.setDate(date.getDate() - 1);
-  const pageNo: number = 1;
-  const numOfRows: number = 1000;
-  const dataType: string = "JSON";
-
-  // const baseDate: string = getBaseDate(REQ_TYPE.WEATHER, date);
-  // const baseTime: string = getNearPredictionTime(hours);
-  const baseDate: string = dateFormatter(date)
-  const baseTime: string = "2300";
-
-  const { x: nx, y: ny } = dfs_xy_conv("toXY", lat, lon);
-
-  return `serviceKey=${serviceKey}&pageNo=${pageNo}&numOfRows=${numOfRows}&dataType=${dataType}&base_date=${baseDate}&base_time=${baseTime}&nx=${nx}&ny=${ny}`;
-}
-
 export const dateFormatter = (curDate: Date): string => {
   let year = curDate.getFullYear();
   let month = ("0" + (1 + curDate.getMonth())).slice(-2);
   let day = ("0" + curDate.getDate()).slice(-2);
   return year + month + day;
+};
+
+export const dateFormatter1 = (currentDate: Date, joint: string = ""): string => {
+  let year = currentDate.getFullYear();
+  let month = ("0" + (1 + currentDate.getMonth())).slice(-2);
+  let day = ("0" + currentDate.getDate()).slice(-2);
+  return [year, month, day].join(joint);
 };
 
 /**
@@ -98,3 +82,15 @@ export function getMinuDustRequestURL() {
 
   return `serviceKey=${serviceKey}&returnType=${dataType}&searchDate=${baseDate}`;
 }
+
+/**
+ *
+ * @param date 기준 날짜
+ * @param elapseDays 경과 시키고 싶은 일
+ * @returns 경과된 날짜
+ */
+export const advanceTime = (date: Date, elapseDays: number) => {
+  let copyDate = new Date(date);
+  copyDate.setDate(copyDate.getDate() + elapseDays);
+  return copyDate;
+};

@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
-import { getBaseDate } from "../../_lib/weatherUtils";
-import { REQ_TYPE, GRADE_OBJ } from "../../_types/types";
+import { advanceTime, dateFormatter1 } from "../../_lib/weatherUtils";
+import { GRADE_OBJ } from "../../_types/types";
 import {
   appFetch,
   handleError,
 } from "../../_helpers/custom-fetch/fetchWrapper";
 import { HttpError } from "../../_helpers/error-class/HttpError";
 
-type UV_RESPONSE = {
+interface HourlyDataItem {
   code: string;
   areaNo: string;
   date: string;
@@ -37,11 +37,29 @@ type UV_RESPONSE = {
   h69: string;
   h72: string;
   h75: string;
-};
+}
+
+interface HourlyResponse {
+  response: {
+    header: {
+      resultCode: string;
+      resultMsg: string;
+    };
+    body: {
+      dataType: string;
+      items: {
+        item: HourlyDataItem[];
+      };
+      pageNo: number;
+      numOfRows: number;
+      totalCount: number;
+    };
+  };
+}
+
 
 const UV_URL =
   "https://apis.data.go.kr/1360000/LivingWthrIdxServiceV4/getUVIdxV4";
-const SERVICE_KEY = process.env.SERVICE_KEY;
 
 export const GET = async (req: Request) => {
   const { searchParams } = new URL(req.url);
@@ -57,11 +75,9 @@ export const GET = async (req: Request) => {
         )
       );
     }
-    const date = new Date();
-    const requestDate = getBaseDate(REQ_TYPE.UV, date);
-    const requestTime = getNearPredictionTime(parseInt(hours));
-    const query = `${UV_URL}?serviceKey=${SERVICE_KEY}&pageNo=1&numOfRows=10&dataType=json&areaNo=${hCode}&time=${requestDate}${requestTime}`;
-    const response = await appFetch(query, {
+    const currentDate = new Date();
+    const fetchURL = makeUVRequestURL(UV_URL, currentDate, 1, 10, "JSON", hCode);
+    const response = await appFetch(fetchURL, {
       method: "GET",
       cache: "no-store",
       headers: {
@@ -81,9 +97,9 @@ export const GET = async (req: Request) => {
         )
       );
     }
-    const data = await response.json();
-    const uvdata: UV_RESPONSE = data.response.body.items.item[0];
-    const result = convertUVObjtoList(uvdata);
+    const data = await response.json() as HourlyResponse;
+    const uvdata = data.response.body.items.item[0];
+    const result = convertUVObjToHourlyList(uvdata);
     return NextResponse.json({ data: result }, { status: 200 });
   } catch (error: unknown) {
     handleError(error, NextResponse.json);
@@ -95,8 +111,11 @@ export const GET = async (req: Request) => {
  * @param uv 3시간 단위로 나눈 uv지수
  * @returns 3시간 단위를 1시간 단위로 변경한 데이터
  */
-const convertUVObjtoList = (uv: UV_RESPONSE) => {
-  const uvList = [];
+const convertUVObjToHourlyList = (uv: HourlyDataItem) => {
+  const uvList = [] as {
+    dt: number;
+    components: { uv: GRADE_OBJ | string },
+  }[];
 
   const strForcastDate = uv.date;
   const year = parseInt(strForcastDate.slice(0, 4));
@@ -183,4 +202,23 @@ const getNearPredictionTime = (hours: number): string => {
   }
 
   return result.toString().padStart(2, "0");
+};
+
+const makeUVRequestURL = (
+  baseURL: string,
+  currentDate: Date,
+  pageNo: number,
+  numOfRows: number,
+  dataType: string,
+  areaNo: string,
+) => {
+  const serviceKey: string = process.env.SERVICE_KEY;
+  const currentHour = currentDate.getHours();
+  let targetDate: Date;
+  if (currentHour < 4) targetDate = advanceTime(currentDate, -1);
+  else targetDate = advanceTime(currentDate, 0);
+  const baseDate = dateFormatter1(targetDate, "");
+  const baseTime = getNearPredictionTime(currentDate.getHours());
+  const query = `${baseURL}?serviceKey=${serviceKey}&pageNo=${pageNo}&numOfRows=${numOfRows}&dataType=${dataType}&areaNo=${areaNo}&time=${baseDate}${baseTime}`;
+  return query;
 };
