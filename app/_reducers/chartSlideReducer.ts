@@ -1,10 +1,12 @@
+import { PayloadAction } from "@reduxjs/toolkit";
+
 export const SLIDE_ACTION_TYPE = {
   SLIDE_RIGHT: "SLIDE_RIGHT",
   SLIDE_LEFT: "SLIDE_LEFT",
   SLIDE_PAUSE_LEFT: "SLIDE_PAUSE_LEFT",
   SLIDE_PAUSE_RIGHT: "SLIDE_PAUSE_RIGHT",
   SLIDE_PAUSE_FREE: "SLIDE_PAUSE_FREE",
-  SILDE_INITIALIZE: "SILDE_INITIALIZE",
+  SLIDE_RESET: "SLIDE_RESET",
 };
 
 export interface SLIDE_STATE {
@@ -64,7 +66,7 @@ export const slideReducer = (state: SLIDE_STATE, action) => {
           right: false,
         },
       };
-    case SLIDE_ACTION_TYPE.SILDE_INITIALIZE:
+    case SLIDE_ACTION_TYPE.SLIDE_RESET:
       return {
         ...state,
         xPos: 0,

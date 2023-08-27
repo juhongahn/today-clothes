@@ -51,7 +51,7 @@ const useSlideNext = (): UseSlideNextReturn => {
     } else if (slideType === SLIDE_TYPE.SLIDE_RIGHT) {
       dispatch({ type: SLIDE_ACTION_TYPE.SLIDE_RIGHT, payload: offset });
     } else {
-      dispatch({ type: SLIDE_ACTION_TYPE.SILDE_INITIALIZE });
+      dispatch({ type: SLIDE_ACTION_TYPE.SLIDE_RESET });
     }
   };
 

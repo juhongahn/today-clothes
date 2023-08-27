@@ -1,16 +1,15 @@
 "use client";
 
-import { useRef, useState, MutableRefObject, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { getXY } from "../searchWeather/SearchSection";
 import styles from "./Tour.module.css";
 import TourCard from "./TourCard";
-import { MdKeyboardArrowLeft } from "@react-icons/all-files/md/MdKeyboardArrowLeft";
-import { MdKeyboardArrowRight } from "@react-icons/all-files/md/MdKeyboardArrowRight";
 import useCoords from "../../_hooks/useCoords";
 import { useAppDispatch, useAppSelector } from "../../_hooks/redux_hooks";
 import Badge from "./tourBadge/Badge";
 import { fetchTour, selectTourList } from "../../_reducers/tourReducer";
 import TourCardLoading from "./Loading";
+import Slider from "../ui/Slider";
 
 type BadgeType = {
   id: string;
@@ -19,23 +18,29 @@ type BadgeType = {
   selected: boolean;
 };
 
+const tourButtonProps = {
+  round: true,
+  position: {
+    left: 30,
+    right: 30,
+  },
+};
+
+const badgeButtonProps = {
+  round: false,
+  position: {
+    left: 16,
+    right: 16,
+  },
+};
+
 const Tour = () => {
   const dispatch = useAppDispatch();
   const tourList = useAppSelector(selectTourList);
 
-  const cardsRef = useRef<HTMLDivElement>(null);
-  const badgeRef = useRef<HTMLDivElement>(null);
-  const [cardsButtonState, cardsSliderHandler] = useSlide(cardsRef);
-  const [badgeButtonState, badgeSliderHandler] = useSlide(badgeRef);
-
   useEffect(() => {
     dispatch(fetchTour({ id: "tour", title: "관광지", contentTypeId: 12 }));
   }, []);
-
-  useEffect(() => {
-    badgeSliderHandler({ slideType: SlideType.RESET, slideLength: 0 }),
-      cardsSliderHandler({ slideType: SlideType.RESET, slideLength: 0 });
-  }, [tourList]);
 
   const [badges, setBadges] = useState<BadgeType[]>([
     { id: "tour", title: "관광지", contentTypeId: 12, selected: true },
@@ -72,137 +77,35 @@ const Tour = () => {
       </div>
       <div className={styles.body}>
         <div className={styles.badgeSlider}>
-          {badgeButtonState.left && (
-            <MdKeyboardArrowLeft
-              size={30}
-              onClick={badgeSliderHandler.bind(null, {
-                slideType: SlideType.LEFT,
-                slideLength: 200,
-              })}
-              className={`${styles.badgeArrow} ${styles.badgeLeft}`}
-            />
-          )}
-          <div style={{ overflow: "hidden", marginBottom: "1rem" }}>
-            <div className={styles.badges} ref={badgeRef}>
-              {badges.map((badge) => (
-                <Badge
-                  key={badge.id}
-                  onClick={badgeSelectHandler.bind(null, badge)}
-                  value={badge.title}
-                  selected={badge.selected}
-                />
-              ))}
-            </div>
-          </div>
-          {badgeButtonState.right && (
-            <MdKeyboardArrowRight
-              onClick={badgeSliderHandler.bind(null, {
-                slideType: SlideType.RIGHT,
-                slideLength: 200,
-              })}
-              size={30}
-              className={`${styles.badgeArrow} ${styles.badgeRigth}`}
-            />
-          )}
+          <Slider slideLength={200} buttonProps={badgeButtonProps}>
+            {badges.map((badge) => (
+              <Badge
+                key={badge.id}
+                onClick={badgeSelectHandler.bind(null, badge)}
+                value={badge.title}
+                selected={badge.selected}
+              />
+            ))}
+          </Slider>
         </div>
-        <div className={styles.slider}>
-          {tourList.length > 0 && cardsButtonState.left && (
-            <MdKeyboardArrowLeft
-              size={30}
-              onClick={cardsSliderHandler.bind(null, {
-                slideType: SlideType.LEFT,
-                slideLength: 280,
-              })}
-              className={`${styles.arrow} ${styles.leftButton}`}
-            />
-          )}
-          <div className={styles.cards} ref={cardsRef}>
-            {tourList.length > 0 ?
-              tourList.map((tour, idx) => {
-                return (
-                  <TourCard
-                    key={idx}
-                    tour={tour}
-                    cardSelectHandler={cardSelectHandler}
-                  />
-                );
-              })
-              : <TourCardLoading />
-            }
-          </div>
-          {tourList.length > 0 && cardsButtonState.right && (
-            <MdKeyboardArrowRight
-              onClick={cardsSliderHandler.bind(null, {
-                slideType: SlideType.RIGHT,
-                slideLength: 280,
-              })}
-              size={30}
-              className={`${styles.arrow} ${styles.rightButton}`}
-            />
-          )}
+        <div className={styles.tourSlider}>
+          <Slider slideLength={278} buttonProps={tourButtonProps}>
+            {tourList.length > 0 ? (
+              tourList.map((tour, idx) => (
+                <TourCard
+                  key={idx}
+                  tour={tour}
+                  cardSelectHandler={cardSelectHandler}
+                />
+              ))
+            ) : (
+              <TourCardLoading />
+            )}
+          </Slider>
         </div>
       </div>
     </div>
   );
-};
-
-const SlideType = {
-  LEFT: "left",
-  RIGHT: "right",
-  RESET: "reset",
-};
-
-type UseSlideReturn = [
-  buttonState: {
-    left: boolean;
-    right: boolean;
-  },
-  sliderHandler: (slide: { slideType: string; slideLength: number }) => void
-];
-
-const useSlide = (ref: MutableRefObject<HTMLDivElement>): UseSlideReturn => {
-  const [xPos, setXPos] = useState(0);
-  const [buttonState, setButtonState] = useState<{
-    left: boolean;
-    right: boolean;
-  }>({
-    left: false,
-    right: true,
-  });
-  const sliderHandler = (slide: { slideType: string; slideLength: number }) => {
-    const { slideType, slideLength } = slide;
-
-    if (slideType === SlideType.RESET) {
-      ref.current.style.transform = `translate(0px)`;
-      setXPos(0);
-      setButtonState({ left: false, right: true });
-      return;
-    }
-    const offset = ref.current.offsetWidth;
-    const newPosition =
-      slideType === SlideType.LEFT
-        ? xPos - (slideLength + 17)
-        : xPos + (slideLength + 17);
-    if (newPosition >= offset - slideLength - 100) {
-      setButtonState({
-        left: true,
-        right: false,
-      });
-    } else if (newPosition < 100) {
-      setButtonState({
-        left: false,
-        right: true,
-      });
-    } else {
-      setButtonState({
-        left: true,
-        right: true,
-      });
-    }
-    setXPos(newPosition);
-    ref.current.style.transform = `translate(${-newPosition}px)`;
-  };
-  return [buttonState, sliderHandler];
 };
 
 const locationSelectHandler = async (

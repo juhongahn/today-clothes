@@ -1,13 +1,10 @@
 "use client";
 
 import {
-  useEffect,
-  useRef,
   useState,
   MutableRefObject,
   Suspense,
   lazy,
-  useReducer,
 } from "react";
 import { useAppSelector } from "../../../_hooks/redux_hooks";
 import { MdKeyboardArrowRight } from "@react-icons/all-files/md/MdKeyboardArrowRight";
