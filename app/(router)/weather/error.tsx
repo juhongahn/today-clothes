@@ -27,7 +27,6 @@ export default function Error({
           width={128}
           height={128}
         />
-        {error.message}
         <h1>ERROR 500</h1>
       </div>
       <div className={styles.body}>
