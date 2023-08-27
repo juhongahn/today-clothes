@@ -1,11 +1,10 @@
 import { IBM_Plex_Sans_KR } from "next/font/google";
 import NavBar from "../_components/navbar/NavBar";
 import Image from "next/image";
-import styles from "./main.module.css";
 import "./globals.css";
 
 const ibm_plex_sans_kr = IBM_Plex_Sans_KR({
-  weight: ["100", "200", "300", "400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
   subsets: ["latin"],
 });
@@ -21,14 +20,14 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
       <body>
         <div id="modal-portal"></div>
         <Image
-          className={styles.img}
           src="/statics/images/background-img.jpg"
           alt="배경 이미지"
           fill
           priority
+          style={{zIndex: "-100", opacity: "0.5"}}
         />
         <NavBar />
-        <section className={styles.container}>{children}</section>
+        <section style={{paddingTop: "3.5rem"}}>{children}</section>
       </body>
     </html>
   );

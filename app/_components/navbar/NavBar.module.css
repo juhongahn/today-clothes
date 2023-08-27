@@ -9,7 +9,6 @@
 
 .container {
   display: flex;
-  justify-content: flex-start;
   align-items: center;
   width: 1150px;
   height: 3.5rem;
