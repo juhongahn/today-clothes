@@ -17,7 +17,6 @@ export default function Error({
   //   // Log the error to an error reporting service
   //   console.error(error);
   // }, [error]);
-
   return (
     <div className={styles.notFound}>
       <div className={styles.header}>
@@ -28,6 +27,7 @@ export default function Error({
           width={128}
           height={128}
         />
+        {error.message}
         <h1>ERROR 500</h1>
       </div>
       <div className={styles.body}>
