@@ -8,10 +8,8 @@ const getWeatherImage = (
 ): { src: string; alt: string; width: number; height: number } => {
   const sunsetHour = parseInt(selectedRiseset[0].sunset[0].substring(0, 2));
   const sunRiseHour = parseInt(selectedRiseset[1].sunrise[0].substring(0, 2));
-
   const selectedDate = new Date(selectedWeather.dt);
   const selectedHour = selectedDate.getHours();
-
   const { WSD, SKY, PTY } = selectedWeather.value;
   const skyFcstVal = parseInt(SKY);
   const ptyFcstVal = parseInt(PTY);
@@ -28,12 +26,14 @@ const getWeatherImage = (
     else _imageSrc = "/statics/images/009-moon.png";
     _alt = "맑음";
   } else if (ptyFcstVal === 0 && skyFcstVal === 3) {
-    if (selectedHour <= sunsetHour && selectedHour > sunRiseHour)
-      _imageSrc = "/statics/images/005-cloudy.png";
-    else _imageSrc = "/statics/images/008-night-cloud.png";
+    if (selectedHour <= sunsetHour && selectedHour > sunRiseHour) {
+      _imageSrc = "/statics/images/004-cloud.png";
+    } else {
+      _imageSrc = "/statics/images/008-night-cloud.png";
+    }
     _alt = "구름 많음";
   } else if (ptyFcstVal === 0 && skyFcstVal >= 4) {
-    _imageSrc = "/statics/images/004-cloud.png";
+    _imageSrc = "/statics/images/005-cloudy.png";
     _alt = "흐림";
   }
 
@@ -56,7 +56,6 @@ const getWeatherImage = (
     width,
     height,
   };
-
   return imgProperty;
 };
 
