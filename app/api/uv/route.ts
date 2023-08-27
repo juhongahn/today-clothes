@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { advanceTime, dateFormatter1 } from "../../_lib/weatherUtils";
+import { advanceTime, dateFormatter } from "../../_lib/weatherUtils";
 import { GRADE_OBJ } from "../../_types/types";
 import {
   appFetch,
@@ -217,7 +217,7 @@ const makeUVRequestURL = (
   let targetDate: Date;
   if (currentHour < 4) targetDate = advanceTime(currentDate, -1);
   else targetDate = advanceTime(currentDate, 0);
-  const baseDate = dateFormatter1(targetDate, "");
+  const baseDate = dateFormatter(targetDate, "");
   const baseTime = getNearPredictionTime(currentDate.getHours());
   const query = `${baseURL}?serviceKey=${serviceKey}&pageNo=${pageNo}&numOfRows=${numOfRows}&dataType=${dataType}&areaNo=${areaNo}&time=${baseDate}${baseTime}`;
   return query;

@@ -5,15 +5,15 @@ import {
   createSelector,
 } from "@reduxjs/toolkit";
 import { RootState, getInitialComparisonTime } from "../store";
-import { REQ_TYPE, type Riseset } from "../_types/types";
-import { getBaseDate } from "../_lib/weatherUtils";
+import type {Riseset } from "../_types/types";
 import { appFetch } from "../_helpers/custom-fetch/fetchWrapper";
 import { FAILED, FULFILLED, LOADING } from "../_helpers/constants/constants";
+import { dateFormatter } from "../_lib/weatherUtils";
 
 export const fetchRiseset = createAsyncThunk(
   "risesetSlice/fetchRiseset",
   async (geolocation: { latitude: number; longitude: number }) => {
-    const curDate = getBaseDate(REQ_TYPE.RISE_SET, new Date());
+    const curDate = dateFormatter(new Date(), "-");
     // 이 단계에서 에러를 catch하면 failed case로 분기되지 않는다. 
     const response = await appFetch(
       `api/riseset?lat=${geolocation.latitude}&lon=${geolocation.longitude}&date=${curDate}`,
@@ -64,14 +64,6 @@ export const risesetSlice = createSlice({
   },
 });
 
-export const dateFormatter = (date: Date) => {
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-  return `${year}${month < 10 ? `0${month}` : month}${
-    day < 10 ? `0${day}` : day
-  }`;
-};
 export const selectComparisonTime = (state: RootState) =>
   state.riseset.comparisonTime;
 
@@ -87,8 +79,8 @@ export const selectMatchedRiseset = createSelector(
       const targetSunsetDate = new Date(comparisonTime); // 일몰
       const targetSunriseDate = new Date(comparisonTime); // 일출
       targetSunriseDate.setDate(targetSunriseDate.getDate() + 1);
-      const targetFormattedToday = dateFormatter(targetSunsetDate);
-      const targetFormattedTommorw = dateFormatter(targetSunriseDate);
+      const targetFormattedToday = dateFormatter(targetSunsetDate, "");
+      const targetFormattedTommorw = dateFormatter(targetSunriseDate, "");
       if (
         riseset.locdate[0] === targetFormattedToday ||
         riseset.locdate[0] === targetFormattedTommorw

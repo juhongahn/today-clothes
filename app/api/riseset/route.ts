@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { dateFormatter } from "../../_lib/weatherUtils";
+import {dateFormatter } from "../../_lib/weatherUtils";
 import {
   appFetch,
   handleError,
@@ -119,7 +119,7 @@ const createPromiseList = (
   }
 
   const promiseList = dateList.map((date) => {
-    const formattedDay = dateFormatter(date);
+    const formattedDay = dateFormatter(date, "");
     return fetcher(lat, lon, formattedDay);
   });
 

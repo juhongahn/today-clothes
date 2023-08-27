@@ -86,7 +86,7 @@ export const selectThreeDaysForcast = createSelector(
       if (comparisonDate.getDate() === currentDate.getDate()) {
         const comparisonHours = comparisonDate.getHours();
         if (comparisonHours === 7 || comparisonHours === 14) {
-          const keyDate = dateFormatter(currentDate);
+          const keyDate = dateFormatter(currentDate, "");
           if (!amPmWeatherObj[keyDate]) {
             amPmWeatherObj[keyDate] = {};
           }

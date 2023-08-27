@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { advanceTime, dateFormatter1 } from "../../_lib/weatherUtils";
+import { advanceTime, dateFormatter } from "../../_lib/weatherUtils";
 import {
   appFetch,
   handleError,
@@ -203,6 +203,6 @@ const makeWeatherRequestURL = (
   const serviceKey: string = process.env.SERVICE_KEY;
   const targetDate = advanceTime(currentDate, -1);
   const { x: nx, y: ny } = dfs_xy_conv("toXY", lat, lon);
-  const baseDate = dateFormatter1(targetDate, "");
+  const baseDate = dateFormatter(targetDate, "");
   return `${baseURL}?serviceKey=${serviceKey}&pageNo=${pageNo}&numOfRows=${numOfRows}&dataType=${dataType}&base_date=${baseDate}&base_time=${baseTime}&nx=${nx}&ny=${ny}`;
 };

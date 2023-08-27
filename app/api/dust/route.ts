@@ -54,9 +54,8 @@ export const GET = async (req: Request) => {
   const { searchParams } = new URL(req.url);
   const lat = searchParams.get("lat");
   const lon = searchParams.get("lon");
-  const date = searchParams.get("date");
   try {
-    if (!lat || !lon || !date) {
+    if (!lat || !lon ) {
       throw new HttpError(
         "잘못된 요청 파라미터 입니다.",
         NextResponse.json(

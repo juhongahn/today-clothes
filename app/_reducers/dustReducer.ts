@@ -1,26 +1,26 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { RootState, getInitialComparisonTime } from "../store";
-import { REQ_TYPE, type DUST } from "../_types/types";
+import type { DUST } from "../_types/types";
 import { appFetch } from "../_helpers/custom-fetch/fetchWrapper";
-import { getBaseDate } from "../_lib/weatherUtils";
+import { dateFormatter } from "../_lib/weatherUtils";
 import { FAILED, FULFILLED, LOADING } from "../_helpers/constants/constants";
 
 export const fetchDust = createAsyncThunk(
   "dustSlice/fetchDust",
   async (geolocation: { latitude: number; longitude: number }) => {
-    const curDate = getBaseDate(REQ_TYPE.DUST, new Date());
+    const curDate = dateFormatter(new Date(), "");
     // Error를 catch 해주면 extraReducers에서 failed로 넘어가지 않는다.
-      const response = await appFetch(
-        `api/dust?lat=${geolocation.latitude}&lon=${geolocation.longitude}&date=${curDate}`,
-        {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-          },
-        }
-      );
-      const { data } = await response.json();
-      return data;
+    const response = await appFetch(
+      `api/dust?lat=${geolocation.latitude}&lon=${geolocation.longitude}&date=${curDate}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+        },
+      }
+    );
+    const { data } = await response.json();
+    return data;
   }
 );
 
