@@ -1,10 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { createPortal } from "react-dom";
 import { useAppSelector } from "../../_hooks/redux_hooks";
 import { selectLocal } from "../../_reducers/localReducer";
-import RecommendatioModal from "../../_components/recommendation/RecommendationModal";
 import CurrentWeather from "./currentWeather/CurrentWeather";
 import Loading from "../ui/Loading";
 import Button from "../ui/Button";
@@ -12,6 +11,8 @@ import Charts from "./charts/Charts";
 import styles from "./Weather.module.css";
 import { RootState } from "../../store";
 import WeeklyForcast from "./weeklyForcast/WeeklyForcast";
+
+const RecommendatioModal = lazy(() => import("../../_components/recommendation/RecommendationModal"));
 
 const Weather = () => {
   const local = useAppSelector(selectLocal);
@@ -58,9 +59,15 @@ const Weather = () => {
       {isModalShow &&
         portalDiv &&
         createPortal(
+          <Suspense fallback={
+            <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+              <Loading size={{ width: 32, height: 32 }} />
+            </div>
+          }>
           <RecommendatioModal
             modalHandler={recommendationModalHandler}
-          />,
+          />
+          </Suspense>,
           portalDiv
         )}
     </div>
