@@ -37,6 +37,4 @@ const WeeklyForcast = () => {
   );
 };
 
-const renderForcastItem = () => {};
-
 export default WeeklyForcast;

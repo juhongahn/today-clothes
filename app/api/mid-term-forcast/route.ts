@@ -91,7 +91,7 @@ const parsingMidTermForcastData = (
   const hlTemperatureItem = hlTemperature.response.body.items.item[0];
   const fcstItem = fcst.response.body.items.item[0];
 
-  baseDateCopy.setDate(baseDateCopy.getDate() + 3);
+  baseDateCopy.setDate(baseDateCopy.getDate() + 4);
   for (let i = 3; i <= 10; i++) {
     const formattedItem = {
       dt: responseDateFormmator(baseDateCopy),
