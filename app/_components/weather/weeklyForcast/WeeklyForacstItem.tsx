@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { MidTermForcast } from "../../../api/mid-term-forcast/route";
 import styles from "./WeeklyForcast.module.css";
+import { advanceTime } from "../../../_lib/weatherUtils";
 
 interface WeeklyForcastItemProps {
   mtForcast: MidTermForcast;
@@ -11,7 +12,9 @@ const WeeklyForcastItem = ({ mtForcast }: WeeklyForcastItemProps) => {
   const pmImgProps = getImageSource(mtForcast.fcst.weatherForcast.wfPM);
   return (
     <li className={styles.weekItem}>
-      <div className={`${styles.fcstDate} ${styles.contents}`}>{renderDate(mtForcast.dt)}</div>
+      <div className={`${styles.fcstDate} ${styles.contents}`}>
+        {renderDate(mtForcast.dt)}
+      </div>
       <div className={`${styles.fcst} ${styles.contents}`}>
         <div className={styles.time}>
           <div className={styles.pop}>
@@ -71,8 +74,8 @@ function formatDate(inputDate: string, isRepresental: boolean) {
 
 function getWeekdays(date: Date) {
   const currentDate = new Date();
-  const tommorwDate = new Date(currentDate.getDate() + 1);
-  const dayAfterTommorwDate = new Date(tommorwDate.getDate() + 1);
+  const tommorwDate = advanceTime(currentDate, 1);
+  const dayAfterTommorwDate = advanceTime(currentDate, 2);
   if (date.getDate() === currentDate.getDate()) return "오늘";
   else if (date.getDate() === tommorwDate.getDate()) return "내일";
   else if (date.getDate() === dayAfterTommorwDate.getDate()) return "모레";
@@ -93,10 +96,10 @@ const getImageSource = (
       src = "/statics/images/003-sunny.png";
       break;
     case "구름많음":
-      src = "/statics/images/005-cloudy.png";
+      src = "/statics/images/004-cloud.png";
       break;
     case "흐림":
-      src = "/statics/images/004-cloud.png";
+      src = "/statics/images/005-cloudy.png";
       break;
     case "구름많고 비":
     case "흐리고 비":
