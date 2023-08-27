@@ -4,7 +4,6 @@ import Image from "next/image";
 import styles from "./TourCard.module.css";
 
 interface TourCardProps {
-  key: number;
   tour: {
     title: string;
     location: string;
@@ -17,10 +16,9 @@ interface TourCardProps {
   }) => void;
 }
 
-const TourCard = ({ key, tour, cardSelectHandler }: TourCardProps) => {
+const TourCard = ({ tour, cardSelectHandler }: TourCardProps) => {
   return (
     <div
-      key={key}
       className={styles.card}
       onClick={cardSelectHandler.bind(null, tour)}
     >
@@ -28,10 +26,10 @@ const TourCard = ({ key, tour, cardSelectHandler }: TourCardProps) => {
         <Image
           className={styles.image}
           src={tour.image}
-          fill
-          sizes="100%"
           alt="여행지 이미지"
           priority
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
       </div>
       <div className={styles.des}>
