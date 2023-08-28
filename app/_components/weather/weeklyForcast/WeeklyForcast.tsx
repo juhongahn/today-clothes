@@ -23,10 +23,10 @@ const WeeklyForcast = () => {
                   <ShortTermForcastWrapper stForcast={stForcast} key={idx} />
                 );
               })} */}
-            {/* {weeklyForcast.length > 0 && threeDaysForcast.length > 0 &&
+            {weeklyForcast.length > 0 && threeDaysForcast.length > 0 &&
               weeklyForcast.map((mtforcast, idx) => {
                 return <WeeklyForcastItem key={idx} mtForcast={mtforcast} />;
-              })} */}
+              })}
             {(threeDaysForcast.length === 0 || weeklyForcast.length === 0) && (
               <WeeklyForcastLoading />
             )}
