@@ -183,12 +183,11 @@ const convertToUnixTime = (fcstDate: string, fcstTime: string) => {
 
   const date = new Date(year, month, day, hours, minutes);
   const unixTime = date.getTime();
-  if (day <= 29 && hours <= 7) {
-    console.log(fcstDate)
-    console.log(date);
-    console.log(unixTime);
-  }
-  return unixTime;
+  // 시간대 보정 (예시: 대한민국의 경우 UTC+9)
+  const timeZoneOffset = 9 * 60 * 60 * 1000; // 밀리초 단위
+  const correctedUnixTime = unixTime + timeZoneOffset;
+
+  return correctedUnixTime;
 };
 
 const makeWeatherRequestURL = (
