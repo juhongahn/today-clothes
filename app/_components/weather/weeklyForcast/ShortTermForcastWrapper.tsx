@@ -14,10 +14,12 @@ const ShortTermForcastWrapper = ({
   stForcast,
 }: ShortTermForcastWrapperProps) => {
   const mtForcast = convertShortTermForcastMidTermForast(stForcast);
-  return (
-    <WeeklyForcastItem
-      mtForcast={mtForcast}
-    />
+  console.log(mtForcast);
+
+  return (<></>
+    // <WeeklyForcastItem
+    //   mtForcast={mtForcast}
+    // />
   );
 };
 
@@ -26,6 +28,7 @@ const convertShortTermForcastMidTermForast = (stForcast: {
   am: Weather;
   pm: Weather;
 }): MidTermForcast => {
+  console.log(stForcast);
   const mtForcast: MidTermForcast = {
     dt: stForcast.fcstDate,
     hlTemperature: {

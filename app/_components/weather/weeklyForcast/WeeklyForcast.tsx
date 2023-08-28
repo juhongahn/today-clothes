@@ -17,12 +17,12 @@ const WeeklyForcast = () => {
       <div className={styles.body}>
         <div className={styles.weeklyList}>
           <ul className={styles.forcastUL}>
-            {/* {weeklyForcast.length > 0 && threeDaysForcast.length > 0 &&
+            {weeklyForcast.length > 0 && threeDaysForcast.length > 0 &&
               threeDaysForcast.map((stForcast, idx) => {
                 return (
                   <ShortTermForcastWrapper stForcast={stForcast} key={idx} />
                 );
-              })} */}
+              })}
             {weeklyForcast.length > 0 && threeDaysForcast.length > 0 &&
               weeklyForcast.map((mtforcast, idx) => {
                 return <WeeklyForcastItem key={idx} mtForcast={mtforcast} />;
