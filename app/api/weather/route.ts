@@ -184,8 +184,7 @@ const convertToUnixTime = (fcstDate: string, fcstTime: string) => {
   const minutes = parseInt(fcstTime.substring(2));
 
   const date = new Date(year, month, day, hours, minutes);
-  const koreanDate = convertKoreanTime(date);
-  const unixTime = koreanDate.getTime();
+  const unixTime = date.getTime();
 
   return unixTime;
 };
