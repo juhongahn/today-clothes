@@ -181,10 +181,9 @@ const convertToUnixTime = (fcstDate: string, fcstTime: string) => {
   const hours = parseInt(fcstTime.substring(0, 2));
   const minutes = parseInt(fcstTime.substring(2));
 
-  const date = new Date(Date.UTC(year, month, day, hours, minutes));
-  date.setHours(date.getHours() + 9);
+  const date = new Date(year, month, day, hours, minutes);
   const unixTime = date.getTime();
-  if (unixTime <= 1693270800000) {
+  if (unixTime <= 1693234800000) {
     console.log(date);
     console.log(unixTime);
   }
