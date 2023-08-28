@@ -1,4 +1,6 @@
+import { NextResponse } from "next/server";
 import { appFetch } from "../_helpers/custom-fetch/fetchWrapper";
+import { HttpError } from "../_helpers/error-class/HttpError";
 
 interface ResponseItem {
   regId: string;
@@ -88,6 +90,20 @@ const hlTemperatureFetcher = async (
       Accept: "application/json",
     },
   });
+
+  // 공공 데이터 포털에서 에러 발생시 xml을 내려준다.
+  if (
+    response.headers.get("Content-Type").includes("application/xml") ||
+    response.headers.get("Content-Type").includes("text/xml")
+  ) {
+    throw new HttpError(
+      "요청시간이 잘못됐 습니다.",
+      NextResponse.json(
+        { error: "요청시간이 잘못 됐습니다." },
+        { status: 401 }
+      )
+    );
+  }
   return response.json();
 };
 
