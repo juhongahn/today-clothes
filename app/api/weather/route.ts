@@ -112,7 +112,9 @@ const groupHLTempWithHourlyFcstValue = (
   weatherItems.forEach((item) => {
     const { fcstDate, fcstTime, fcstValue, category } = item;
     const unixTime = convertToUnixTime(fcstDate, fcstTime);
-    console.log(unixTime)
+    if (unixTime <= 1693321200000) {
+      console.log(unixTime);
+    }
     const existingData = transformedData.find((data) => data.dt === unixTime);
     const { TMX, TMN } =
       minMaxList.find((data) => data.fcstDate === fcstDate) || {};
