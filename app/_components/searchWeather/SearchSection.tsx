@@ -108,7 +108,6 @@ export const getXY = async (address: string) => {
       body: JSON.stringify(address),
     });
     const { data } = await response.json();
-    console.log(data)
     return data[0];
   } catch (error) {
     throw new Error("주소를 찾을 수 없습니다.");
