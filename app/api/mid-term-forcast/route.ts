@@ -30,15 +30,24 @@ export const POST = async (req: Request) => {
     const hlRegId = getRegIdBySiName(hlRegion);
     const wfRegId = getRegionCodeByRegionName(wfRegion);
     const baseDate = new Date(date);
+    console.log(baseDate)
+    
     const tmFc = requestDateFormmator(baseDate);
+    console.log(tmFc)
     const hlTemperatureQuery = `${MID_TERM_HL_TEMERATURE_FORCAST_URL}?serviceKey=${SERVICE_KEY}&pageNo=1&numOfRows=10&dataType=json&regId=${hlRegId}&tmFc=${tmFc}`;
+    console.log(hlTemperatureQuery)
     const fcstQuery = `${MID_TERM_MID_FCST_FORCAST_URL}?serviceKey=${SERVICE_KEY}&pageNo=1&numOfRows=10&dataType=json&regId=${wfRegId}&tmFc=${tmFc}`;
+    console.log(fcstQuery)
+
     const hlTempData = hlTemperatureFetcher(hlTemperatureQuery);
     const fcstData = fcstFetcher(fcstQuery);
     const [hlTemperature, fcst] = await Promise.all([hlTempData, fcstData]);
+    console.log(hlTemperature)
+    console.log(fcst)
     const result = parsingMidTermForcastData(hlTemperature, fcst, baseDate);
     return NextResponse.json({ data: result }, { status: 200 });
   } catch (error: unknown) {
+    console.error(error);
     handleError(error, NextResponse.json);
   }
 };
