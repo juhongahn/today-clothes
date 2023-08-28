@@ -3,14 +3,18 @@ const nextConfig = {
   reactStrictMode: false,
   experimental: {
     appDir: true,
-    optimizeCss: true
+    optimizeCss: true,
+  },
+  plugins: ["transform-remove-console"],
+  rules: {
+    "no-console": "off",
   },
   images: {
     remotePatterns: [
       {
-        protocol: 'http',
-        hostname: 'tong.visitkorea.or.kr',
-        port: '',
+        protocol: "http",
+        hostname: "tong.visitkorea.or.kr",
+        port: "",
       },
     ],
   },
