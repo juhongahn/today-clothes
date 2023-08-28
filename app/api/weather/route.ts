@@ -184,6 +184,7 @@ const convertToUnixTime = (fcstDate: string, fcstTime: string) => {
   const date = new Date(year, month, day, hours, minutes);
   const unixTime = date.getTime();
   if (day <= 29 && hours <= 7) {
+    console.log(fcstDate)
     console.log(date);
     console.log(unixTime);
   }
