@@ -10,7 +10,6 @@ interface WeeklyForcastItemProps {
 const WeeklyForcastItem = ({ mtForcast }: WeeklyForcastItemProps) => {
   const amImgProps = getImageSource(mtForcast.fcst.weatherForcast.wfAM);
   const pmImgProps = getImageSource(mtForcast.fcst.weatherForcast.wfPM);
-  console.log(mtForcast);
   return (
     <li className={styles.weekItem}>
       <div className={`${styles.fcstDate} ${styles.contents}`}>

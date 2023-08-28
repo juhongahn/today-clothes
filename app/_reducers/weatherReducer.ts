@@ -29,7 +29,6 @@ export const fetchWeathers = createAsyncThunk(
       }
     );
     const { data } = await response.json();
-    console.log(data);
     return data;
   }
 );
@@ -86,19 +85,16 @@ export const selectThreeDaysForcast = createSelector(
   (weathers) => {
     const amPmWeatherObj = {};
     const currentDate = new Date();
-    console.log("currentDate: " + currentDate);
     weathers.forEach((weather) => {
       const comparisonDate = new Date(weather.dt);
-      console.log("comparisonDate: " + comparisonDate)
       if (comparisonDate.getDate() === currentDate.getDate()) {
         const comparisonHours = comparisonDate.getHours();
-        console.log("comparisonHours: " + comparisonHours)
-        if (comparisonHours === 7 || comparisonHours === 14) {
+        if (comparisonHours === 9 || comparisonHours === 15) {
           const keyDate = dateFormatter(currentDate, "");
           if (!amPmWeatherObj[keyDate]) {
             amPmWeatherObj[keyDate] = {};
           }
-          if (comparisonHours === 7) {
+          if (comparisonHours === 9) {
             amPmWeatherObj[keyDate]["am"] = weather;
           } else {
             amPmWeatherObj[keyDate]["pm"] = weather;
