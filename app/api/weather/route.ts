@@ -112,7 +112,7 @@ const groupHLTempWithHourlyFcstValue = (
   weatherItems.forEach((item) => {
     const { fcstDate, fcstTime, fcstValue, category } = item;
     const unixTime = convertToUnixTime(fcstDate, fcstTime);
-    if (unixTime <= 1693245600000) {
+    if (unixTime <= 1693270800000) {
       console.log(unixTime);
     }
     const existingData = transformedData.find((data) => data.dt === unixTime);
@@ -183,11 +183,9 @@ const convertToUnixTime = (fcstDate: string, fcstTime: string) => {
   const hours = parseInt(fcstTime.substring(0, 2));
   const minutes = parseInt(fcstTime.substring(2));
 
-  // Date 객체로 변환
   const date = new Date(year, month, day, hours, minutes);
-
-  // getTime() 메서드를 사용하여 유닉스 시간(밀리초)으로 변환
-  const unixTime = date.getTime();
+  const koreanDate = convertKoreanTime(date);
+  const unixTime = koreanDate.getTime();
 
   return unixTime;
 };
