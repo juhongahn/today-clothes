@@ -13,23 +13,19 @@ import { dateFormatter } from "../_lib/weatherUtils";
 export const fetchWeathers = createAsyncThunk(
   "weatherSlice/fetchWeathers",
   async (location: { latitude: number; longitude: number }) => {
-    const response = await appFetch(
-      'api/weather',
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          lat: location.latitude,
-          lon: location.longitude,
-          date: new Date().toISOString(),
-        })
-      }
-    );
+    const response = await appFetch("api/weather", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        lat: location.latitude,
+        lon: location.longitude,
+        date: new Date().toISOString(),
+      }),
+    });
     const { data } = await response.json();
-    console.log(data)
     return data;
   }
 );
@@ -86,13 +82,10 @@ export const selectThreeDaysForcast = createSelector(
   (weathers) => {
     const amPmWeatherObj = {};
     const currentDate = new Date();
-    console.log("currentDate: " + currentDate);
     weathers.forEach((weather) => {
       const comparisonDate = new Date(weather.dt);
-      console.log("comparisonDate: " + comparisonDate)
       if (comparisonDate.getDate() === currentDate.getDate()) {
         const comparisonHours = comparisonDate.getHours();
-        console.log("comparisonHours: " + comparisonHours)
         if (comparisonHours === 7 || comparisonHours === 14) {
           const keyDate = dateFormatter(currentDate, "");
           if (!amPmWeatherObj[keyDate]) {
