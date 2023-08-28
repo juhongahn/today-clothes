@@ -88,8 +88,8 @@ export const POST = async (req: Request) => {
     }
     const data = (await response.json()) as ForecastResponse;
     const items = data.response.body.items.item;
-    console.log(items)
     const minMaxTemperatureList = makeHotLowTemperatureList(items);
+    console.log(minMaxTemperatureList)
     const result = groupHLTempWithHourlyFcstValue(items, minMaxTemperatureList);
     return NextResponse.json({ data: result }, { status: 200 });
   } catch (error: unknown) {
