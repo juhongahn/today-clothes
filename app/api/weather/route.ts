@@ -89,7 +89,6 @@ export const POST = async (req: Request) => {
     const data = (await response.json()) as ForecastResponse;
     const items = data.response.body.items.item;
     const minMaxTemperatureList = makeHotLowTemperatureList(items);
-    console.log(minMaxTemperatureList)
     const result = groupHLTempWithHourlyFcstValue(items, minMaxTemperatureList);
     return NextResponse.json({ data: result }, { status: 200 });
   } catch (error: unknown) {
@@ -112,7 +111,9 @@ const groupHLTempWithHourlyFcstValue = (
 
   weatherItems.forEach((item) => {
     const { fcstDate, fcstTime, fcstValue, category } = item;
+    console.log(fcstDate)
     const unixTime = convertToUnixTime(fcstDate, fcstTime);
+    console.log(unixTime)
     const existingData = transformedData.find((data) => data.dt === unixTime);
     const { TMX, TMN } =
       minMaxList.find((data) => data.fcstDate === fcstDate) || {};
