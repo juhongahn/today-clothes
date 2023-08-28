@@ -13,7 +13,7 @@ interface ShortTermForcastWrapperProps {
 const ShortTermForcastWrapper = ({
   stForcast,
 }: ShortTermForcastWrapperProps) => {
-  const mtForcast = convertShortTermForcastMidTermForast(stForcast);
+  //const mtForcast = convertShortTermForcastMidTermForast(stForcast);
 
   return (<></>
     // <WeeklyForcastItem
