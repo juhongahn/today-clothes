@@ -40,6 +40,7 @@ export const GET = async (req: Request) => {
     const result = parsingMidTermForcastData(hlTemperature, fcst, baseDate);
     return NextResponse.json({ data: result }, { status: 200 });
   } catch (error: unknown) {
+    console.log(error)
     handleError(error, NextResponse.json);
   }
 };
