@@ -1,5 +1,5 @@
 import type { Weather } from "../../../_types/types";
-import { MidTermForcast } from "../../../api/mid-term-forcast/route";
+import type { MidTermForcast } from "../../../api/mid-term-forcast/route";
 import WeeklyForcastItem from "./WeeklyForacstItem";
 
 interface ShortTermForcastWrapperProps {
@@ -14,6 +14,7 @@ const ShortTermForcastWrapper = ({
   stForcast,
 }: ShortTermForcastWrapperProps) => {
   const mtForcast = convertShortTermForcastMidTermForast(stForcast);
+  console.log(mtForcast)
   return (
     <WeeklyForcastItem
       mtForcast={mtForcast}
