@@ -17,6 +17,7 @@ const SERVICE_KEY = process.env.SERVICE_KEY;
 export const POST = async (req: Request) => {
   const reqBody = await req.json();
   const { hlRegion, wfRegion, date } = reqBody;
+  console.log(date)
   try {
     if (!hlRegion || !wfRegion || !date) {
       throw new HttpError(

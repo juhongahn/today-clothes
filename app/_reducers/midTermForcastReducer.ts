@@ -6,6 +6,8 @@ import { MidTermForcast } from "../api/mid-term-forcast/route";
 export const fetchMidTermForcast = createAsyncThunk(
   "midTermForcastSlice/fetchMidTermForcast",
   async (arg: { si: string; do: string }) => {
+    const currentDate = new Date();
+    console.log(currentDate)
     const response = await fetch("api/mid-term-forcast", {
       method: "POST",
       headers: {
@@ -15,7 +17,7 @@ export const fetchMidTermForcast = createAsyncThunk(
       body: JSON.stringify({
         hlRegion: arg.si,
         wfRegion: arg.do,
-        date: new Date().toISOString(),
+        date: currentDate.toString(),
       })
     });
     const { data } = await response.json();
