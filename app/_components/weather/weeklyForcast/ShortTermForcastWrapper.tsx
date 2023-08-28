@@ -14,9 +14,10 @@ const ShortTermForcastWrapper = ({
   stForcast,
 }: ShortTermForcastWrapperProps) => {
   return (
-    <WeeklyForcastItem
-      mtForcast={convertShortTermForcastMidTermForast(stForcast)}
-    />
+    <></>
+    // <WeeklyForcastItem
+    //   mtForcast={convertShortTermForcastMidTermForast(stForcast)}
+    // />
   );
 };
 
