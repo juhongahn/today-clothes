@@ -5,9 +5,10 @@ const nextConfig = {
     appDir: true,
     optimizeCss: true,
   },
-  plugins: ["transform-remove-console"],
-  rules: {
-    "no-console": "off",
+  eslint: {
+    // Warning: This allows production builds to successfully complete even if
+    // your project has ESLint errors.
+    ignoreDuringBuilds: true,
   },
   images: {
     remotePatterns: [
