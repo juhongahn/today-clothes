@@ -53,7 +53,7 @@ const Weather = () => {
           <Charts />
         </div>
         <div className={styles.card}>
-        {/* <WeeklyForcast /> */}
+        <WeeklyForcast />
         </div>
       </div>
       {isModalShow &&
