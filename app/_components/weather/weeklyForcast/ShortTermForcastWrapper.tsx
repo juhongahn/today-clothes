@@ -3,7 +3,6 @@ import { MidTermForcast } from "../../../api/mid-term-forcast/route";
 import WeeklyForcastItem from "./WeeklyForacstItem";
 
 interface ShortTermForcastWrapperProps {
-  key: number;
   stForcast: {
     fcstDate: string;
     am: Weather;
@@ -12,13 +11,11 @@ interface ShortTermForcastWrapperProps {
 }
 
 const ShortTermForcastWrapper = ({
-  key,
   stForcast,
 }: ShortTermForcastWrapperProps) => {
   return (
     <WeeklyForcastItem
       mtForcast={convertShortTermForcastMidTermForast(stForcast)}
-      key={key}
     />
   );
 };
