@@ -13,14 +13,19 @@ import { dateFormatter } from "../_lib/weatherUtils";
 export const fetchWeathers = createAsyncThunk(
   "weatherSlice/fetchWeathers",
   async (location: { latitude: number; longitude: number }) => {
-    const currentHours = new Date().getHours();
     const response = await appFetch(
-      `api/weather?lat=${location.latitude}&lon=${location.longitude}&hours=${currentHours}`,
+      'api/weather',
       {
-        method: "GET",
+        method: "POST",
         headers: {
+          "Content-Type": "application/json",
           Accept: "application/json",
         },
+        body: JSON.stringify({
+          lat: location.latitude,
+          lon: location.longitude,
+          date: new Date().toISOString(),
+        })
       }
     );
     const { data } = await response.json();

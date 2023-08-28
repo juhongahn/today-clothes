@@ -39,14 +39,12 @@ interface ForecastResponse {
 const WEATHER_URL =
   "https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst";
 
-export const GET = async (req: Request) => {
-  const { searchParams } = new URL(req.url);
-  const lat = searchParams.get("lat");
-  const lon = searchParams.get("lon");
-  const hours = searchParams.get("hours");
+export const POST = async (req: Request) => {
+  const reqBody = await req.json();
+  const { lat, lon, date } = reqBody;
 
   try {
-    if (!lat || !lon || !hours) {
+    if (!lat || !lon || !date) {
       throw new HttpError(
         "잘못된 요청 파라미터 입니다.",
         NextResponse.json(
@@ -55,7 +53,7 @@ export const GET = async (req: Request) => {
         )
       );
     }
-    const currentDate = new Date();
+    const currentDate = new Date(date);
     const fetchURL = makeWeatherRequestURL(
       WEATHER_URL,
       currentDate,

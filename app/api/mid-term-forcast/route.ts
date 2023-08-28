@@ -14,12 +14,11 @@ const MID_TERM_MID_FCST_FORCAST_URL =
   "https://apis.data.go.kr/1360000/MidFcstInfoService/getMidLandFcst";
 const SERVICE_KEY = process.env.SERVICE_KEY;
 
-export const GET = async (req: Request) => {
-  const { searchParams } = new URL(req.url);
-  const hlRegion = searchParams.get("hlRegion");
-  const wfRegion = searchParams.get("wfRegion");
+export const POST = async (req: Request) => {
+  const reqBody = await req.json();
+  const { hlRegion, wfRegion, date } = reqBody;
   try {
-    if (!hlRegion || !wfRegion) {
+    if (!hlRegion || !wfRegion || !date) {
       throw new HttpError(
         "잘못된 요청 파라미터 입니다.",
         NextResponse.json(
@@ -30,21 +29,16 @@ export const GET = async (req: Request) => {
     }
     const hlRegId = getRegIdBySiName(hlRegion);
     const wfRegId = getRegionCodeByRegionName(wfRegion);
-    const baseDate = new Date();
-    console.log(baseDate)
+    const baseDate = new Date(date);
     const tmFc = requestDateFormmator(baseDate);
-    console.log(tmFc)
     const hlTemperatureQuery = `${MID_TERM_HL_TEMERATURE_FORCAST_URL}?serviceKey=${SERVICE_KEY}&pageNo=1&numOfRows=10&dataType=json&regId=${hlRegId}&tmFc=${tmFc}`;
     const fcstQuery = `${MID_TERM_MID_FCST_FORCAST_URL}?serviceKey=${SERVICE_KEY}&pageNo=1&numOfRows=10&dataType=json&regId=${wfRegId}&tmFc=${tmFc}`;
     const hlTempData = hlTemperatureFetcher(hlTemperatureQuery);
     const fcstData = fcstFetcher(fcstQuery);
     const [hlTemperature, fcst] = await Promise.all([hlTempData, fcstData]);
-    console.log(hlTemperature)
-    console.log(fcst)
     const result = parsingMidTermForcastData(hlTemperature, fcst, baseDate);
     return NextResponse.json({ data: result }, { status: 200 });
   } catch (error: unknown) {
-    console.log(error)
     handleError(error, NextResponse.json);
   }
 };

@@ -5,15 +5,18 @@ import { MidTermForcast } from "../api/mid-term-forcast/route";
 
 export const fetchMidTermForcast = createAsyncThunk(
   "midTermForcastSlice/fetchMidTermForcast",
-  async (arg: {
-    si: string,
-    do: string
-  }) => {
-    const response = await fetch(`api/mid-term-forcast?hlRegion=${arg.si}&wfRegion=${arg.do}`, {
-      method: "GET",
+  async (arg: { si: string; do: string }) => {
+    const response = await fetch("api/mid-term-forcast", {
+      method: "POST",
       headers: {
+        "Content-Type": "application/json",
         Accept: "application/json",
       },
+      body: JSON.stringify({
+        hlRegion: arg.si,
+        wfRegion: arg.do,
+        date: new Date().toISOString(),
+      })
     });
     const { data } = await response.json();
     return data;
