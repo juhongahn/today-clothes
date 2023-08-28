@@ -65,6 +65,7 @@ export const POST = async (req: Request) => {
       lat,
       lon
     );
+    console.log(fetchURL)
     const response = await appFetch(fetchURL, {
       method: "GET",
       cache: "no-store",
