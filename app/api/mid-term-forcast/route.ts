@@ -47,14 +47,11 @@ export const GET = async (req: Request) => {
 const requestDateFormmator = (date: Date) => {
   const hours = date.getHours();
   let formattedHours: string;
-
-  if (hours >= 6) {
-    formattedHours = "0600";
-  } else {
-    formattedHours = "1800";
+  formattedHours = "1800";
+  if (hours < 18) {
     date.setDate(date.getDate() - 1);
   }
-
+ 
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString().padStart(2, "0");
   const day = date.getDate().toString().padStart(2, "0");

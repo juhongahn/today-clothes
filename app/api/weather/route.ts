@@ -62,7 +62,6 @@ export const GET = async (req: Request) => {
       1,
       1000,
       "JSON",
-      "2300",
       lat,
       lon
     );
@@ -196,13 +195,33 @@ const makeWeatherRequestURL = (
   pageNo: number,
   numOfRows: number,
   dataType: string,
-  baseTime: string,
   lat: string,
   lon: string
 ) => {
   const serviceKey: string = process.env.SERVICE_KEY;
-  const targetDate = advanceTime(currentDate, -1);
+  const predictionDate = getNearPredictionTime(currentDate);
   const { x: nx, y: ny } = dfs_xy_conv("toXY", lat, lon);
-  const baseDate = dateFormatter(targetDate, "");
-  return `${baseURL}?serviceKey=${serviceKey}&pageNo=${pageNo}&numOfRows=${numOfRows}&dataType=${dataType}&base_date=${baseDate}&base_time=${baseTime}&nx=${nx}&ny=${ny}`;
+  return `${baseURL}?serviceKey=${serviceKey}&pageNo=${pageNo}&numOfRows=${numOfRows}&dataType=${dataType}&base_date=${predictionDate.baseDate}&base_time=${predictionDate.baseTime}&nx=${nx}&ny=${ny}`;
+};
+
+const getNearPredictionTime = (
+  currentDate: Date
+): {
+  baseDate: string;
+  baseTime: string;
+} => {
+  if (currentDate.getHours() < 18) {
+    const targetDate = advanceTime(currentDate, -1);
+    const baseDate = dateFormatter(targetDate, "");
+    return {
+      baseDate,
+      baseTime: "2300",
+    };
+  } else {
+    const baseDate = dateFormatter(currentDate, "");
+    return {
+      baseDate,
+      baseTime: "1700",
+    };
+  }
 };

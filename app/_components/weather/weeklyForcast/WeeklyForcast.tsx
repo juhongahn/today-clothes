@@ -9,7 +9,6 @@ import WeeklyForcastLoading from "./Loading";
 const WeeklyForcast = () => {
   const weeklyForcast = useAppSelector(selectMidTermForcast);
   const threeDaysForcast = useAppSelector(selectThreeDaysForcast);
-  console.log(threeDaysForcast)
   return (
     <div className={styles.weeklyForcast}>
       <div className={styles.header}>
