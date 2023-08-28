@@ -17,7 +17,6 @@ const SERVICE_KEY = process.env.SERVICE_KEY;
 export const POST = async (req: Request) => {
   const reqBody = await req.json();
   const { hlRegion, wfRegion, date } = reqBody;
-  console.log(date)
   try {
     if (!hlRegion || !wfRegion || !date) {
       throw new HttpError(
@@ -30,7 +29,7 @@ export const POST = async (req: Request) => {
     }
     const hlRegId = getRegIdBySiName(hlRegion);
     const wfRegId = getRegionCodeByRegionName(wfRegion);
-    const baseDate = new Date(date);
+    const baseDate = convertKoreanTime(new Date(date));
     console.log(baseDate)
     
     const tmFc = requestDateFormmator(baseDate);
@@ -128,3 +127,13 @@ const responseDateFormmator = (date: Date): string => {
   const day = date.getDate().toString().padStart(2, "0");
   return `${year}${month}${day}`;
 };
+
+const convertKoreanTime = (date: Date) => {
+  const utcTime = 
+  date.getTime() + 
+    (date.getTimezoneOffset() * 60 * 1000);
+    const krTimeDiff = 9 * 60 * 60 * 1000;
+    const krCurrentTime = 
+    new Date(utcTime + (krTimeDiff));
+  return krCurrentTime;
+}
