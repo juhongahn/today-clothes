@@ -7,7 +7,6 @@ export const fetchMidTermForcast = createAsyncThunk(
   "midTermForcastSlice/fetchMidTermForcast",
   async (arg: { si: string; do: string }) => {
     const currentDate = new Date();
-    console.log(currentDate)
     const response = await fetch("api/mid-term-forcast", {
       method: "POST",
       headers: {

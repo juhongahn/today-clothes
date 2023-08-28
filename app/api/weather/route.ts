@@ -6,6 +6,7 @@ import {
 } from "../../_helpers/custom-fetch/fetchWrapper";
 import { HttpError } from "../../_helpers/error-class/HttpError";
 import { dfs_xy_conv } from "../../_lib/gridConverter";
+import { convertKoreanTime } from "../mid-term-forcast/route";
 
 interface ForecastItem {
   baseDate: string;
@@ -53,7 +54,8 @@ export const POST = async (req: Request) => {
         )
       );
     }
-    const currentDate = new Date(date);
+
+    const currentDate = convertKoreanTime(new Date(date));
     const fetchURL = makeWeatherRequestURL(
       WEATHER_URL,
       currentDate,
