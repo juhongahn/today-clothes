@@ -15,6 +15,7 @@ import type { Weather } from "../../../_types/types";
 import Loading from "../../ui/Loading";
 import styles from "./Charts.module.css";
 import useSlideNext, { SLIDE_TYPE } from "../../../_hooks/useSlideNext";
+import dayjs from "dayjs";
 
 const HumidityChart = lazy(() => import("./HumidityChart"));
 const PercipitationChart = lazy(() => import("./PercipitationChart"));
@@ -83,9 +84,9 @@ const Charts = () => {
 
 const useTimeMatchedWeather = (): Weather[] => {
   const weathers = useAppSelector(selectWeatherList);
-  const currentDate = new Date().getTime();
+  const currentDateInUnix = dayjs().unix();
   const data = weathers.filter(
-    (weather) => weather.dt >= currentDate && isAllValueContained(weather)
+    (weather) => weather.dt >= currentDateInUnix && isAllValueContained(weather)
   );
   return data;
 };

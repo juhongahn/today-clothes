@@ -7,6 +7,7 @@ import localReducer from "./_reducers/localReducer";
 import risesetReducer from "./_reducers/risesetReducer";
 import midTermForcastReducer from "./_reducers/midTermForcastReducer";
 import tourReducer from "./_reducers/tourReducer";
+import dayjs from "./_lib/dayjs";
 
 export const store = configureStore({
   reducer: {
@@ -22,14 +23,7 @@ export const store = configureStore({
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
-export const getInitialComparisonTime = () => {
-  const currentDate = new Date();
-  const year = currentDate.getFullYear();
-  const month = currentDate.getMonth() + 1;
-  const day = currentDate.getDate();
-  const hours = currentDate.getHours();
-  
-  const dateObj = new Date(year, month - 1, day, hours, 0, 0, 0);
-  const initialComparisonTime = dateObj.getTime();
+export const getInitialComparisonTime = ():number => {
+  const initialComparisonTime = dayjs().tz().minute(0).second(0).millisecond(0).unix() * 1000;
   return initialComparisonTime;
 }

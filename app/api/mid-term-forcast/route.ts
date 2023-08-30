@@ -7,6 +7,7 @@ import { handleError } from "../../_helpers/custom-fetch/fetchWrapper";
 import { HttpError } from "../../_helpers/error-class/HttpError";
 import getRegIdBySiName from "../../_lib/getRegId";
 import { getRegionCodeByRegionName } from "../../_helpers/constants/midtermForcastRegionCode";
+import dayjs from "../../_lib/dayjs";
 
 const MID_TERM_HL_TEMERATURE_FORCAST_URL =
   "	http://apis.data.go.kr/1360000/MidFcstInfoService/getMidTa";
@@ -29,35 +30,32 @@ export const POST = async (req: Request) => {
     }
     const hlRegId = getRegIdBySiName(hlRegion);
     const wfRegId = getRegionCodeByRegionName(wfRegion);
-    const baseDate = convertKoreanTime(new Date(date));
+    const baseDate = dayjs(date).tz();
     const tmFc = requestDateFormmator(baseDate);
+
     const hlTemperatureQuery = `${MID_TERM_HL_TEMERATURE_FORCAST_URL}?serviceKey=${SERVICE_KEY}&pageNo=1&numOfRows=10&dataType=json&regId=${hlRegId}&tmFc=${tmFc}`;
     const fcstQuery = `${MID_TERM_MID_FCST_FORCAST_URL}?serviceKey=${SERVICE_KEY}&pageNo=1&numOfRows=10&dataType=json&regId=${wfRegId}&tmFc=${tmFc}`;
-
+    
     const hlTempData = hlTemperatureFetcher(hlTemperatureQuery);
     const fcstData = fcstFetcher(fcstQuery);
     const [hlTemperature, fcst] = await Promise.all([hlTempData, fcstData]);
     const result = parsingMidTermForcastData(hlTemperature, fcst, baseDate);
     return NextResponse.json({ data: result }, { status: 200 });
   } catch (error: unknown) {
-    console.error(error);
     handleError(error, NextResponse.json);
   }
 };
 
-const requestDateFormmator = (date: Date) => {
-  const hours = date.getHours();
-  let formattedHours: string;
-  formattedHours = "1800";
+const requestDateFormmator = (date: dayjs.Dayjs) => {
+  const dateCopy = dayjs(date).tz();
+  const hours = date.hour();
+  let targetDate: dayjs.Dayjs;
   if (hours < 18) {
-    date.setDate(date.getDate() - 1);
+    targetDate = dateCopy.subtract(1, "day");
+  } else {
+    targetDate = dateCopy;
   }
- 
-  const year = date.getFullYear();
-  const month = (date.getMonth() + 1).toString().padStart(2, "0");
-  const day = date.getDate().toString().padStart(2, "0");
-
-  return `${year}${month}${day}${formattedHours}`;
+  return targetDate.format("YYYYMMDD").concat("1800");
 };
 
 export interface MidTermForcast {
@@ -81,52 +79,47 @@ export interface MidTermForcast {
 const parsingMidTermForcastData = (
   hlTemperature: HLTemperatureResponseType,
   fcst: FcstResponseType,
-  baseDate: Date
+  baseDate: dayjs.Dayjs
 ): MidTermForcast[] => {
   const result: MidTermForcast[] = [];
-  const baseDateCopy = new Date(baseDate);
+  const baseDateCopy = dayjs(baseDate).tz();
 
   const hlTemperatureItem = hlTemperature.response.body.items.item[0];
   const fcstItem = fcst.response.body.items.item[0];
 
-  baseDateCopy.setDate(baseDateCopy.getDate() + 4);
+  baseDateCopy.add(4, "day");
   for (let i = 3; i <= 10; i++) {
     const formattedItem = {
-      dt: responseDateFormmator(baseDateCopy),
+      dt: baseDateCopy.format("YYYYMMDD"),
       hlTemperature: {
         tmx: hlTemperatureItem[`taMax${i}`],
         tmn: hlTemperatureItem[`taMin${i}`],
       },
       fcst: {
         pop: {
-          popAM: fcstItem[`rnSt${i}Am`] !== undefined ? fcstItem[`rnSt${i}Am`] : fcstItem[`rnSt${i}`],
-          popPM: fcstItem[`rnSt${i}Pm`] !== undefined ? fcstItem[`rnSt${i}Pm`] : fcstItem[`rnSt${i}`],
+          popAM:
+            fcstItem[`rnSt${i}Am`] !== undefined
+              ? fcstItem[`rnSt${i}Am`]
+              : fcstItem[`rnSt${i}`],
+          popPM:
+            fcstItem[`rnSt${i}Pm`] !== undefined
+              ? fcstItem[`rnSt${i}Pm`]
+              : fcstItem[`rnSt${i}`],
         },
         weatherForcast: {
-          wfAM: fcstItem[`wf${i}Am`] !== undefined ? fcstItem[`wf${i}Am`] : fcstItem[`wf${i}`],
-          wfPM: fcstItem[`wf${i}Pm`] !== undefined ? fcstItem[`wf${i}Pm`] : fcstItem[`wf${i}`],
+          wfAM:
+            fcstItem[`wf${i}Am`] !== undefined
+              ? fcstItem[`wf${i}Am`]
+              : fcstItem[`wf${i}`],
+          wfPM:
+            fcstItem[`wf${i}Pm`] !== undefined
+              ? fcstItem[`wf${i}Pm`]
+              : fcstItem[`wf${i}`],
         },
       },
     };
     result.push(formattedItem);
-    baseDateCopy.setDate(baseDateCopy.getDate() + 1);
+    baseDateCopy.add(1, "day");
   }
   return result;
 };
-
-const responseDateFormmator = (date: Date): string => {
-  const year = date.getFullYear();
-  const month = (date.getMonth() + 1).toString().padStart(2, "0");
-  const day = date.getDate().toString().padStart(2, "0");
-  return `${year}${month}${day}`;
-};
-
-export const convertKoreanTime = (date: Date) => {
-  const utcTime = 
-  date.getTime() + 
-    (date.getTimezoneOffset() * 60 * 1000);
-    const krTimeDiff = 9 * 60 * 60 * 1000;
-    const krCurrentTime = 
-    new Date(utcTime + (krTimeDiff));
-  return krCurrentTime;
-}

@@ -4,6 +4,7 @@ import { forwardRef } from "react";
 import { BarChart, Bar, LabelList } from "recharts";
 import type { Weather } from "../../../_types/types";
 import styles from "./WeatherChart.module.css";
+import { getDayDifference } from "../../../_lib/dateUtils";
 
 interface PercipitationChartProps {
   weathers: Weather[];
@@ -155,14 +156,4 @@ const extractPCP = (inputString: string | undefined): number => {
     const strNumber = inputString.match(/\d+\.\d+|\d+/g);
     return parseInt(strNumber[0]);
   }
-};
-
-const getDayDifference = (timestamp: number): number => {
-  const currentDate = new Date();
-  currentDate.setHours(0, 0, 0, 0);
-  const currentTime = currentDate.getTime();
-  const oneDayInTime = 24 * 60 * 60 * 1000;
-
-  const daysDifference = Math.floor((timestamp - currentTime) / oneDayInTime);
-  return daysDifference;
 };

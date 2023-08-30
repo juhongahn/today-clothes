@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
-import { advanceTime, dateFormatter } from "../../_lib/weatherUtils";
 import {
   appFetch,
   handleError,
 } from "../../_helpers/custom-fetch/fetchWrapper";
 import { HttpError } from "../../_helpers/error-class/HttpError";
 import { dfs_xy_conv } from "../../_lib/gridConverter";
-import { convertKoreanTime } from "../mid-term-forcast/route";
+import dayjs from "../../_lib/dayjs"
+
 
 interface ForecastItem {
   baseDate: string;
@@ -54,8 +54,7 @@ export const POST = async (req: Request) => {
         )
       );
     }
-
-    const currentDate = convertKoreanTime(new Date(date));
+    const currentDate = dayjs(date).tz();
     const fetchURL = makeWeatherRequestURL(
       WEATHER_URL,
       currentDate,
@@ -112,7 +111,7 @@ const groupHLTempWithHourlyFcstValue = (
   weatherItems.forEach((item) => {
     const { fcstDate, fcstTime, fcstValue, category } = item;
     const unixTime = convertToUnixTime(fcstDate, fcstTime);
-    
+
     const existingData = transformedData.find((data) => data.dt === unixTime);
     const { TMX, TMN } =
       minMaxList.find((data) => data.fcstDate === fcstDate) || {};
@@ -180,18 +179,13 @@ const convertToUnixTime = (fcstDate: string, fcstTime: string) => {
   const day = parseInt(fcstDate.substring(6, 8));
   const hours = parseInt(fcstTime.substring(0, 2));
   const minutes = parseInt(fcstTime.substring(2));
-
-  const date = new Date(year, month, day, hours, minutes);
-  const unixTime = date.getTime();
-  const timeZoneOffset = 9 * 60 * 60 * 1000;
-  const correctedUnixTime = unixTime - timeZoneOffset;
-
-  return correctedUnixTime;
+  const unixTime = dayjs().tz().year(year).month(month).date(day).hour(hours).minute(minutes).second(0).unix() * 1000;
+  return unixTime;
 };
 
 const makeWeatherRequestURL = (
   baseURL: string,
-  currentDate: Date,
+  currentDate: dayjs.Dayjs,
   pageNo: number,
   numOfRows: number,
   dataType: string,
@@ -205,20 +199,19 @@ const makeWeatherRequestURL = (
 };
 
 const getNearPredictionTime = (
-  currentDate: Date
+  currentDate: dayjs.Dayjs
 ): {
   baseDate: string;
   baseTime: string;
 } => {
-  if (currentDate.getHours() < 18) {
-    const targetDate = advanceTime(currentDate, -1);
-    const baseDate = dateFormatter(targetDate, "");
+  if (currentDate.hour() < 18) {
+    const baseDate = currentDate.add(-1, "day").format('YYYYMMDD');
     return {
       baseDate,
       baseTime: "2300",
     };
   } else {
-    const baseDate = dateFormatter(currentDate, "");
+    const baseDate = currentDate.format('YYYYMMDD');
     return {
       baseDate,
       baseTime: "1700",

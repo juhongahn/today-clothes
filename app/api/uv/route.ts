@@ -6,6 +6,7 @@ import {
   handleError,
 } from "../../_helpers/custom-fetch/fetchWrapper";
 import { HttpError } from "../../_helpers/error-class/HttpError";
+import dayjs from "../../_lib/dayjs"
 
 interface HourlyDataItem {
   code: string;
@@ -61,12 +62,11 @@ interface HourlyResponse {
 const UV_URL =
   "https://apis.data.go.kr/1360000/LivingWthrIdxServiceV4/getUVIdxV4";
 
-export const GET = async (req: Request) => {
-  const { searchParams } = new URL(req.url);
-  const hCode = searchParams.get("h");
-  const hours = searchParams.get("hours");
+export const POST = async (req: Request) => {
+  const reqBody = await req.json();
+  const { hcode, date } = reqBody;
   try {
-    if (!hCode || !hours) {
+    if (!hcode || !date) {
       throw new HttpError(
         "잘못된 요청 파라미터 입니다.",
         NextResponse.json(
@@ -75,8 +75,8 @@ export const GET = async (req: Request) => {
         )
       );
     }
-    const currentDate = new Date();
-    const fetchURL = makeUVRequestURL(UV_URL, currentDate, 1, 10, "JSON", hCode);
+    const currentDate = dayjs(date).tz();
+    const fetchURL = makeUVRequestURL(UV_URL, currentDate, 1, 10, "JSON", hcode);
     const response = await appFetch(fetchURL, {
       method: "GET",
       cache: "no-store",
@@ -123,28 +123,27 @@ const convertUVObjToHourlyList = (uv: HourlyDataItem) => {
   const day = parseInt(strForcastDate.slice(6, 8));
   const hour = parseInt(strForcastDate.slice(8, 10));
 
-  const forcastDate = new Date(year, month - 1, day, hour);
+  const forcastDate = dayjs().tz().year(year).month(month - 1).date(day);
   let prevVal = "";
   for (let i = 0; i < 76; i++) {
     const value = uv[`h${i}`];
     const elapsedHour = i + hour;
-    let date = new Date(forcastDate);
-    date.setHours(elapsedHour);
+    let date = dayjs(forcastDate).tz().hour(elapsedHour).minute(0).second(0).millisecond(0);
     if (value) {
       prevVal = value;
       uvList.push({
-        dt: date.getTime(),
+        dt: date.unix() * 1000,
         components: { uv: convertValueToGrade(parseInt(value)) },
       });
     } else if (value === undefined && prevVal) {
       uvList.push({
-        dt: date.getTime(),
+        dt: date.unix() * 1000,
         components: { uv: convertValueToGrade(parseInt(prevVal)) },
       });
     } else {
       prevVal = "";
       uvList.push({
-        dt: date.getTime(),
+        dt: date.unix() * 1000,
         components: { uv: "" },
       });
     }
@@ -206,19 +205,19 @@ const getNearPredictionTime = (hours: number): string => {
 
 const makeUVRequestURL = (
   baseURL: string,
-  currentDate: Date,
+  currentDate: dayjs.Dayjs,
   pageNo: number,
   numOfRows: number,
   dataType: string,
   areaNo: string,
 ) => {
   const serviceKey: string = process.env.SERVICE_KEY;
-  const currentHour = currentDate.getHours();
-  let targetDate: Date;
-  if (currentHour < 4) targetDate = advanceTime(currentDate, -1);
-  else targetDate = advanceTime(currentDate, 0);
-  const baseDate = dateFormatter(targetDate, "");
-  const baseTime = getNearPredictionTime(currentDate.getHours());
+  const currentHour = currentDate.hour();
+  let targetDate: dayjs.Dayjs;
+  if (currentHour < 4) targetDate = dayjs(currentHour).tz().subtract(1, 'day');
+  else targetDate = dayjs(currentHour).tz();
+  const baseDate = currentDate.format('YYYYMMDD');
+  const baseTime = getNearPredictionTime(currentDate.hour());
   const query = `${baseURL}?serviceKey=${serviceKey}&pageNo=${pageNo}&numOfRows=${numOfRows}&dataType=${dataType}&areaNo=${areaNo}&time=${baseDate}${baseTime}`;
   return query;
 };

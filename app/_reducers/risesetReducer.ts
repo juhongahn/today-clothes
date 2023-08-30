@@ -5,7 +5,7 @@ import {
   createSelector,
 } from "@reduxjs/toolkit";
 import { RootState, getInitialComparisonTime } from "../store";
-import type {Riseset } from "../_types/types";
+import type { Riseset } from "../_types/types";
 import { appFetch } from "../_helpers/custom-fetch/fetchWrapper";
 import { FAILED, FULFILLED, LOADING } from "../_helpers/constants/constants";
 import { dateFormatter } from "../_lib/weatherUtils";
@@ -14,16 +14,19 @@ export const fetchRiseset = createAsyncThunk(
   "risesetSlice/fetchRiseset",
   async (geolocation: { latitude: number; longitude: number }) => {
     const curDate = dateFormatter(new Date(), "-");
-    // 이 단계에서 에러를 catch하면 failed case로 분기되지 않는다. 
-    const response = await appFetch(
-      `api/riseset?lat=${geolocation.latitude}&lon=${geolocation.longitude}&date=${curDate}`,
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-        },
-      }
-    );
+    // 이 단계에서 에러를 catch하면 failed case로 분기되지 않는다.
+    const response = await appFetch("api/riseset", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        lat: geolocation.latitude,
+        lon: geolocation.longitude,
+        date: new Date().toISOString(),
+      }),
+    });
     const { data } = await response.json();
     return data;
   }

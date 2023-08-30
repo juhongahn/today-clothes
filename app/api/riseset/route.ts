@@ -5,6 +5,7 @@ import {
   handleError,
 } from "../../_helpers/custom-fetch/fetchWrapper";
 import { HttpError } from "../../_helpers/error-class/HttpError";
+import dayjs from "../../_lib/dayjs";
 
 const RISE_SET_URL =
   "https://apis.data.go.kr/B090041/openapi/service/RiseSetInfoService/getLCRiseSetInfo";
@@ -51,11 +52,9 @@ type RISE_SET_JSON = {
   };
 };
 
-export const GET = async (req: Request) => {
-  const { searchParams } = new URL(req.url);
-  const lat = searchParams.get("lat");
-  const lon = searchParams.get("lon");
-  const date = searchParams.get("date");
+export const POST = async (req: Request) => {
+  const reqBody = await req.json();
+  const { lat, lon, date } = reqBody;
   try {
     if (!lat || !lon || !date) {
       throw new HttpError(
@@ -66,9 +65,9 @@ export const GET = async (req: Request) => {
         )
       );
     }
-    const today = new Date(date);
+    const currentDate = dayjs(date).tz();
     const setteledResults = await Promise.allSettled(
-      createPromiseList(today, 4, lat, lon)
+      createPromiseList(currentDate, 4, lat, lon)
     );
     const results = convertXMLToJSON(setteledResults);
     return NextResponse.json({ data: results }, { status: 200 });
@@ -106,20 +105,19 @@ const convertXMLToJSON = (inputPSRList: PromiseSettledResult<string>[]) => {
 };
 
 const createPromiseList = (
-  startDate: Date,
+  startDate: dayjs.Dayjs,
   targetDays: number,
   lat: string,
   lon: string
 ) => {
-  const dateList: Date[] = [startDate];
+  const dateList: dayjs.Dayjs[] = [startDate];
   for (let i = 0; i < targetDays; i++) {
-    const nextDate = new Date();
-    nextDate.setDate(dateList[i].getDate() + 1);
+    const nextDate = dateList[i].add(1, 'day');
     dateList.push(nextDate);
   }
 
   const promiseList = dateList.map((date) => {
-    const formattedDay = dateFormatter(date, "");
+    const formattedDay = date.format('YYYYMMDD');
     return fetcher(lat, lon, formattedDay);
   });
 

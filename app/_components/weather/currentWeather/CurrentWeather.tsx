@@ -28,6 +28,7 @@ const CurrentWeather = () => {
 const Badges = () => {
   const selectedDust = useAppSelector(selectMatchedDust);
   const selectedUV = useAppSelector(selectMatchedUV);
+
   if (!selectedDust || !selectedUV) {
     return (
       <>

@@ -4,6 +4,8 @@ import { forwardRef } from "react";
 import { BarChart, Bar, LabelList } from "recharts";
 import type { Weather } from "../../../_types/types";
 import styles from "./WeatherChart.module.css";
+import dayjs from "dayjs";
+import { getDayDifference } from "../../../_lib/dateUtils";
 
 interface HumidityChartProps {
   weathers: Weather[];
@@ -42,8 +44,7 @@ export default HumidityChart;
 const HumidityChartLabelList = (props) => {
   const { x, y, width, value } = props;
   const dayDifference = getDayDifference(value.dt);
-  const targetDate = new Date(value.dt);
-  const hour = targetDate.getHours();
+  const hour = dayjs(value.dt).hour();
   const reh = value.value.REH;
   return (
     <g>
@@ -71,14 +72,4 @@ const HumidityChartLabelList = (props) => {
       </text>
     </g>
   );
-};
-
-const getDayDifference = (timestamp: number): number => {
-  const currentDate = new Date();
-  currentDate.setHours(0, 0, 0, 0);
-  const currentTime = currentDate.getTime();
-  const oneDayInTime = 24 * 60 * 60 * 1000;
-
-  const daysDifference = Math.floor((timestamp - currentTime) / oneDayInTime);
-  return daysDifference;
 };

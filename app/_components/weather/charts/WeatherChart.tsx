@@ -13,6 +13,8 @@ import {
 import getWeatherImage from "../../../_lib/getWeatherImage";
 import type { Riseset, Weather } from "../../../_types/types";
 import styles from "./WeatherChart.module.css";
+import { getDayDifference } from "../../../_lib/dateUtils";
+import dayjs from "../../../_lib/dayjs";
 
 interface WeatherChartProps {
   weathers: Weather[];
@@ -55,16 +57,15 @@ const WeatherChartLabelList = (props) => {
   const { x, y, value } = props;
   const dispatch = useAppDispatch();
   const risesetList = useAppSelector(selectRisesetList);
-  
-  if (risesetList.length === 0) return;
 
+  if (risesetList.length === 0) return;
   const dayDifference = getDayDifference(value.dt);
   const hour = new Date(value.dt).getHours();
   const tmp = value.value.TMP;
-  
+
   const targetRiseset = extractTargetRiseset(risesetList, value.dt);
   const imageProperties = getWeatherImage(value, targetRiseset, 32, 32);
-  
+
   const selectHandler = (dt: number) => {
     dispatch(weatherComparisonTimeUpdated(dt));
     dispatch(dustComparisonTimeUpdated(dt));
@@ -95,7 +96,11 @@ const WeatherChartLabelList = (props) => {
         y={180}
         textAnchor="middle"
       >
-        {dayDifference === 1 && hour === 0 ? "내일" : dayDifference === 2 && hour === 0 ? "모레" : hour.toString().padStart(2,'0') + "시"}
+        {dayDifference === 1 && hour === 0
+          ? "내일"
+          : dayDifference === 2 && hour === 0
+          ? "모레"
+          : hour.toString().padStart(2, "0") + "시"}
       </text>
       <text className={styles.tmp} x={x} y={y - 10} textAnchor="middle">
         {tmp + "°"}
@@ -114,46 +119,41 @@ const WeatherChartLabelList = (props) => {
 
 const parseDate = (dateString: string) => {
   const year = parseInt(dateString.substring(0, 4));
-  const month = parseInt(dateString.substring(4, 6)) - 1; // 월은 0부터 시작하므로 1을 빼줍니다.
+  const month = parseInt(dateString.substring(4, 6)) - 1;
   const day = parseInt(dateString.substring(6, 8));
 
-  return new Date(year, month, day);
-};
-
-const isSameDate = (date1: Date, date2: Date) => {
-  return (
-    date1.getFullYear() === date2.getFullYear() &&
-    date1.getMonth() === date2.getMonth() &&
-    date1.getDate() === date2.getDate()
-  );
-};
-
-const getDayDifference = (timestamp: number): number => {
-  const currentDate = new Date();
-  currentDate.setHours(0, 0, 0, 0);
-  const currentTime = currentDate.getTime();
-  const oneDayInTime = 24 * 60 * 60 * 1000;
-
-  const daysDifference = Math.floor((timestamp - currentTime) / oneDayInTime);
-  return daysDifference;
+  return dayjs()
+    .year(year)
+    .month(month)
+    .date(day)
+    .hour(0)
+    .minute(0)
+    .second(0)
+    .millisecond(0)
+    .tz();
 };
 
 const extractTargetRiseset = (
   risesetList: Riseset[],
   timestamp: number
 ): Riseset[] => {
-  const targetDate = new Date(timestamp);
-  const afterTargetDate = new Date();
-  afterTargetDate.setDate(targetDate.getDate() + 1);
-
+  const targetDate = dayjs(timestamp)
+    .hour(0)
+    .minute(0)
+    .second(0)
+    .millisecond(0)
+    .tz();
+  const afterTargetDate = targetDate
+    .add(1, "day")
+    .hour(0)
+    .minute(0)
+    .second(0)
+    .millisecond(0)
+    .tz();
   const targetRiseset = risesetList.filter((riseset: Riseset) => {
-    const risesetDate = parseDate(riseset.locdate[0]);
-    if (
-      isSameDate(risesetDate, targetDate) ||
-      isSameDate(risesetDate, afterTargetDate)
-    )
+    const risesetDate = parseDate(riseset.locdate[0].trim());
+    if (risesetDate.isSame(targetDate) || risesetDate.isSame(afterTargetDate))
       return true;
   });
   return targetRiseset;
 };
-
