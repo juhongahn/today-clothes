@@ -210,10 +210,14 @@
 
 @keyframes scaleUp {
   0% {
+    top: 50%;
+    left: 50%;
     transform: scale(0.8) translate(-50%, -50%);
     opacity: 0;
   }
   100% {
+    top: 50%;
+    left: 50%;
     transform: scale(1) translate(-50%, -50%);
     opacity: 1;
   }

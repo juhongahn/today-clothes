@@ -81,7 +81,6 @@ const RecommendationModal = ({ modalHandler }: RecommendationModalProps) => {
           reh: REH,
           wsd: WSD,
           uv,
-          pm,
           pop: POP,
           tmn: TMN,
           tmx: TMX,
