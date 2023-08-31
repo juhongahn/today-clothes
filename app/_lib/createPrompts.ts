@@ -6,7 +6,6 @@ export type PromptsType = {
   reh: string;
   wsd: string;
   uv: string;
-  pm: string;
   pop: string;
   tmn: string;
   tmx: string;
@@ -15,7 +14,7 @@ export type PromptsType = {
 };
 
 const createPrompts = (promptInput: PromptsType): string => {
-  const { tmp, reh, wsd, uv, pm, pop, tmn, tmx, gender, color } = promptInput;
+  const { tmp, reh, wsd, uv, pop, tmn, tmx, gender, color } = promptInput;
   let personalColor = "";
   switch (color) {
     case "springWarm":
@@ -38,12 +37,12 @@ const createPrompts = (promptInput: PromptsType): string => {
     습도(%): ${reh}
     풍속(m/s): ${wsd}
     자외선 지수(UV index): ${uv}
-    미세먼지 농도(μg/m³): ${pm}
     강수확률(%): ${pop}
-    최고 기온(℃): ${tmn}
-    최저 기온(℃): ${tmx}
+    ${tmn && `최고 기온(℃): ${tmn}`}
+    ${tmx && `최저 기온(℃): ${tmx}`}
     성별(남성/여성): ${gender === "male" ? "남자" : "여자"}
     ${personalColor && `퍼스널 컬러: ${personalColor}`}
+    위 제공된 날씨 정보와 선호에 따라서 하루 옷차림을 추천해 줄래? 그리고 날씨에 대한 설명은 생략해줘.
     `;
   return prompt;
 };
