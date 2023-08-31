@@ -269,7 +269,7 @@ const usePrompt = (
       if (
         scriptRef.current &&
         scriptRef.current.scrollTop + scriptRef.current.clientHeight >=
-        scriptRef.current.scrollHeight - 20
+          scriptRef.current.scrollHeight - 20
       ) {
         setAutoScroll(true);
       } else {

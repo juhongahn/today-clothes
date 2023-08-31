@@ -4,7 +4,7 @@ import {
   createParser,
 } from "eventsource-parser";
 
-export type ChatGPTAgent = "user" | "system";
+export type ChatGPTAgent = "user" | "system" | "assistant";
 
 export interface ChatGPTMessage {
   role: ChatGPTAgent;
@@ -20,7 +20,6 @@ export interface OpenAIStreamPayload {
   presence_penalty: number;
   stream: boolean;
   max_tokens: number;
-  n: number;
 }
 
 export const OpenAIStream = async (payload: OpenAIStreamPayload) => {
