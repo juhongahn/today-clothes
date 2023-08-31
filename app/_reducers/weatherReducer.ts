@@ -8,7 +8,7 @@ import { RootState, getInitialComparisonTime } from "../store";
 import { Weather } from "../_types/types";
 import { appFetch } from "../_helpers/custom-fetch/fetchWrapper";
 import { FAILED, FULFILLED, LOADING } from "../_helpers/constants/constants";
-import { dateFormatter } from "../_lib/weatherUtils";
+import dayjs from "../_lib/dayjs";
 
 export const fetchWeathers = createAsyncThunk(
   "weatherSlice/fetchWeathers",
@@ -81,13 +81,15 @@ export const selectThreeDaysForcast = createSelector(
   [selectWeatherList],
   (weathers) => {
     const amPmWeatherObj = {};
-    const currentDate = new Date();
-    weathers.forEach((weather) => {
-      const comparisonDate = new Date(weather.dt);
-      if (comparisonDate.getDate() === currentDate.getDate()) {
-        const comparisonHours = comparisonDate.getHours();
+    let currentDate = dayjs().tz().minute(0).second(0).millisecond(0);
+    for (let i = 0; i < weathers.length; i++) {
+      const weather = weathers[i];
+      const targetDate = dayjs(currentDate).tz();
+      const comparisonDate = dayjs(weather.dt).tz();
+      if (targetDate.date() === comparisonDate.date()) {
+        const comparisonHours = comparisonDate.hour();
         if (comparisonHours === 7 || comparisonHours === 14) {
-          const keyDate = dateFormatter(currentDate, "");
+          const keyDate = comparisonDate.format("YYYYMMDD");
           if (!amPmWeatherObj[keyDate]) {
             amPmWeatherObj[keyDate] = {};
           }
@@ -95,12 +97,12 @@ export const selectThreeDaysForcast = createSelector(
             amPmWeatherObj[keyDate]["am"] = weather;
           } else {
             amPmWeatherObj[keyDate]["pm"] = weather;
-            currentDate.setDate(currentDate.getDate() + 1);
           }
         }
+      } else if (targetDate.isBefore(comparisonDate)) {
+        currentDate = currentDate.add(1, "day");
       }
-    });
-
+    }
     const result: {
       fcstDate: string;
       am: Weather;

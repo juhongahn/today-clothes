@@ -49,9 +49,11 @@ const CurrentWeatherItem = () => {
       <div className={styles.description}>
         <p>{curTime}</p>
         <p className={styles.slash}>{imgProperty.alt}</p>
-        <p className={styles.slash}>
-          <span>H: {parseInt(TMX)}°</span> / <span>L: {parseInt(TMN)}°</span>
-        </p>
+        {TMX && TMN && (
+          <p className={styles.slash}>
+            <span>H: {parseInt(TMX)}°</span> / <span>L: {parseInt(TMN)}°</span>
+          </p>
+        )}
       </div>
     </div>
   );

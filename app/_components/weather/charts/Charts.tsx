@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  useState,
-  MutableRefObject,
-  Suspense,
-  lazy,
-} from "react";
+import { useState, MutableRefObject, Suspense, lazy } from "react";
 import { useAppSelector } from "../../../_hooks/redux_hooks";
 import { MdKeyboardArrowRight } from "@react-icons/all-files/md/MdKeyboardArrowRight";
 import { MdKeyboardArrowLeft } from "@react-icons/all-files/md/MdKeyboardArrowLeft";
@@ -15,7 +10,7 @@ import type { Weather } from "../../../_types/types";
 import Loading from "../../ui/Loading";
 import styles from "./Charts.module.css";
 import useSlideNext, { SLIDE_TYPE } from "../../../_hooks/useSlideNext";
-import dayjs from "dayjs";
+import dayjs from "../../../_lib/dayjs";
 
 const HumidityChart = lazy(() => import("./HumidityChart"));
 const PercipitationChart = lazy(() => import("./PercipitationChart"));
@@ -84,7 +79,8 @@ const Charts = () => {
 
 const useTimeMatchedWeather = (): Weather[] => {
   const weathers = useAppSelector(selectWeatherList);
-  const currentDateInUnix = dayjs().unix();
+  const currentDateInUnix =
+    dayjs().tz().minute(0).second(0).millisecond(0).unix() * 1000;
   const data = weathers.filter(
     (weather) => weather.dt >= currentDateInUnix && isAllValueContained(weather)
   );
@@ -95,7 +91,7 @@ const renderChart = (
   selectedChart: string,
   data: Weather[],
   chartRef: MutableRefObject<any>,
-  width: number,
+  width: number
 ) => {
   const size = { width: 32, height: 32 };
   switch (selectedChart) {
@@ -120,7 +116,7 @@ const renderChart = (
             </div>
           }
         >
-          <HumidityChart weathers={data} ref={chartRef} width={width}/>
+          <HumidityChart weathers={data} ref={chartRef} width={width} />
         </Suspense>
       );
     case "percipitation":
@@ -132,14 +128,14 @@ const renderChart = (
             </div>
           }
         >
-          <PercipitationChart weathers={data} ref={chartRef} width={width}/>
+          <PercipitationChart weathers={data} ref={chartRef} width={width} />
         </Suspense>
       );
   }
 };
 
 const isAllValueContained = (obj: Weather) => {
-  if (Object.keys(obj.value).length !== 14) return false;
+  if (Object.keys(obj.value).length < 12) return false;
   return true;
 };
 

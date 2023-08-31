@@ -82,15 +82,14 @@ const parsingMidTermForcastData = (
   baseDate: dayjs.Dayjs
 ): MidTermForcast[] => {
   const result: MidTermForcast[] = [];
-  const baseDateCopy = dayjs(baseDate).tz();
-
+  
   const hlTemperatureItem = hlTemperature.response.body.items.item[0];
   const fcstItem = fcst.response.body.items.item[0];
-
-  baseDateCopy.add(4, "day");
+  
   for (let i = 3; i <= 10; i++) {
+    const targetDate = dayjs(baseDate).tz().add(i + 1, "day");
     const formattedItem = {
-      dt: baseDateCopy.format("YYYYMMDD"),
+      dt: targetDate.format("YYYYMMDD"),
       hlTemperature: {
         tmx: hlTemperatureItem[`taMax${i}`],
         tmn: hlTemperatureItem[`taMin${i}`],
@@ -119,7 +118,6 @@ const parsingMidTermForcastData = (
       },
     };
     result.push(formattedItem);
-    baseDateCopy.add(1, "day");
   }
   return result;
 };

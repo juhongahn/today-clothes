@@ -67,7 +67,7 @@ export const POST = async (req: Request) => {
     }
     const currentDate = dayjs(date).tz();
     const setteledResults = await Promise.allSettled(
-      createPromiseList(currentDate, 4, lat, lon)
+      createPromiseList(currentDate, 5, lat, lon)
     );
     const results = convertXMLToJSON(setteledResults);
     return NextResponse.json({ data: results }, { status: 200 });

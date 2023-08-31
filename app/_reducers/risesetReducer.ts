@@ -13,7 +13,6 @@ import { dateFormatter } from "../_lib/weatherUtils";
 export const fetchRiseset = createAsyncThunk(
   "risesetSlice/fetchRiseset",
   async (geolocation: { latitude: number; longitude: number }) => {
-    const curDate = dateFormatter(new Date(), "-");
     // 이 단계에서 에러를 catch하면 failed case로 분기되지 않는다.
     const response = await appFetch("api/riseset", {
       method: "POST",
