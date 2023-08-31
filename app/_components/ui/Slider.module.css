@@ -6,7 +6,7 @@
   position: absolute;
   color: #8f8f8f;
   top: calc(50% - 1rem);
-  z-index: 999;
+  z-index: 5;
   cursor: pointer;
 }
 
