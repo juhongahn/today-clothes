@@ -8,7 +8,6 @@ import {
   SetStateAction,
   MutableRefObject,
 } from "react";
-import { PromptsType } from "../../_lib/createPrompts";
 import { selectCurrentDust } from "../../_reducers/dustReducer";
 import { selectCurrentUV } from "../../_reducers/uvReducer";
 import { selectCurrentWeather } from "../../_reducers/weatherReducer";
@@ -18,7 +17,6 @@ import { useSelector } from "react-redux";
 import { HttpError } from "../../_helpers/error-class/HttpError";
 import { DUST, UV, Weather } from "../../_types/types";
 import { SelectionError } from "../../_helpers/error-class/SelectionError";
-import { useChat } from 'ai/react';
 
 interface RecommendationModalProps {
   modalHandler: () => void;
@@ -46,15 +44,25 @@ const COLOR: ColorType[] = [
   { color: "nothing", value: "상관 없음" },
 ];
 
+type PromptsType = {
+  tmp: string;
+  reh: string;
+  wsd: string;
+  uv: string;
+  pop: string;
+  tmn: string;
+  tmx: string;
+  gender: string;
+  color: string;
+};
+
 const RecommendationModal = ({ modalHandler }: RecommendationModalProps) => {
   const [personalSelection, personalSelectionHandler] = usePersonalSelection();
   const [curWeahter, curUV, curDust] = usePromptData();
   const scriptRef = useRef(null);
   const [responsePrompt, setResponsePrompt, promptLoading, setPromptLoading] =
     usePrompt(scriptRef);
-  // const { messages, input, isLoading, setInput,  } = useChat({
-  //     api: 'https://5zslvex5puvgc4aant2nvf7hsi0yvyxy.lambda-url.ap-northeast-2.on.aws/'
-  //   }); 
+  
   useEffect(() => {
     if (window) {
       const promptScript = sessionStorage.getItem("prompt");
@@ -90,14 +98,17 @@ const RecommendationModal = ({ modalHandler }: RecommendationModalProps) => {
           color: personalSelection.color.color,
         };
 
-        const response = await fetch("https://5zslvex5puvgc4aant2nvf7hsi0yvyxy.lambda-url.ap-northeast-2.on.aws/", {
-          method: "OPTIONS",
-          cache: "no-store",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ inputPrompt }),
-        });
+        const response = await fetch(
+          "https://5zslvex5puvgc4aant2nvf7hsi0yvyxy.lambda-url.ap-northeast-2.on.aws/",
+          {
+            method: "POST",
+            cache: "no-store",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ inputPrompt }),
+          }
+        );
         if (!response.ok) {
           throw new HttpError("데이터 요청 중 에러가 발생했습니다.", response);
         }
@@ -106,8 +117,11 @@ const RecommendationModal = ({ modalHandler }: RecommendationModalProps) => {
 
         while (true) {
           const { value, done } = await reader.read();
+          console.log("value: " + value)
+          console.log("done: " + done)
           if (done) break;
           const chunkValue = decoder.decode(value);
+          console.log("chunkValue: " + chunkValue)
           setResponsePrompt((prev) => prev + chunkValue);
         }
         sessionStorage.setItem("prompt", responsePrompt);
