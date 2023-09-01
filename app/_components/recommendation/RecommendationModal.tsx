@@ -18,6 +18,7 @@ import { useSelector } from "react-redux";
 import { HttpError } from "../../_helpers/error-class/HttpError";
 import { DUST, UV, Weather } from "../../_types/types";
 import { SelectionError } from "../../_helpers/error-class/SelectionError";
+import { useChat } from 'ai/react';
 
 interface RecommendationModalProps {
   modalHandler: () => void;
@@ -51,7 +52,9 @@ const RecommendationModal = ({ modalHandler }: RecommendationModalProps) => {
   const scriptRef = useRef(null);
   const [responsePrompt, setResponsePrompt, promptLoading, setPromptLoading] =
     usePrompt(scriptRef);
-
+  // const { messages, input, isLoading, setInput,  } = useChat({
+  //     api: 'https://5zslvex5puvgc4aant2nvf7hsi0yvyxy.lambda-url.ap-northeast-2.on.aws/'
+  //   }); 
   useEffect(() => {
     if (window) {
       const promptScript = sessionStorage.getItem("prompt");
@@ -75,7 +78,6 @@ const RecommendationModal = ({ modalHandler }: RecommendationModalProps) => {
         setPromptLoading(true);
         const { TMP, REH, WSD, POP, TMX, TMN } = curWeahter.value;
         const uv = curUV.components.uv.value.toString();
-        const pm = curDust.components.pm10.value.toString();
         const inputPrompt: PromptsType = {
           tmp: TMP,
           reh: REH,
@@ -88,8 +90,8 @@ const RecommendationModal = ({ modalHandler }: RecommendationModalProps) => {
           color: personalSelection.color.color,
         };
 
-        const response = await fetch("api/cloth-recomendation", {
-          method: "POST",
+        const response = await fetch("https://5zslvex5puvgc4aant2nvf7hsi0yvyxy.lambda-url.ap-northeast-2.on.aws/", {
+          method: "OPTIONS",
           cache: "no-store",
           headers: {
             "Content-Type": "application/json",
