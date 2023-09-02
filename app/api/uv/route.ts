@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { advanceTime, dateFormatter } from "../../_lib/weatherUtils";
 import { GRADE_OBJ } from "../../_types/types";
 import {
   appFetch,
@@ -58,7 +57,6 @@ interface HourlyResponse {
   };
 }
 
-
 const UV_URL =
   "https://apis.data.go.kr/1360000/LivingWthrIdxServiceV4/getUVIdxV4";
 
@@ -77,6 +75,7 @@ export const POST = async (req: Request) => {
     }
     const currentDate = dayjs(date).tz();
     const fetchURL = makeUVRequestURL(UV_URL, currentDate, 1, 10, "JSON", hcode);
+    console.log(fetchURL)
     const response = await appFetch(fetchURL, {
       method: "GET",
       cache: "no-store",
@@ -173,34 +172,22 @@ const convertValueToGrade = (value: number): GRADE_OBJ => {
 
 /**
  *
+ * Base_time : 03, 06, 09, 12, 15, 18, 21, 24 (1일 8회)
  * @param hours
  * @returns 현재 시간에 제일 가까운 요청시간
  */
-const getNearPredictionTime = (hours: number): string => {
-  if (hours < 4) {
-    return "24";
-  }
-  // Base_time : 03, 06, 09, 12, 1500, 18, 21, 24 (1일 8회)
-  const forecastTimes: number[] = [3, 6, 9, 12, 15, 18, 21, 24];
-  let left = 0;
-  let right = forecastTimes.length - 1;
-  let result = null;
-
-  while (left <= right) {
-    let mid = Math.floor((left + right) / 2);
-
-    if (forecastTimes[mid] === hours) {
-      result = forecastTimes[mid - 1];
+const getNearPredictionTime = (date: dayjs.Dayjs): string => {
+  const forecastTimes: number[] = [0, 3, 6, 9, 12, 15, 18, 21];
+  const currentHour = date.hour();
+  const currentMinute = date.minute();
+  let nextTime = forecastTimes[0];
+  for (const time of forecastTimes) {
+    if (currentHour < time || (currentHour === time && currentMinute >= 20)) {
+      nextTime = time;
       break;
-    } else if (forecastTimes[mid] < hours) {
-      result = forecastTimes[mid];
-      left = mid + 1;
-    } else {
-      right = mid - 1;
     }
   }
-
-  return result.toString().padStart(2, "0");
+  return nextTime.toString().padStart(2, "0");
 };
 
 const makeUVRequestURL = (
@@ -212,12 +199,8 @@ const makeUVRequestURL = (
   areaNo: string,
 ) => {
   const serviceKey: string = process.env.SERVICE_KEY;
-  const currentHour = currentDate.hour();
-  let targetDate: dayjs.Dayjs;
-  if (currentHour < 4) targetDate = dayjs(currentHour).tz().subtract(1, 'day');
-  else targetDate = dayjs(currentHour).tz();
   const baseDate = currentDate.format('YYYYMMDD');
-  const baseTime = getNearPredictionTime(currentDate.hour());
+  const baseTime = getNearPredictionTime(currentDate);
   const query = `${baseURL}?serviceKey=${serviceKey}&pageNo=${pageNo}&numOfRows=${numOfRows}&dataType=${dataType}&areaNo=${areaNo}&time=${baseDate}${baseTime}`;
   return query;
 };
