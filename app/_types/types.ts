@@ -1,12 +1,3 @@
-export type Location = {
-  location?: {
-    latitude: number;
-    longitude: number;
-  };
-  loaded: boolean;
-  error?: string;
-};
-
 export type Riseset = {
   locdate: string[];
   sunrise: string[];
@@ -40,8 +31,8 @@ export type Weather = {
     VVV: string;
     WAV: string;
     WSD: string;
-    TMX: string,
-    TMN: string,
+    TMX: string;
+    TMN: string;
   };
 };
 
@@ -72,9 +63,7 @@ export type GRADE_OBJ = {
   value: number;
 };
 
-export enum REQ_TYPE {
-  WEATHER = "weather",
-  UV = "uv",
-  DUST = "dust",
-  RISE_SET = "riseset",
-}
+export type COORDS = {
+  latitude: number;
+  longitude: number;
+};
