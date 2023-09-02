@@ -1,5 +1,4 @@
 import { IBM_Plex_Sans_KR } from "next/font/google";
-import NavBar from "../_components/navbar/NavBar";
 import Image from "next/image";
 import "./globals.css";
 
@@ -16,20 +15,19 @@ export const metadata = {
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <html lang="ko" className={ibm_plex_sans_kr.className}>
-      <body>
-        <div id="modal-portal"></div>
-        <Image
-          src="/statics/images/background-img.jpg"
-          alt="배경 이미지"
-          fill
-          priority
-          style={{zIndex: "-100", opacity: "0.5"}}
-        />
-        <NavBar />
-        <section style={{paddingTop: "3.5rem"}}>{children}</section>
-      </body>
-    </html>
+      <html lang="ko" className={ibm_plex_sans_kr.className}>
+        <body>
+          <div id="modal-portal"></div>
+          <Image
+            src="/statics/images/background-img.jpg"
+            alt="배경 이미지"
+            fill
+            priority
+            style={{ zIndex: "-100", opacity: "0.5" }}
+          />
+          <section id="rootSection">{children}</section>
+        </body>
+      </html>
   );
 };
 

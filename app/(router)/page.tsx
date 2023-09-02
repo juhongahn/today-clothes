@@ -1,7 +1,13 @@
 import Geolocation from "../_components/geolocation/Geolocation";
+import NavBar from "../_components/navbar/NavBar";
 
 const Page = () => {
-  return <Geolocation />;
+  return (
+    <>
+      <NavBar />
+      <Geolocation />
+    </>
+  );
 };
 
 export default Page;

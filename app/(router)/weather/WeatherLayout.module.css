@@ -14,8 +14,8 @@
   .container {
     display: flex;
     justify-content: center;
-    margin-top: 5vh;
     padding: 0 1rem;
+    margin-top: 0;
   }
   
 }

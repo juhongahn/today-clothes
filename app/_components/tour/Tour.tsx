@@ -22,14 +22,6 @@ type BadgeType = {
   selected: boolean;
 };
 
-const tourButtonProps = {
-  round: true,
-  position: {
-    left: 30,
-    right: 30,
-  },
-};
-
 const badgeButtonProps = {
   round: false,
   position: {
@@ -44,7 +36,14 @@ const Tour = () => {
   useEffect(() => {
     dispatch(fetchTour({ id: "tour", title: "관광지", contentTypeId: 12 }));
   }, []);
-
+  const [isMobile, viewWidth] = useMobileDetect();
+  const tourButtonProps = {
+    round: true,
+    position: {
+      left: isMobile ? 20 : 30,
+      right: isMobile ? 20 : 30,
+    },
+  };
   const [badges, setBadges] = useState<BadgeType[]>([
     { id: "tour", title: "관광지", contentTypeId: 12, selected: true },
     { id: "restaurants", title: "맛집", contentTypeId: 39, selected: false },
@@ -85,7 +84,10 @@ const Tour = () => {
       </div>
       <div className={styles.body}>
         <div className={styles.badgeSlider}>
-          <Slider slideLength={200} buttonProps={badgeButtonProps}>
+          <Slider
+            slideLength={isMobile ? 100 : 200}
+            buttonProps={badgeButtonProps}
+          >
             {badges.map((badge) => (
               <Badge
                 key={badge.id}
@@ -97,7 +99,10 @@ const Tour = () => {
           </Slider>
         </div>
         <div className={styles.tourSlider}>
-          <Slider slideLength={278} buttonProps={tourButtonProps}>
+          <Slider
+            slideLength={isMobile ? 356 : 278}
+            buttonProps={tourButtonProps}
+          >
             {tourList.length > 0 ? (
               tourList.map((tour, idx) => (
                 <TourCard
@@ -127,6 +132,25 @@ const convertLocationToCoords = async (tour: {
     longitude: parseFloat(x),
   };
   return coords;
+};
+
+type useMobileDetectReturn = [
+  boolean,
+  number
+]
+
+const useMobileDetect = ():useMobileDetectReturn => {
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [width, setWidth] = useState<number>(0)
+  useEffect(() => {
+    if (window) {
+      if (window.innerWidth <= 680) {
+        setIsMobile(true);
+        setWidth(window.innerWidth);
+      }
+    }
+  }, []);
+  return [isMobile, width];
 };
 
 export default Tour;

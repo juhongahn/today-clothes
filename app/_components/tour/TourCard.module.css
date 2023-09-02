@@ -55,3 +55,12 @@
   color: black;
   margin-bottom: 0.3rem;
 }
+
+@media screen and (max-width: 680px) {
+  .graphic {
+    width: 360px;
+  }
+  .des {
+    width: 100%;
+  }
+}

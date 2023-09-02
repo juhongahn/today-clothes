@@ -56,3 +56,12 @@
   );
   pointer-events: none;
 }
+
+@media screen and (max-width: 680px) {
+  .tour {
+    width: calc(100vw - 3rem);
+  }
+  .tourSlider::after {
+    display: none;
+  }
+}

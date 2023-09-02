@@ -24,8 +24,15 @@ p {
   padding: 0;
 }
 
+#rootSection {
+  padding-top: 3.5rem;
+}
+
 @media screen and (max-width: 680px) {
   html {
     font-size: 10px;
+  }
+  #rootSection {
+    padding-top: 64px;
   }
 }

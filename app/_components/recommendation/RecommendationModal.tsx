@@ -117,11 +117,8 @@ const RecommendationModal = ({ modalHandler }: RecommendationModalProps) => {
 
         while (true) {
           const { value, done } = await reader.read();
-          console.log("value: " + value)
-          console.log("done: " + done)
           if (done) break;
           const chunkValue = decoder.decode(value);
-          console.log("chunkValue: " + chunkValue)
           setResponsePrompt((prev) => prev + chunkValue);
         }
         sessionStorage.setItem("prompt", responsePrompt);

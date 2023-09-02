@@ -26,14 +26,25 @@
   margin: 0;
 }
 
+.search {
+  display: none;
+}
+
 @media screen and (max-width: 680px) {
   .container {
     width: 100vw;
-    justify-content: center;
+    height: 64px;
+    justify-content: space-between;
+    padding: 0 2rem
   }
+  
   .link p {
-    font-size: 1.6rem;
+    font-size: 2rem;
     font-weight: 600;
     margin: 0;
   }
+
+  .search {
+  display: block;
+}
 }
