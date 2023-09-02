@@ -5,7 +5,7 @@
 .arrow {
   position: absolute;
   color: #8f8f8f;
-  top: calc(50% - 1rem);
+  top: calc(50% - 16px);
   z-index: 5;
   cursor: pointer;
 }
@@ -46,4 +46,15 @@
   gap: 0.8rem;
   min-width: fit-content;
   transition: transform 0.5s ease-in-out;
+}
+
+@media screen and (max-width: 680px) {
+  .arrow {
+    position: absolute;
+    color: #8f8f8f;
+    top: calc(50% - 16px);
+    right: 0;
+    z-index: 5;
+    cursor: pointer;
+  }
 }

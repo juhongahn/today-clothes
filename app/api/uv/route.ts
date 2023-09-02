@@ -75,7 +75,6 @@ export const POST = async (req: Request) => {
     }
     const currentDate = dayjs(date).tz();
     const fetchURL = makeUVRequestURL(UV_URL, currentDate, 1, 10, "JSON", hcode);
-    console.log(fetchURL)
     const response = await appFetch(fetchURL, {
       method: "GET",
       cache: "no-store",
