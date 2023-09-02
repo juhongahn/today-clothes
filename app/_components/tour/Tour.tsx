@@ -1,15 +1,19 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getXY } from "../searchWeather/SearchSection";
-import styles from "./Tour.module.css";
-import TourCard from "./TourCard";
-import useCoords from "../../_hooks/useCoords";
-import { useAppDispatch, useAppSelector } from "../../_hooks/redux_hooks";
-import Badge from "./tourBadge/Badge";
+import { getXY } from "../searchWeather/SearchBar";
+import {
+  thunkUpdateCoords,
+  useAppDispatch,
+  useAppSelector,
+} from "../../_hooks/redux_hooks";
 import { fetchTour, selectTourList } from "../../_reducers/tourReducer";
+import { COORDS } from "../../_types/types";
 import TourCardLoading from "./Loading";
+import Badge from "./tourBadge/Badge";
+import TourCard from "./TourCard";
 import Slider from "../ui/Slider";
+import styles from "./Tour.module.css";
 
 type BadgeType = {
   id: string;
@@ -35,9 +39,8 @@ const badgeButtonProps = {
 };
 
 const Tour = () => {
-  const dispatch = useAppDispatch();
   const tourList = useAppSelector(selectTourList);
-
+  const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(fetchTour({ id: "tour", title: "관광지", contentTypeId: 12 }));
   }, []);
@@ -52,12 +55,17 @@ const Tour = () => {
     { id: "tracking", title: "트레킹", contentTypeId: 12, selected: false },
   ]);
 
-  const cardSelectHandler = (tour: {
+  const cardSelectHandler = async (tour: {
     title: string;
     location: string;
     image: string;
   }) => {
-    locationSelectHandler(tour, dispatch);
+    try {
+      const coords = await convertLocationToCoords(tour);
+      dispatch(thunkUpdateCoords(coords));
+    } catch (error) {
+      //TODO: 좌표변환 실패시 에러처리.
+    }
   };
 
   const badgeSelectHandler = (keyword: BadgeType) => {
@@ -108,20 +116,17 @@ const Tour = () => {
   );
 };
 
-const locationSelectHandler = async (
-  tour: {
-    title: string;
-    location: string;
-    image: string;
-  },
-  dispatch
-) => {
+const convertLocationToCoords = async (tour: {
+  title: string;
+  location: string;
+  image: string;
+}): Promise<COORDS> => {
   const { x, y } = await getXY(tour.location);
   const coords = {
     latitude: parseFloat(y),
     longitude: parseFloat(x),
   };
-  useCoords(coords, dispatch);
+  return coords;
 };
 
 export default Tour;
