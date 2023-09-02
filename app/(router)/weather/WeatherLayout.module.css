@@ -12,7 +12,10 @@
 
 @media screen and (max-width: 680px) {
   .container {
-    width: 85vw;
+    display: flex;
+    justify-content: center;
     margin-top: 5vh;
+    padding: 0 1rem;
   }
+  
 }

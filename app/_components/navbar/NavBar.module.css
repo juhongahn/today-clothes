@@ -28,6 +28,7 @@
 
 @media screen and (max-width: 680px) {
   .container {
+    width: 100vw;
     justify-content: center;
   }
   .link p {

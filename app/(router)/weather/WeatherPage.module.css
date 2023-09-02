@@ -12,3 +12,19 @@
   flex-direction: column;
   gap: 1.5rem;
 }
+
+@media screen and (max-width: 680px) {
+  .page {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .weather {
+    width: 100vw;
+    padding: 0 1.5rem;
+  }
+
+  .side {
+    width: 100%;
+  }
+}
