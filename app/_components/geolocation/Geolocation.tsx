@@ -40,7 +40,7 @@ const Geolocation = () => {
           animationData={lottieJson}
           play
           speed={0.6}
-          style={{width: "70%", height: "70%"}}
+          style={{ width: '80%'}}
         />
       </div>
     </div>
@@ -53,7 +53,7 @@ interface LocationErrorProps {
 
 const LocationError = ({ errorMessage }: LocationErrorProps) => {
   return (
-    <div>
+    <div className={styles.errorContainer}>
       <p className={styles.error}>{errorMessage}</p>
       <p>설정 탭에서 위치 엑세스를 허용하거나 다른 브라우저를 사용해 주세요.</p>
     </div>

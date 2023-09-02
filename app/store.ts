@@ -1,5 +1,4 @@
-import { configureStore } from "@reduxjs/toolkit";
-
+import { ThunkAction, configureStore, AnyAction } from "@reduxjs/toolkit";
 import weatherReducer from "./_reducers/weatherReducer";
 import uvReducer from "./_reducers/uvReducer";
 import dustReducer from "./_reducers/dustReducer";
@@ -22,8 +21,16 @@ export const store = configureStore({
 });
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
-
-export const getInitialComparisonTime = ():number => {
-  const initialComparisonTime = dayjs().tz().minute(0).second(0).millisecond(0).unix() * 1000;
+export type AppThunk<ReturnType = void> = ThunkAction<
+  ReturnType,
+  RootState,
+  unknown,
+  AnyAction
+>
+export const getInitialComparisonTime = (): number => {
+  const initialComparisonTime =
+    dayjs().tz().minute(0).second(0).millisecond(0).unix() * 1000;
   return initialComparisonTime;
-}
+};
+
+

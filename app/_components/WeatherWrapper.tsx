@@ -2,9 +2,9 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAppDispatch } from "../_hooks/redux_hooks";
+import { thunkUpdateCoords, useAppDispatch } from "../_hooks/redux_hooks";
 import Weather from "./weather/Weather";
-import useCoords from "../_hooks/useCoords";
+import { COORDS } from "../_types/types";
 
 const WeatherWrapper = () => {
   const dispatch = useAppDispatch();
@@ -13,9 +13,9 @@ const WeatherWrapper = () => {
   useEffect(() => {
     const strCoords = sessionStorage.getItem("coords");
     if (strCoords) {
-      const coords: { latitude: number; longitude: number } =
+      const coords: COORDS =
         JSON.parse(strCoords);
-      useCoords(coords, dispatch);
+      dispatch(thunkUpdateCoords(coords));
     } else {
       alert("위치 엑세스를 허용 해주세요.");
       router.push("/");
