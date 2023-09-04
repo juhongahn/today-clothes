@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, MutableRefObject, Suspense, lazy } from "react";
+import { useState, MutableRefObject, Suspense, lazy, useMemo } from "react";
 import { useAppSelector } from "../../../_hooks/redux_hooks";
 import { MdKeyboardArrowRight } from "@react-icons/all-files/md/MdKeyboardArrowRight";
 import { MdKeyboardArrowLeft } from "@react-icons/all-files/md/MdKeyboardArrowLeft";
@@ -27,7 +27,8 @@ const ChartList: ChartType[] = [
 ];
 
 const Charts = () => {
-  const data = useTimeMatchedWeather();
+  const weathers = useAppSelector(selectWeatherList);
+  const timeMatcedData = useMemo(() => filterMatchedWeather(weathers), [weathers]);
   const [slideHandler, chartRef, containerRef, slideState] = useSlideNext();
   const [selectedChart, setSelectedChart] = useState<ChartType>({
     type: "weather",
@@ -63,7 +64,7 @@ const Charts = () => {
           ))}
         </div>
         <div className={styles.chartContainer}>
-          {renderChart(selectedChart.type, data, chartRef, 614 * 4)}
+          {renderChart(selectedChart.type, timeMatcedData, chartRef, 614 * 4)}
         </div>
       </div>
       {!slideState.isButtonDisabled.right && (
@@ -77,8 +78,7 @@ const Charts = () => {
   );
 };
 
-const useTimeMatchedWeather = (): Weather[] => {
-  const weathers = useAppSelector(selectWeatherList);
+const filterMatchedWeather = (weathers: Weather[]): Weather[] => {
   const currentDateInUnix =
     dayjs().tz().minute(0).second(0).millisecond(0).unix() * 1000;
   const data = weathers.filter(
