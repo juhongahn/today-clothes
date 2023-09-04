@@ -15,19 +15,22 @@ export const metadata = {
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-      <html lang="ko" className={ibm_plex_sans_kr.className}>
-        <body>
-          <div id="modal-portal"></div>
-          <Image
-            src="/statics/images/background-img.jpg"
-            alt="배경 이미지"
-            fill
-            priority
-            style={{ zIndex: "-100", opacity: "0.5" }}
-          />
-          <section id="rootSection">{children}</section>
-        </body>
-      </html>
+    <html lang="ko" className={ibm_plex_sans_kr.className}>
+      <head>
+        <link rel="icon" href="/favicon/favicon.ico" />
+      </head>
+      <body>
+        <div id="modal-portal"></div>
+        <Image
+          src="/statics/images/background-img.jpg"
+          alt="배경 이미지"
+          fill
+          priority
+          style={{ zIndex: "-100", opacity: "0.5" }}
+        />
+        <section id="rootSection">{children}</section>
+      </body>
+    </html>
   );
 };
 
