@@ -1,9 +1,10 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { RootState, getInitialComparisonTime } from "../store";
+import { RootState } from "../store";
 import type { DUST } from "../_types/types";
 import { appFetch } from "../_helpers/custom-fetch/fetchWrapper";
 import { dateFormatter } from "../_lib/weatherUtils";
 import { FAILED, FULFILLED, LOADING } from "../_helpers/constants/constants";
+import { getInitialComparisonTime } from "../_hooks/redux_hooks";
 
 export const fetchDust = createAsyncThunk(
   "dustSlice/fetchDust",

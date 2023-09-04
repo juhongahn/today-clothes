@@ -3,9 +3,10 @@ import {
   createAsyncThunk,
   PayloadAction,
 } from "@reduxjs/toolkit";
-import { RootState, getInitialComparisonTime } from "../store";
+import { RootState } from "../store";
 import type { UV } from "../_types/types";
 import { FAILED, FULFILLED, LOADING } from "../_helpers/constants/constants";
+import { getInitialComparisonTime } from "../_hooks/redux_hooks";
 
 export const fetchUV = createAsyncThunk(
   "uvSlice/fetchUV",

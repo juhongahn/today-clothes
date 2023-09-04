@@ -27,10 +27,3 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   unknown,
   AnyAction
 >
-export const getInitialComparisonTime = (): number => {
-  const initialComparisonTime =
-    dayjs().tz().minute(0).second(0).millisecond(0).unix() * 1000;
-  return initialComparisonTime;
-};
-
-

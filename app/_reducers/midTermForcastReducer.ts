@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { RootState, getInitialComparisonTime } from "../store";
+import { RootState } from "../store";
 import { FAILED, FULFILLED, LOADING } from "../_helpers/constants/constants";
 import { MidTermForcast } from "../api/mid-term-forcast/route";
 

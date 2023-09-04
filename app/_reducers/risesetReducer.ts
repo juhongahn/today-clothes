@@ -4,11 +4,12 @@ import {
   PayloadAction,
   createSelector,
 } from "@reduxjs/toolkit";
-import { RootState, getInitialComparisonTime } from "../store";
+import { RootState } from "../store";
 import type { Riseset } from "../_types/types";
 import { appFetch } from "../_helpers/custom-fetch/fetchWrapper";
 import { FAILED, FULFILLED, LOADING } from "../_helpers/constants/constants";
 import { dateFormatter } from "../_lib/weatherUtils";
+import { getInitialComparisonTime } from "../_hooks/redux_hooks";
 
 export const fetchRiseset = createAsyncThunk(
   "risesetSlice/fetchRiseset",

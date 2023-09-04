@@ -4,11 +4,12 @@ import {
   PayloadAction,
   createSelector,
 } from "@reduxjs/toolkit";
-import { RootState, getInitialComparisonTime } from "../store";
+import { RootState } from "../store";
 import { Weather } from "../_types/types";
 import { appFetch } from "../_helpers/custom-fetch/fetchWrapper";
 import { FAILED, FULFILLED, LOADING } from "../_helpers/constants/constants";
 import dayjs from "../_lib/dayjs";
+import { getInitialComparisonTime } from "../_hooks/redux_hooks";
 
 export const fetchWeathers = createAsyncThunk(
   "weatherSlice/fetchWeathers",
