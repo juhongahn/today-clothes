@@ -11,25 +11,20 @@ import Charts from "./charts/Charts";
 import styles from "./Weather.module.css";
 import { RootState } from "../../store";
 import WeeklyForcast from "./weeklyForcast/WeeklyForcast";
+import Local from "./local/Local";
 
-const RecommendatioModal = lazy(() => import("../../_components/recommendation/RecommendationModal"));
+const RecommendatioModal = lazy(
+  () => import("../../_components/recommendation/RecommendationModal")
+);
 
 const Weather = () => {
-  const local = useAppSelector(selectLocal);
   const isAllDataReady = useAllLoaded();
   const [isModalShow, recommendationModalHandler, portalDiv] =
     useRecommendationModal();
-
   return (
     <div className={styles.weather}>
       <div className={styles.header}>
-        {local ? (
-          <p>
-            {local.region_2depth_name} {local.region_3depth_name}
-          </p>
-        ) : (
-          <Loading />
-        )}
+        <Local />
         <div className={styles.clothButton}>
           {isAllDataReady ? (
             <Button
@@ -53,31 +48,33 @@ const Weather = () => {
           <Charts />
         </div>
         <div className={styles.card}>
-        <WeeklyForcast />
+          <WeeklyForcast />
         </div>
       </div>
       {isModalShow &&
         portalDiv &&
         createPortal(
-          <Suspense fallback={
-            <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
-              <Loading size={{ width: 32, height: 32 }} />
-            </div>
-          }>
-          <RecommendatioModal
-            modalHandler={recommendationModalHandler}
-          />
+          <Suspense
+            fallback={
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Loading size={{ width: 32, height: 32 }} />
+              </div>
+            }
+          >
+            <RecommendatioModal modalHandler={recommendationModalHandler} />
           </Suspense>,
           portalDiv
         )}
     </div>
   );
 };
-type UseRecommendationModalReturn = [
-  boolean,
-  () => void,
-  Element | null,
-];
+type UseRecommendationModalReturn = [boolean, () => void, Element | null];
 const useRecommendationModal = (): UseRecommendationModalReturn => {
   const [isModalShow, setIsModalShow] = useState<boolean>(false);
   const [portalDiv, setPortalDiv] = useState<Element | null>(null);
