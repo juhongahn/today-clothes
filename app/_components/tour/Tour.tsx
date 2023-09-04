@@ -100,7 +100,7 @@ const Tour = () => {
         </div>
         <div className={styles.tourSlider}>
           <Slider
-            slideLength={isMobile ? 356 : 278}
+            slideLength={isMobile ? 355 : 278}
             buttonProps={tourButtonProps}
           >
             {tourList.length > 0 ? (
