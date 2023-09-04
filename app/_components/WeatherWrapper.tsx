@@ -13,8 +13,7 @@ const WeatherWrapper = () => {
   useEffect(() => {
     const strCoords = sessionStorage.getItem("coords");
     if (strCoords) {
-      const coords: COORDS =
-        JSON.parse(strCoords);
+      const coords: COORDS = JSON.parse(strCoords);
       dispatch(thunkUpdateCoords(coords));
     } else {
       alert("위치 엑세스를 허용 해주세요.");
@@ -22,11 +21,7 @@ const WeatherWrapper = () => {
     }
   }, []);
 
-  return (
-    <>
-      <Weather />
-    </>
-  );
+  return <Weather />;
 };
 
 export default WeatherWrapper;
