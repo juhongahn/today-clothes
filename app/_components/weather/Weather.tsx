@@ -32,6 +32,7 @@ const Weather = () => {
               size="md"
               text="오늘의 옷 보기"
               onClick={recommendationModalHandler.bind(null, false)}
+              name="open-modal"
             />
           ) : (
             <Button variant="secondary" size="md">

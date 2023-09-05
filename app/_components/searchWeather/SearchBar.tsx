@@ -27,6 +27,7 @@ const SearchBar = () => {
           onClick={(event) => {
             handleSubmit(event);
           }}
+          name="search-address"
         >
           <FaSearchLocation size={18} color="#5f6368ff" />
         </button>

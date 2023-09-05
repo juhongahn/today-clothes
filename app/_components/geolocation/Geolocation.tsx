@@ -26,6 +26,7 @@ const Geolocation = () => {
             variant="primary"
             size="lg"
             disabled={isLoading}
+            name="start-today-clothes"
           >
             {isLoading && <Loading />}
           </Button>
