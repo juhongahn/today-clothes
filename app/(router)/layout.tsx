@@ -26,7 +26,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           alt="배경 이미지"
           fill
           priority
-          style={{ zIndex: "-100", opacity: "0.5" }}
+          style={{ zIndex: "-100", opacity: "0.5" , objectFit: "cover"}}
         />
         <section id="rootSection">{children}</section>
       </body>
