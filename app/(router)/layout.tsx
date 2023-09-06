@@ -1,5 +1,6 @@
 import { IBM_Plex_Sans_KR } from "next/font/google";
 import Image from "next/image";
+import backgroundImg from "/public/statics/images/background-img.jpg"
 import "./globals.css";
 
 const ibm_plex_sans_kr = IBM_Plex_Sans_KR({
@@ -22,10 +23,11 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
       <body>
         <div id="modal-portal"></div>
         <Image
-          src="/statics/images/background-img.jpg"
+          src={backgroundImg}
           alt="배경 이미지"
           fill
           priority
+          placeholder="blur"
           style={{ zIndex: "-100", opacity: "0.5" , objectFit: "cover"}}
         />
         <section id="rootSection">{children}</section>
