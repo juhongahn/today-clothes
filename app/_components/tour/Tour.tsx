@@ -36,7 +36,7 @@ const Tour = () => {
   useEffect(() => {
     dispatch(fetchTour({ id: "tour", title: "관광지", contentTypeId: 12 }));
   }, []);
-  const [isMobile, viewWidth] = useMobileDetect();
+  const [isMobile] = useMobileDetect();
   const tourButtonProps = {
     round: true,
     position: {
@@ -108,6 +108,7 @@ const Tour = () => {
                 <TourCard
                   key={idx}
                   tour={tour}
+                  tourImageCounter={idx}
                   cardSelectHandler={cardSelectHandler}
                 />
               ))
