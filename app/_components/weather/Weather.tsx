@@ -3,7 +3,6 @@
 import { useState, useEffect, lazy, Suspense } from "react";
 import { createPortal } from "react-dom";
 import { useAppSelector } from "../../_hooks/redux_hooks";
-import { selectLocal } from "../../_reducers/localReducer";
 import CurrentWeather from "./currentWeather/CurrentWeather";
 import Loading from "../ui/Loading";
 import Button from "../ui/Button";
@@ -13,7 +12,7 @@ import { RootState } from "../../store";
 import WeeklyForcast from "./weeklyForcast/WeeklyForcast";
 import Local from "./local/Local";
 
-const RecommendatioModal = lazy(
+const RecommendationModal = lazy(
   () => import("../../_components/recommendation/RecommendationModal")
 );
 
@@ -68,7 +67,7 @@ const Weather = () => {
               </div>
             }
           >
-            <RecommendatioModal modalHandler={recommendationModalHandler} />
+            <RecommendationModal modalHandler={recommendationModalHandler} />
           </Suspense>,
           portalDiv
         )}
