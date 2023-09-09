@@ -31,7 +31,7 @@ const TourCard = ({ tour, cardSelectHandler, tourImageCounter }: TourCardProps) 
           priority={tourImageCounter === 0}
           loading={ tourImageCounter > 1 ? "lazy" : "eager"}
           fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          sizes="400px"
         />
       </div>
       <div className={styles.des}>
