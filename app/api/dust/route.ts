@@ -67,7 +67,6 @@ export const GET = async (req: Request) => {
     const query = `${DUST_URL}?lat=${lat}&lon=${lon}&appid=${OPEN_WEATHER_KEY}`;
     const response = await appFetch(query, {
       method: "GET",
-      cache: "no-store",
       headers: {
         Accept: "application/json",
       },

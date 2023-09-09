@@ -59,7 +59,6 @@ export interface FcstResponseType {
 const fcstFetcher = async (url: string): Promise<FcstResponseType> => {
   const response = await appFetch(url, {
     method: "GET",
-    cache: "no-store",
     headers: {
       Accept: "application/json",
     },

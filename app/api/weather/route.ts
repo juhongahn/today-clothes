@@ -66,7 +66,6 @@ export const POST = async (req: Request) => {
     );
     const response = await appFetch(fetchURL, {
       method: "GET",
-      cache: "no-store",
       headers: {
         Accept: "application/json",
       },

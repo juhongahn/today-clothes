@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
-import {dateFormatter } from "../../_lib/weatherUtils";
+import { dateFormatter } from "../../_lib/weatherUtils";
 import {
   appFetch,
   handleError,
 } from "../../_helpers/custom-fetch/fetchWrapper";
 import { HttpError } from "../../_helpers/error-class/HttpError";
 import dayjs from "../../_lib/dayjs";
-
+const parseString = require("xml2js").parseString;
 const RISE_SET_URL =
   "https://apis.data.go.kr/B090041/openapi/service/RiseSetInfoService/getLCRiseSetInfo";
 const SERVICE_KEY = process.env.SERVICE_KEY;
@@ -77,8 +77,6 @@ export const POST = async (req: Request) => {
 };
 
 const convertXMLToJSON = (inputPSRList: PromiseSettledResult<string>[]) => {
-  const parseString = require("xml2js").parseString;
-
   const isRejected = (
     inputPSR: PromiseSettledResult<unknown>
   ): inputPSR is PromiseRejectedResult => inputPSR.status === "rejected";
@@ -112,15 +110,14 @@ const createPromiseList = (
 ) => {
   const dateList: dayjs.Dayjs[] = [startDate];
   for (let i = 0; i < targetDays; i++) {
-    const nextDate = dateList[i].add(1, 'day');
+    const nextDate = dateList[i].add(1, "day");
     dateList.push(nextDate);
   }
 
   const promiseList = dateList.map((date) => {
-    const formattedDay = date.format('YYYYMMDD');
+    const formattedDay = date.format("YYYYMMDD");
     return fetcher(lat, lon, formattedDay);
   });
-
   return promiseList;
 };
 
@@ -128,7 +125,6 @@ const fetcher = async (lat: string, lon: string, date: string) => {
   const query = `${RISE_SET_URL}?serviceKey=${SERVICE_KEY}&locdate=${date}&longitude=${lon}&latitude=${lat}&dnYn=Y`;
   const response = await appFetch(query, {
     method: "GET",
-    cache: "no-store",
   });
   return response.text();
 };

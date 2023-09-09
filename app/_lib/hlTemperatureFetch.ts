@@ -83,7 +83,6 @@ const hlTemperatureFetcher = async (
 ): Promise<HLTemperatureResponseType> => {
   const response = await appFetch(url, {
     method: "GET",
-    cache: "no-store",
     headers: {
       Accept: "application/json",
     },
