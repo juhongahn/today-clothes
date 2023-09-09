@@ -69,6 +69,7 @@ export const weatherSlice = createSlice({
 export const { weatherComparisonTimeUpdated } = weatherSlice.actions;
 export const selectWeatherList = (state: RootState) =>
   state.weather.weatherList;
+export const selecteMemoizedWeatherList = createSelector([selectWeatherList], (weathers) => weathers)
 export const selectMatchedWeather = (state: RootState) =>
   state.weather.weatherList.find(
     (weather) => weather.dt === state.weather.comparisonTime

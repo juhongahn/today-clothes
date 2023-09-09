@@ -4,7 +4,7 @@ import { useState, MutableRefObject, Suspense, lazy, useMemo } from "react";
 import { useAppSelector } from "../../../_hooks/redux_hooks";
 import { MdKeyboardArrowRight } from "@react-icons/all-files/md/MdKeyboardArrowRight";
 import { MdKeyboardArrowLeft } from "@react-icons/all-files/md/MdKeyboardArrowLeft";
-import { selectWeatherList } from "../../../_reducers/weatherReducer";
+import { selecteMemoizedWeatherList } from "../../../_reducers/weatherReducer";
 import WeatherChart from "./WeatherChart";
 import type { Weather } from "../../../_types/types";
 import Loading from "../../ui/Loading";
@@ -27,7 +27,7 @@ const ChartList: ChartType[] = [
 ];
 
 const Charts = () => {
-  const weathers = useAppSelector(selectWeatherList);
+  const weathers = useAppSelector(selecteMemoizedWeatherList);
   const timeMatcedData = useMemo(() => filterMatchedWeather(weathers), [weathers]);
   const [slideHandler, chartRef, containerRef, slideState] = useSlideNext();
   const [selectedChart, setSelectedChart] = useState<ChartType>({
