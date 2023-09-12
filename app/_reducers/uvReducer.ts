@@ -1,7 +1,7 @@
 import {
   createSlice,
   createAsyncThunk,
-  PayloadAction,
+  PayloadAction
 } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import type { UV } from "../_types/types";
@@ -11,17 +11,16 @@ import { getInitialComparisonTime } from "../_hooks/redux_hooks";
 export const fetchUV = createAsyncThunk(
   "uvSlice/fetchUV",
   async (hcode: string) => {
-    const currentHours = new Date().getHours();
-    const response = await fetch('api/uv?', {
+    const response = await fetch("api/uv", {
       method: "POST",
       headers: {
-        "Content-Type" : "application/json",
+        "Content-Type": "application/json",
         Accept: "application/json",
       },
       body: JSON.stringify({
         hcode,
         date: new Date().toISOString(),
-      })
+      }),
     });
     const { data } = await response.json();
     return data;
