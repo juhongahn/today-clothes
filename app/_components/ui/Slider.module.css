@@ -58,6 +58,9 @@
     cursor: pointer;
   }
   .children {
-    gap: 1rem;
+    gap: 0;
+  }
+  .children div{
+    width: calc(100vw - 5rem - 1.6px);
   }
 }

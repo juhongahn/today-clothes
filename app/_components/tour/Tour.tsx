@@ -36,7 +36,7 @@ const Tour = () => {
   useEffect(() => {
     dispatch(fetchTour({ id: "tour", title: "관광지", contentTypeId: 12 }));
   }, []);
-  const [isMobile] = useMobileDetect();
+  const [isMobile, width] = useMobileDetect();
   const tourButtonProps = {
     round: true,
     position: {
@@ -100,7 +100,7 @@ const Tour = () => {
         </div>
         <div className={styles.tourSlider}>
           <Slider
-            slideLength={isMobile ? 355 : 278}
+            slideLength={isMobile ? width - 50 - 1.6 - 17 : 278}
             buttonProps={tourButtonProps}
           >
             {tourList.length > 0 ? (

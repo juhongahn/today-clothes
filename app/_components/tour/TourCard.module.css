@@ -58,9 +58,19 @@
 
 @media screen and (max-width: 680px) {
   .graphic {
-    width: 360px;
+    width: 100%;
   }
   .des {
     width: 100%;
+  }
+
+  .card:hover .graphic,
+  .card:hover .des {
+    width: auto;
+  }
+
+  .card:last-child .graphic,
+  .card:last-child .des {
+    width: auto;
   }
 }
