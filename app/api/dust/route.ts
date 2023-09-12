@@ -103,7 +103,7 @@ export const GET = async (req: Request) => {
     });
     return NextResponse.json({ data: res }, { status: 200 });
   } catch (error: unknown) {
-    handleError(error, NextResponse.json);
+    return handleError(error, NextResponse.json);
   }
 };
 

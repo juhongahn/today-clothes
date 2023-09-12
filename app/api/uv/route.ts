@@ -77,7 +77,6 @@ export const POST = async (req: Request) => {
     const fetchURL = makeUVRequestURL(UV_URL, currentDate, 1, 10, "JSON", hcode);
     const response = await appFetch(fetchURL, {
       method: "GET",
-      cache: "no-store",
       headers: {
         Accept: "application/json",
       },
@@ -100,7 +99,7 @@ export const POST = async (req: Request) => {
     const result = convertUVObjToHourlyList(uvdata);
     return NextResponse.json({ data: result }, { status: 200 });
   } catch (error: unknown) {
-    handleError(error, NextResponse.json);
+    return handleError(error, NextResponse.json);
   }
 };
 

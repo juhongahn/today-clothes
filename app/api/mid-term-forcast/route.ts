@@ -42,7 +42,7 @@ export const POST = async (req: Request) => {
     const result = parsingMidTermForcastData(hlTemperature, fcst, baseDate);
     return NextResponse.json({ data: result }, { status: 200 });
   } catch (error: unknown) {
-    handleError(error, NextResponse.json);
+    return handleError(error, NextResponse.json);
   }
 };
 

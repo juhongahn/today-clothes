@@ -85,7 +85,7 @@ export const POST = async (req: NextRequest) => {
     const result = formateData(data.response);
     return NextResponse.json(result, { status: 200 });
   } catch (error: unknown) {
-    handleError(error, NextResponse.json);
+    return handleError(error, NextResponse.json);
   }
 };
 
