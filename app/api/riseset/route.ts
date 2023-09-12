@@ -1,17 +1,17 @@
 import { NextResponse } from "next/server";
-import { dateFormatter } from "../../_lib/weatherUtils";
 import {
   appFetch,
   handleError,
 } from "../../_helpers/custom-fetch/fetchWrapper";
 import { HttpError } from "../../_helpers/error-class/HttpError";
 import dayjs from "../../_lib/dayjs";
-const parseString = require("xml2js").parseString;
+import { parseString } from "xml2js";
+
 const RISE_SET_URL =
   "https://apis.data.go.kr/B090041/openapi/service/RiseSetInfoService/getLCRiseSetInfo";
 const SERVICE_KEY = process.env.SERVICE_KEY;
 
-type RISE_SET_JSON = {
+type RisesetResponseJSON = {
   response: {
     header: [
       {
@@ -52,6 +52,13 @@ type RISE_SET_JSON = {
   };
 };
 
+type RisesetJSON =
+  RisesetResponseJSON["response"]["body"]["0"]["items"]["0"]["item"]["0"];
+type ParseString = (
+  str: string,
+  callback: (err: Error | null, result: any) => void
+) => void;
+
 export const POST = async (req: Request) => {
   const reqBody = await req.json();
   const { lat, lon, date } = reqBody;
@@ -66,38 +73,19 @@ export const POST = async (req: Request) => {
       );
     }
     const currentDate = dayjs(date).tz();
-    const setteledResults = await Promise.allSettled(
-      createPromiseList(currentDate, 5, lat, lon)
-    );
-    const results = convertXMLToJSON(setteledResults);
-    return NextResponse.json({ data: results }, { status: 200 });
+    const promiseList = createPromiseList(currentDate, 4, lat, lon);
+    const risesetXML = await Promise.all(promiseList);
+    const risesetJSON = convertXMLToJSON(parseString, risesetXML);
+    return NextResponse.json({ data: risesetJSON }, { status: 200 });
   } catch (error: unknown) {
-    handleError(error, NextResponse.json);
+    return handleError(error, NextResponse.json);
   }
 };
 
-const convertXMLToJSON = (inputPSRList: PromiseSettledResult<string>[]) => {
-  const isRejected = (
-    inputPSR: PromiseSettledResult<unknown>
-  ): inputPSR is PromiseRejectedResult => inputPSR.status === "rejected";
-  const isFulfilled = <T>(
-    inputPSR: PromiseSettledResult<T>
-  ): inputPSR is PromiseFulfilledResult<T> => inputPSR.status === "fulfilled";
-
+const convertXMLToJSON = (parseString: ParseString, xmlList: string[]) => {
   let results = [];
-
-  const errors = inputPSRList.filter(isRejected);
-  if (errors.length) throw new Error("rejection occured");
-
-  const fulfilledResults = inputPSRList.filter(isFulfilled);
-  fulfilledResults.forEach((fulfilledResult) => {
-    parseString(fulfilledResult.value, (err: any, result: RISE_SET_JSON) => {
-      if (err) {
-        throw new Error("xml에서 json으로 변환 중 에러가 발생했습니다.");
-      }
-      const jsonResult = result.response.body[0].items[0].item[0];
-      results.push(jsonResult);
-    });
+  xmlList.forEach((fulfilledResult) => {
+    results.push(parseToJSON(parseString, fulfilledResult));
   });
   return results;
 };
@@ -113,7 +101,6 @@ const createPromiseList = (
     const nextDate = dateList[i].add(1, "day");
     dateList.push(nextDate);
   }
-
   const promiseList = dateList.map((date) => {
     const formattedDay = date.format("YYYYMMDD");
     return fetcher(lat, lon, formattedDay);
@@ -126,5 +113,17 @@ const fetcher = async (lat: string, lon: string, date: string) => {
   const response = await appFetch(query, {
     method: "GET",
   });
-  return response.text();
+  const result = response.text();
+  return result;
+};
+
+const parseToJSON = (parseString: ParseString, xml: string): RisesetJSON => {
+  let result: RisesetJSON;
+  parseString(xml, (err, parsedData: RisesetResponseJSON) => {
+    if (err) {
+      throw new Error("xml 파싱중 에러가 발생했습니다.");
+    }
+    result = parsedData.response.body[0].items[0].item[0];
+  });
+  return result;
 };
