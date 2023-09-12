@@ -22,8 +22,7 @@ export const appFetch = async (
   }
   const response = await fetch(input, initOptions);
   if (!response.ok) {
-    const { error } = await response.json();
-    throw new HttpError(error, response);
+    throw new HttpError("Bad response", response);
   }
   return response;
 };
