@@ -5,8 +5,7 @@ import {
 } from "../../_helpers/custom-fetch/fetchWrapper";
 import { HttpError } from "../../_helpers/error-class/HttpError";
 import { dfs_xy_conv } from "../../_lib/gridConverter";
-import dayjs from "../../_lib/dayjs"
-
+import dayjs from "../../_lib/dayjs";
 
 interface ForecastItem {
   baseDate: string;
@@ -55,9 +54,11 @@ export const POST = async (req: Request) => {
       );
     }
     const currentDate = dayjs(date).tz();
+    const predictionDate = getNearPredictionTime(currentDate);
+
     const fetchURL = makeWeatherRequestURL(
       WEATHER_URL,
-      currentDate,
+      predictionDate,
       1,
       1000,
       "JSON",
@@ -70,7 +71,6 @@ export const POST = async (req: Request) => {
         Accept: "application/json",
       },
     });
-
     // 공공 데이터 포털에서 에러 발생시 xml을 내려준다.
     if (
       response.headers.get("Content-Type").includes("application/xml") ||
@@ -86,17 +86,17 @@ export const POST = async (req: Request) => {
     }
     const data = (await response.json()) as ForecastResponse;
     const items = data.response.body.items.item;
-    const minMaxTemperatureList = makeHotLowTemperatureList(items);
-    const result = groupHLTempWithHourlyFcstValue(items, minMaxTemperatureList);
+    const hotLowTemperatureList = extractHotLowTemperatureList(items);
+    const result = groupHLTempWithHourlyFcstValue(items, hotLowTemperatureList);
     return NextResponse.json({ data: result }, { status: 200 });
   } catch (error: unknown) {
-    handleError(error, NextResponse.json);
+    return handleError(error, NextResponse.json);
   }
 };
 
 const groupHLTempWithHourlyFcstValue = (
   weatherItems: ForecastItem[],
-  minMaxList: ForecastWithTemperature
+  minMaxList: HotLowTemperature[]
 ) => {
   const transformedData = [] as {
     dt: number;
@@ -128,49 +128,40 @@ const groupHLTempWithHourlyFcstValue = (
       transformedData.push(newData);
     }
   });
-
   return transformedData;
 };
 
 type HotLowTemperature = {
-  [fcstDate: string]: {
-    TMX?: number;
-    TMN?: number;
-  };
+  fcstDate: string,
+  TMX?: number,
+  TMN?: number,
 };
 
-const extractHotLowTemperature = (items: ForecastItem[]) => {
-  const tmnxObjByDate = {} as HotLowTemperature;
-  items.forEach((item) => {
-    if (item.category === "TMX" || item.category === "TMN") {
-      if (!tmnxObjByDate[item.fcstDate]) {
-        tmnxObjByDate[item.fcstDate] = {};
-      }
-      tmnxObjByDate[item.fcstDate][item.category] = parseInt(item.fcstValue);
-    }
-  });
-  return tmnxObjByDate;
+const extractHotLowTemperatureList = (items: ForecastItem[]) => {
+  const hlTemperatureList = items.filter(isHLTemperature);
+  const hlTemperatureListWithFcstDate = hlTemperatureList.reduce(makeTemperatureObjList, [])
+  return hlTemperatureListWithFcstDate;
 };
 
-type ForecastWithTemperature = {
-  fcstDate: string;
-  TMX?: number;
-  TMN?: number;
-}[];
+const isHLTemperature = (item: ForecastItem) => item.category === "TMX" || item.category === "TMN";
 
-const makeHotLowTemperatureList = (items: ForecastItem[]) => {
-  const tmnxObjByDate = extractHotLowTemperature(items);
-  const result = [] as ForecastWithTemperature;
-  for (const fcstDate in tmnxObjByDate) {
-    const { TMN, TMX } = tmnxObjByDate[fcstDate];
-    result.push({
+const makeTemperatureObjList = (accHLTemperatureList: HotLowTemperature[], currentValue: ForecastItem) => {
+  const fcstDate = currentValue.fcstDate;
+  const fcstValue = parseInt(currentValue.fcstValue);
+  const existingTemperatureObj = accHLTemperatureList.find((data) => data.fcstDate === fcstDate);
+  if (existingTemperatureObj) {
+    if (currentValue.category === "TMX") existingTemperatureObj.TMX = fcstValue;
+    else existingTemperatureObj.TMN = fcstValue;
+  } else {
+    const newTemperatureObj = {
       fcstDate,
-      TMX,
-      TMN,
-    });
+      TMX: currentValue.category === "TMX" ? fcstValue : null,
+      TMN: currentValue.category === "TMN" ? fcstValue : null,
+    }
+    accHLTemperatureList.push(newTemperatureObj);
   }
-  return result;
-};
+  return accHLTemperatureList;
+}
 
 const convertToUnixTime = (fcstDate: string, fcstTime: string) => {
   const year = parseInt(fcstDate.substring(0, 4));
@@ -178,13 +169,25 @@ const convertToUnixTime = (fcstDate: string, fcstTime: string) => {
   const day = parseInt(fcstDate.substring(6, 8));
   const hours = parseInt(fcstTime.substring(0, 2));
   const minutes = parseInt(fcstTime.substring(2));
-  const unixTime = dayjs().tz().year(year).month(month).date(day).hour(hours).minute(minutes).second(0).unix() * 1000;
+  const unixTime =
+    dayjs()
+      .tz()
+      .year(year)
+      .month(month)
+      .date(day)
+      .hour(hours)
+      .minute(minutes)
+      .second(0)
+      .unix() * 1000;
   return unixTime;
 };
 
 const makeWeatherRequestURL = (
   baseURL: string,
-  currentDate: dayjs.Dayjs,
+  predictionDate: {
+    baseDate: string;
+    baseTime: string;
+  },
   pageNo: number,
   numOfRows: number,
   dataType: string,
@@ -192,7 +195,6 @@ const makeWeatherRequestURL = (
   lon: string
 ) => {
   const serviceKey: string = process.env.SERVICE_KEY;
-  const predictionDate = getNearPredictionTime(currentDate);
   const { x: nx, y: ny } = dfs_xy_conv("toXY", lat, lon);
   return `${baseURL}?serviceKey=${serviceKey}&pageNo=${pageNo}&numOfRows=${numOfRows}&dataType=${dataType}&base_date=${predictionDate.baseDate}&base_time=${predictionDate.baseTime}&nx=${nx}&ny=${ny}`;
 };
@@ -204,13 +206,13 @@ const getNearPredictionTime = (
   baseTime: string;
 } => {
   if (currentDate.hour() < 18) {
-    const baseDate = currentDate.add(-1, "day").format('YYYYMMDD');
+    const baseDate = currentDate.add(-1, "day").format("YYYYMMDD");
     return {
       baseDate,
       baseTime: "2300",
     };
   } else {
-    const baseDate = currentDate.format('YYYYMMDD');
+    const baseDate = currentDate.format("YYYYMMDD");
     return {
       baseDate,
       baseTime: "1700",
