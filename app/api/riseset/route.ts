@@ -73,7 +73,7 @@ export const POST = async (req: Request) => {
       );
     }
     const currentDate = dayjs(date).tz();
-    const promiseList = createPromiseList(currentDate, 4, lat, lon);
+    const promiseList = createPromiseList(currentDate, 5, lat, lon);
     const risesetXML = await Promise.all(promiseList);
     const risesetJSON = convertXMLToJSON(parseString, risesetXML);
     return NextResponse.json({ data: risesetJSON }, { status: 200 });
