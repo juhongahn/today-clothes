@@ -1,6 +1,5 @@
 "use client";
 
-import { appFetch } from "../../_helpers/custom-fetch/fetchWrapper";
 import styles from "./SearchSection.module.css";
 import SearchBar from "./SearchBar";
 import KeywordsBox from "./KeywordsBox";

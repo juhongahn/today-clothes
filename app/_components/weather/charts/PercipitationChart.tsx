@@ -2,12 +2,12 @@
 
 import { forwardRef } from "react";
 import { BarChart, Bar, LabelList } from "recharts";
-import type { Weather } from "../../../_types/types";
+import type { WEATHER } from "../../../_types/types";
 import styles from "./WeatherChart.module.css";
 import { getDayDifference } from "../../../_lib/dateUtils";
 
 interface PercipitationChartProps {
-  weathers: Weather[];
+  weathers: WEATHER[];
   width: number;
 }
 

@@ -11,15 +11,15 @@ import {
 import { selectCurrentDust } from "../../_reducers/dustReducer";
 import { selectCurrentUV } from "../../_reducers/uvReducer";
 import { selectCurrentWeather } from "../../_reducers/weatherReducer";
-import Backdrop from "../ui/Backdrop";
-import styles from "./RecommendationModal.module.css";
 import { useSelector } from "react-redux";
-import { HttpError } from "../../_helpers/error-class/HttpError";
-import { DUST, UV, Weather } from "../../_types/types";
 import { SelectionError } from "../../_helpers/error-class/SelectionError";
+import { HttpError } from "../../_helpers/error-class/HttpError";
+import { DUST, UV, WEATHER } from "../../_types/types";
+import Backdrop from "../ui/backdrop/Backdrop";
+import styles from "./RecommendationModal.module.css";
 
 interface RecommendationModalProps {
-  modalHandler: () => void;
+  modalHandler: (promptLoading: boolean) => void;
 }
 
 interface GenderType {
@@ -62,7 +62,7 @@ const RecommendationModal = ({ modalHandler }: RecommendationModalProps) => {
   const scriptRef = useRef(null);
   const [responsePrompt, setResponsePrompt, promptLoading, setPromptLoading] =
     usePrompt(scriptRef);
-  
+
   useEffect(() => {
     if (window) {
       const promptScript = sessionStorage.getItem("prompt");
@@ -300,7 +300,7 @@ const usePrompt = (
   return [responsePrompt, setResponsePrompt, promptLoading, setPromptLoading];
 };
 
-type usePromptDataReturn = [curWeather: Weather, curUV: UV, curDust: DUST];
+type usePromptDataReturn = [curWeather: WEATHER, curUV: UV, curDust: DUST];
 
 const usePromptData = (): usePromptDataReturn => {
   const curWeahter = useSelector(selectCurrentWeather);

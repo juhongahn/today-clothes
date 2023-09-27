@@ -11,13 +11,13 @@ import {
   selectRisesetList,
 } from "../../../_reducers/risesetReducer";
 import getWeatherImage from "../../../_lib/getWeatherImage";
-import type { Riseset, Weather } from "../../../_types/types";
+import type { RISESET, WEATHER } from "../../../_types/types";
 import styles from "./WeatherChart.module.css";
 import { getDayDifference } from "../../../_lib/dateUtils";
 import dayjs from "../../../_lib/dayjs";
 
 interface WeatherChartProps {
-  weathers: Weather[];
+  weathers: WEATHER[];
   width: number;
 }
 
@@ -25,11 +25,11 @@ const WeatherChart = forwardRef<any, WeatherChartProps>(function WeatherChart(
   props,
   ref
 ) {
-  const { weathers } = props;
+  const { weathers, width } = props;
   return (
     <>
       <LineChart
-        width={props.width}
+        width={width}
         height={200}
         data={weathers}
         margin={{ top: 50, right: 20, bottom: 0, left: 20 }}
@@ -134,9 +134,9 @@ const parseDate = (dateString: string) => {
 };
 
 const extractTargetRiseset = (
-  risesetList: Riseset[],
+  risesetList: RISESET[],
   timestamp: number
-): Riseset[] => {
+): RISESET[] => {
   const targetDate = dayjs(timestamp)
     .hour(0)
     .minute(0)
@@ -150,8 +150,8 @@ const extractTargetRiseset = (
     .second(0)
     .millisecond(0)
     .tz();
-  const targetRiseset = risesetList.filter((riseset: Riseset) => {
-    const risesetDate = parseDate(riseset.locdate[0].trim());
+  const targetRiseset = risesetList.filter((riseset: RISESET) => {
+    const risesetDate = parseDate(riseset.locdate.toString());
     if (risesetDate.isSame(targetDate) || risesetDate.isSame(afterTargetDate))
       return true;
   });

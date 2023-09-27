@@ -32,7 +32,7 @@
 }
 
 .chart {
-  transition: ease-in-out 1s;
+  transition: linear 0.5s;
 }
 
 .slideButton {
@@ -45,27 +45,20 @@
 .line {
   stroke: #e5e9ef;
   stroke-dasharray: 100;
-  stroke-dashoffset: 100;
-  animation: line-animation 1s linear forwards;
+  stroke-dashoffset: 0;
   stroke-width: 2;
   stroke-linecap: round;
   z-index: -100;
 }
 
-.image {
-  animation: opacity-animation 1s;
-}
-
 .tmp {
   font-size: 0.7rem;
-  animation: opacity-animation 1s;
   fill: #242424;
   font-weight: 500;
 }
 
 .pcp {
   font-size: 0.7rem;
-  animation: opacity-animation 1s;
   font-weight: 500;
 }
 
@@ -78,7 +71,6 @@
 .time {
   fill: #8f8f8f;
   font-size: 0.75rem;
-  animation: opacity-animation 1s;
 }
 
 .tommorow {
@@ -97,22 +89,4 @@
   fill: #e5e9ef;
   cursor: pointer;
   opacity: 0.3;
-}
-
-@keyframes line-animation {
-  from {
-    stroke-dashoffset: 100;
-  }
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
-@keyframes opacity-animation {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
 }

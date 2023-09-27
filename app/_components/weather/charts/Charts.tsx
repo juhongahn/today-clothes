@@ -6,11 +6,12 @@ import { MdKeyboardArrowRight } from "@react-icons/all-files/md/MdKeyboardArrowR
 import { MdKeyboardArrowLeft } from "@react-icons/all-files/md/MdKeyboardArrowLeft";
 import { selecteMemoizedWeatherList } from "../../../_reducers/weatherReducer";
 import WeatherChart from "./WeatherChart";
-import type { Weather } from "../../../_types/types";
-import Loading from "../../ui/Loading";
+import type { WEATHER } from "../../../_types/types";
 import styles from "./Charts.module.css";
 import useSlideNext, { SLIDE_TYPE } from "../../../_hooks/useSlideNext";
 import dayjs from "../../../_lib/dayjs";
+import Card from "../../ui/card/Card";
+import ChartLoading from "./Loading";
 
 const HumidityChart = lazy(() => import("./HumidityChart"));
 const PercipitationChart = lazy(() => import("./PercipitationChart"));
@@ -28,7 +29,10 @@ const ChartList: ChartType[] = [
 
 const Charts = () => {
   const weathers = useAppSelector(selecteMemoizedWeatherList);
-  const timeMatcedData = useMemo(() => filterMatchedWeather(weathers), [weathers]);
+  const timeMatcedData = useMemo(
+    () => filterMatchedWeather(weathers),
+    [weathers]
+  );
   const [slideHandler, chartRef, containerRef, slideState] = useSlideNext();
   const [selectedChart, setSelectedChart] = useState<ChartType>({
     type: "weather",
@@ -40,7 +44,7 @@ const Charts = () => {
   };
 
   return (
-    <div className={styles.charts}>
+    <Card className={styles.charts}>
       {!slideState.isButtonDisabled.left && (
         <MdKeyboardArrowLeft
           size={30}
@@ -74,11 +78,11 @@ const Charts = () => {
           className={`${styles.arrow} ${styles.rightButton}`}
         />
       )}
-    </div>
+    </Card>
   );
 };
 
-const filterMatchedWeather = (weathers: Weather[]): Weather[] => {
+const filterMatchedWeather = (weathers: WEATHER[]): WEATHER[] => {
   const currentDateInUnix =
     dayjs().tz().minute(0).second(0).millisecond(0).unix() * 1000;
   const data = weathers.filter(
@@ -89,52 +93,29 @@ const filterMatchedWeather = (weathers: Weather[]): Weather[] => {
 
 const renderChart = (
   selectedChart: string,
-  data: Weather[],
+  data: WEATHER[],
   chartRef: MutableRefObject<any>,
   width: number
 ) => {
-  const size = { width: 32, height: 32 };
   switch (selectedChart) {
     case "weather":
-      return (
-        <>
-          {data.length > 0 ? (
-            <WeatherChart weathers={data} ref={chartRef} width={width} />
-          ) : (
-            <div className={styles.chartLoading}>
-              <Loading size={size} />
-            </div>
-          )}
-        </>
-      );
+      return <WeatherChart weathers={data} ref={chartRef} width={width} />;
     case "humidity":
       return (
-        <Suspense
-          fallback={
-            <div className={styles.chartLoading}>
-              <Loading size={size} />
-            </div>
-          }
-        >
+        <Suspense fallback={<ChartLoading />}>
           <HumidityChart weathers={data} ref={chartRef} width={width} />
         </Suspense>
       );
     case "percipitation":
       return (
-        <Suspense
-          fallback={
-            <div className={styles.chartLoading}>
-              <Loading size={size} />
-            </div>
-          }
-        >
+        <Suspense fallback={<ChartLoading />}>
           <PercipitationChart weathers={data} ref={chartRef} width={width} />
         </Suspense>
       );
   }
 };
 
-const isAllValueContained = (obj: Weather) => {
+const isAllValueContained = (obj: WEATHER) => {
   if (Object.keys(obj.value).length < 12) return false;
   return true;
 };

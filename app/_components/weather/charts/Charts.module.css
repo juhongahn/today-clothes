@@ -45,15 +45,11 @@
 }
 
 .leftButton {
-  left: -30px;
+  left: -1rem;
 }
 
 .rightButton {
-  right: -30px;
-}
-
-.chart {
-  transition: ease-in-out 1s;
+  right: -1rem;
 }
 
 .slideButton {
@@ -108,11 +104,4 @@
   height: 2.5px;
   background-color: #000000;
   z-index: 10;
-}
-
-.chartLoading {
-  height: 180px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
