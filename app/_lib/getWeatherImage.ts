@@ -1,13 +1,13 @@
-import type { Riseset, Weather } from "../_types/types";
+import type { RISESET, WEATHER } from "../_types/types";
 
 const getWeatherImage = (
-  selectedWeather: Weather,
-  selectedRiseset: Riseset[],
+  selectedWeather: WEATHER,
+  selectedRiseset: RISESET[],
   width: number,
   height: number
 ): { src: string; alt: string; width: number; height: number } => {
-  const sunsetHour = parseInt(selectedRiseset[0].sunset[0].substring(0, 2));
-  const sunRiseHour = parseInt(selectedRiseset[1].sunrise[0].substring(0, 2));
+  const sunsetHour = parseInt(selectedRiseset[0].sunset.substring(0, 2));
+  const sunRiseHour = parseInt(selectedRiseset[1].sunrise.substring(0, 2));
   const selectedDate = new Date(selectedWeather.dt);
   const selectedHour = selectedDate.getHours();
   const { WSD, SKY, PTY } = selectedWeather.value;
