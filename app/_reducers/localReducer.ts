@@ -1,44 +1,40 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import { fetchUV } from "./uvReducer";
 import type { Local } from "../_types/types";
-import { appFetch } from "../_helpers/custom-fetch/fetchWrapper";
-import { FAILED, FULFILLED, LOADING } from "../_helpers/constants/constants";
-import { fetchMidTermForcast } from "./midTermForcastReducer";
+import {
+  FAILED,
+  FULFILLED,
+  IDLE,
+  LOADING,
+} from "../_helpers/constants/constants";
+import { HttpError } from "../_helpers/error-class/HttpError";
+import axios from "axios";
 
 export const fetchLocal = createAsyncThunk(
   "localSlice/fetchLocal",
-  async (geolocation: { latitude: number; longitude: number }, thunkAPI) => {
-    const response = await appFetch(
-      `api/local?lat=${geolocation.latitude}&lon=${geolocation.longitude}`,
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-        },
-      }
+  async (geolocation: { latitude: number; longitude: number }) => {
+    const { latitude, longitude } = geolocation;
+    const response = await axios.get(
+      `/api/local?x=${longitude}&y=${latitude}`,
     );
-    const { data } = await response.json();
-    thunkAPI.dispatch(fetchUV(data[1].code)); // 행정 코드를 기반으로 UV 데이터 요청
-    const midTermForcastParams = {
-      si: data[1].region_2depth_name.split(" ")[0],
-      do: data[1].region_1depth_name,
-    };
-    thunkAPI.dispatch(fetchMidTermForcast(midTermForcastParams));
-    return data;
+    const { data } = response;
+    const { documents } = data;
+    return documents;
   }
 );
 
-interface localState {
+interface LocalState {
   localList: Local[];
   selectedLocal: Local | null;
   status: string;
+  error: Error | HttpError;
 }
 
-const initialState: localState = {
+const initialState: LocalState = {
   localList: [],
   selectedLocal: null,
-  status: LOADING,
+  status: IDLE,
+  error: null,
 };
 
 export const localSlice = createSlice({

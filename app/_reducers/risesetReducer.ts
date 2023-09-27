@@ -3,45 +3,80 @@ import {
   createAsyncThunk,
   PayloadAction,
   createSelector,
+  SerializedError,
 } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import type { Riseset } from "../_types/types";
-import { appFetch } from "../_helpers/custom-fetch/fetchWrapper";
-import { FAILED, FULFILLED, LOADING } from "../_helpers/constants/constants";
+import type { RISESET } from "../_types/types";
+import {
+  FAILED,
+  FULFILLED,
+  IDLE,
+  LOADING,
+} from "../_helpers/constants/constants";
 import { dateFormatter } from "../_lib/weatherUtils";
 import { getInitialComparisonTime } from "../_hooks/redux_hooks";
+import dayjs from "../_lib/dayjs";
+import axios from "axios";
+
+type RisesetResponseJSON = {
+  response: {
+    header: {
+      resultCode: string;
+      resultMsg: string;
+    };
+    body: {
+      items: {
+        item: {
+          aste: string;
+          astm: string;
+          civile: string;
+          civilm: string;
+          latitude: number;
+          latitudeNum: string;
+          location: string;
+          locdate: number;
+          longitude: number;
+          longitudeNum: string;
+          moonrise: string;
+          moonset: string;
+          moontransit: string;
+          naute: string;
+          nautm: string;
+          sunrise: string;
+          sunset: string;
+          suntransit: number;
+        };
+      };
+    };
+  };
+};
 
 export const fetchRiseset = createAsyncThunk(
   "risesetSlice/fetchRiseset",
   async (geolocation: { latitude: number; longitude: number }) => {
-    // 이 단계에서 에러를 catch하면 failed case로 분기되지 않는다.
-    const response = await appFetch("api/riseset", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        lat: geolocation.latitude,
-        lon: geolocation.longitude,
-        date: new Date().toISOString(),
-      }),
-    });
-    const { data } = await response.json();
-    return data;
+    const { latitude, longitude } = geolocation;
+    const currentDate = dayjs().tz();
+    const promiseList = createPromiseList(currentDate, 5, latitude, longitude);
+    const risesetResponseList = await Promise.all(promiseList);
+    const result = risesetResponseList.map(
+      (res) => res.data.response.body.items.item
+    );
+    return result;
   }
 );
 
 interface RisesetState {
-  risesetList: Riseset[];
+  risesetList: RISESET[];
   comparisonTime: number;
   status: string;
+  error: SerializedError;
 }
 
 const initialState: RisesetState = {
   risesetList: [],
   comparisonTime: null,
-  status: LOADING,
+  status: IDLE,
+  error: null,
 };
 
 export const risesetSlice = createSlice({
@@ -63,6 +98,7 @@ export const risesetSlice = createSlice({
     });
     builder.addCase(fetchRiseset.rejected, (state, action) => {
       state.status = FAILED;
+      state.error = action.error;
     });
   },
 });
@@ -78,20 +114,50 @@ export const { risesetComparisonTimeUpdated } = risesetSlice.actions;
 export const selectMatchedRiseset = createSelector(
   [selectRisesetList, selectComparisonTime],
   (risesetList, comparisonTime) => {
-    const seletedRiseset = risesetList.filter((riseset) => {
-      const targetSunsetDate = new Date(comparisonTime); // 일몰
-      const targetSunriseDate = new Date(comparisonTime); // 일출
-      targetSunriseDate.setDate(targetSunriseDate.getDate() + 1);
-      const targetFormattedToday = dateFormatter(targetSunsetDate, "");
-      const targetFormattedTommorw = dateFormatter(targetSunriseDate, "");
-      if (
-        riseset.locdate[0] === targetFormattedToday ||
-        riseset.locdate[0] === targetFormattedTommorw
-      ) {
-        return true;
-      }
-    });
+    const seletedRiseset = risesetList.filter((riseset) =>
+      isMatchedsunRiseSet(riseset, comparisonTime)
+    );
     return seletedRiseset;
   }
 );
+
+const isMatchedsunRiseSet = (riseset: RISESET, comparisonTime: number) => {
+  const targetSunsetDate = new Date(comparisonTime); // 일몰
+  const targetSunriseDate = new Date(comparisonTime); // 일출
+  targetSunriseDate.setDate(targetSunriseDate.getDate() + 1);
+  const targetFormattedToday = dateFormatter(targetSunsetDate, "");
+  const targetFormattedTommorw = dateFormatter(targetSunriseDate, "");
+  if (
+    riseset.locdate.toString() === targetFormattedToday ||
+    riseset.locdate.toString() === targetFormattedTommorw
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+};
 export default risesetSlice.reducer;
+
+const createPromiseList = (
+  startDate: dayjs.Dayjs,
+  targetDays: number,
+  lat: number,
+  lon: number
+) => {
+  const dateList: dayjs.Dayjs[] = [startDate];
+  for (let i = 0; i < targetDays; i++) {
+    const nextDate = dateList[i].add(1, "day");
+    dateList.push(nextDate);
+  }
+  const promiseList = dateList.map((date) => {
+    const formattedDay = date.format("YYYYMMDD");
+    return fetcher(lat, lon, formattedDay);
+  });
+  return promiseList;
+};
+
+const fetcher = async (lat: number, lon: number, date: string) => {
+  const query = `/api/riseset?locdate=${date}&longitude=${lon}&latitude=${lat}&dnYn=Y`;
+  const response = axios.get<RisesetResponseJSON>(query);
+  return response;
+};
