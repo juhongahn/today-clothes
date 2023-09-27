@@ -12,7 +12,7 @@ import { COORDS } from "../../_types/types";
 import TourCardLoading from "./Loading";
 import Badge from "./tourBadge/Badge";
 import TourCard from "./TourCard";
-import Slider from "../ui/Slider";
+import Slider from "../ui/slider/Slider";
 import styles from "./Tour.module.css";
 
 type BadgeType = {
@@ -33,9 +33,7 @@ const badgeButtonProps = {
 const Tour = () => {
   const tourList = useAppSelector(selectTourList);
   const dispatch = useAppDispatch();
-  useEffect(() => {
-    dispatch(fetchTour({ id: "tour", title: "관광지", contentTypeId: 12 }));
-  }, []);
+ 
   const [isMobile, width] = useMobileDetect();
   const tourButtonProps = {
     round: true,
