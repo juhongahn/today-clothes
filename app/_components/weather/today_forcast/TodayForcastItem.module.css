@@ -1,0 +1,154 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.graphic {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.temperatureContainer {
+  position: relative;
+}
+
+.temperature {
+  font-size: 3rem;
+  font-weight: bold;
+}
+
+.sensory {
+  position: absolute;
+  bottom: -0.6rem;
+}
+
+.info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.description {
+  font-size: 1.2rem;
+  font-weight: 500;
+  text-align: end;
+  color: #70757a;
+}
+
+.forcasts {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #70757a;
+}
+
+.sensory span {
+  font-size: 0.7rem;
+  color: #70757a;
+}
+
+.loading {
+  height: 4rem;
+}
+
+.skeleton {
+  opacity: 0.7;
+  animation: skeleton-loading 1s linear infinite alternate;
+}
+
+.skeletonImg {
+  width: 140px;
+  height: 4rem;
+  border-radius: 5px;
+}
+
+.skeletonText {
+  width: 6rem;
+  height: 0.8rem;
+  margin-bottom: 0.4rem;
+  border-radius: 1.6px;
+}
+
+.skeletonText:last-child {
+  margin-bottom: 0.6rem;
+}
+
+.skeletonDescription {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.skeletonDate {
+  width: 8rem;
+  height: 1rem;
+  margin-bottom: 0.5rem;
+  border-radius: 1.6px;
+}
+
+.skeletonDes {
+  width: 5rem;
+  height: 1rem;
+  margin-block: 0;
+  border-radius: 0.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.skeletonBadges {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.skeletonBadge {
+  flex-grow: 1;
+  height: 52px;
+  border-radius: 5px;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-color: hsl(201, 18%, 85%);
+  }
+  100% {
+    background-color: hsl(200, 20%, 95%);
+  }
+}
+
+@media screen and (max-width: 680px) {
+  .container {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .info {
+    flex-direction: column;
+  }
+  .forcasts {
+    display: flex;
+    flex-direction: row;
+    font-size: 0.95rem;
+  }
+  .description {
+    display: flex;
+    flex-direction: row;
+  }
+  .sensory {
+    bottom: -13.5px;
+  }
+
+  .slash::before {
+    content: "";
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: #d8d8d8;
+    margin: 0 8px;
+  }
+
+  .description .slash::before {
+    vertical-align: 3px;
+  }
+}
