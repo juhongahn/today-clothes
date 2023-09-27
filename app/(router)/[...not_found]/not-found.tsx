@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import styles from "./not-found.module.css";
-import Button from "../../_components/ui/Button";
+import Button from "../../_components/ui/button/Button";
 
 const NotFound = () => {
   return (
