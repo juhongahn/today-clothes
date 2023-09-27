@@ -14,17 +14,18 @@ interface RegionData {
   예보구역코드: string;
 }
 
-const getRegIdBySiName = (regionName: string): string => {
+const getRegIdBySiName = (siName: string, doName: string): string => {
   const workbook: XLSX.WorkBook = XLSX.readFile(excelFilePath);
   const sheetName: string = workbook.SheetNames[0];
   const worksheet: XLSX.WorkSheet = workbook.Sheets[sheetName];
   const data: RegionData[] = XLSX.utils.sheet_to_json(worksheet);
 
   for (const { 지역, 예보구역코드 } of data) {
-    if (regionName.includes(지역)) {
+    if (siName.includes(지역) || doName.includes(지역)) {
       return 예보구역코드;
     }
   }
+
   return "지점을 찾을 수 없음";
 };
 
