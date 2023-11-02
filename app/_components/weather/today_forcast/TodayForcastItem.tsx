@@ -1,25 +1,19 @@
 "use client";
 
 import Image from "next/image";
-import { useSelector } from "react-redux";
-import { selectMatchedRiseset } from "../../../../_reducers/risesetReducer";
-import { selectMatchedWeather } from "../../../../_reducers/weatherReducer";
-import getWeatherImage from "../../../../_lib/getWeatherImage";
-import styles from "./CurrentWeatherItem.module.css";
-import Loading from "./Loading";
+import getWeatherImage from "../../../_lib/getWeatherImage";
+import { RISESET, WEATHER } from "../../../_types/types";
+import styles from "./TodayForcastItem.module.css";
 
-// 습도, 맑음, 온도, 풍속
-const CurrentWeatherItem = () => {
-  const selectedWeather = useSelector(selectMatchedWeather);
-  const selectedRiseset = useSelector(selectMatchedRiseset);
+interface Props {
+  weather: WEATHER;
+  riseset: RISESET[];
+}
 
-  if (!selectedWeather || selectedRiseset.length === 0 || !selectedRiseset)
-    return <Loading />;
-
-  const imgProperty = getWeatherImage(selectedWeather, selectedRiseset, 64, 64);
-  const selectedDate = new Date(selectedWeather.dt);
-  const curTime = getCurrentTime(selectedDate);
-  const { TMP, POP, WSD, REH, TMX, TMN } = selectedWeather.value;
+const TodayForcastItem = ({ weather, riseset }: Props) => {
+  const imgProperty = getWeatherImage(weather, riseset, 64, 64);
+  const curTime = getCurrentTime(weather.dt);
+  const { TMP, POP, WSD, REH, TMX, TMN } = weather.value;
   const sensoryTemperature = calcSensoryTemperature(
     parseFloat(TMP),
     parseFloat(WSD)
@@ -59,14 +53,15 @@ const CurrentWeatherItem = () => {
   );
 };
 
-export default CurrentWeatherItem;
+export default TodayForcastItem;
 
 /**
  *
  * @param date
  * @returns "(월) 오전 1시"
  */
-function getCurrentTime(date: Date) {
+function getCurrentTime(selectedTimeInUnix: number) {
+  const date = new Date(selectedTimeInUnix);
   const daysOfWeek = ["일", "월", "화", "수", "목", "금", "토"];
   const dayOfWeek = daysOfWeek[date.getDay()];
   let hours = date.getHours();

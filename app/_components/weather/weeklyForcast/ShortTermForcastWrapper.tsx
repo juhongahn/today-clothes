@@ -1,12 +1,12 @@
-import type { Weather } from "../../../_types/types";
-import type { MidTermForcast } from "../../../api/mid-term-forcast/route";
+import { MidTermForcast } from "../../../_reducers/midTermForcastReducer";
+import type { WEATHER } from "../../../_types/types";
 import WeeklyForcastItem from "./WeeklyForacstItem";
 
 interface ShortTermForcastWrapperProps {
   stForcast: {
     fcstDate: string;
-    am: Weather;
-    pm: Weather;
+    am: WEATHER;
+    pm: WEATHER;
   };
 }
 
@@ -24,8 +24,8 @@ const ShortTermForcastWrapper = ({
 
 const convertShortTermForcastMidTermForast = (stForcast: {
   fcstDate: string;
-  am: Weather;
-  pm: Weather;
+  am: WEATHER;
+  pm: WEATHER;
 }): MidTermForcast => {
   const mtForcast: MidTermForcast = {
     dt: stForcast.fcstDate,
@@ -51,11 +51,10 @@ const convertShortTermForcastMidTermForast = (stForcast: {
     맑음
 - 구름많음, 구름많고 비, 구름많고 눈, 구름많고 비/눈, 구름많고 소나기
 - 흐림, 흐리고 비, 흐리고 눈, 흐리고 비/눈, 흐리고 소나기
-
  * 
  */
 
-const convertFcstValueToWF = (fcstValue: Weather) => {
+const convertFcstValueToWF = (fcstValue: WEATHER) => {
   const { PTY, SKY } = fcstValue.value;
   const ptyFcstVal = parseFloat(PTY);
   const skyFcstVal = parseFloat(SKY);

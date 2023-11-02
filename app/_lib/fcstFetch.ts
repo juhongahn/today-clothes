@@ -1,5 +1,3 @@
-import { appFetch } from "../_helpers/custom-fetch/fetchWrapper";
-
 interface ResponseItem {
   regId: string;
   rnSt3Am: number;
@@ -55,15 +53,3 @@ interface Response {
 export interface FcstResponseType {
   response: Response;
 }
-
-const fcstFetcher = async (url: string): Promise<FcstResponseType> => {
-  const response = await appFetch(url, {
-    method: "GET",
-    headers: {
-      Accept: "application/json",
-    },
-  });
-  return response.json();
-};
-
-export default fcstFetcher;

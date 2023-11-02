@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./Geolocation.module.css";
-import Loading from "../ui/Loading";
-import Button from "../ui/Button";
+import Loading from "../ui/loading/Loading";
+import Button from "../ui/button/Button";
 import Lottie from "react-lottie-player";
 import lottieJson from "../../../public/statics/lottieFiles/homeLottie.json";
 

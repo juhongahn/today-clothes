@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import Button from "../../_components/ui/Button";
+import Button from "../../_components/ui/button/Button";
 import styles from "./error.module.css";
 
 export default function Error({
@@ -14,8 +14,7 @@ export default function Error({
   reset: () => void;
 }) {
   useEffect(() => {
-    // Log the error to an error reporting service
-    console.error(error);
+    // console.error(error);
   }, [error]);
   return (
     <div className={styles.notFound}>

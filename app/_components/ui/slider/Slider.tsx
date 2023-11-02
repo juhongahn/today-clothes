@@ -6,7 +6,7 @@ import {
   SLIDE_ACTION_TYPE,
   SLIDE_INITIAL_STATE,
   slideReducer,
-} from "../../_reducers/chartSlideReducer";
+} from "../../../_reducers/chartSlideReducer";
 
 interface SliderProps {
   children: React.ReactNode;

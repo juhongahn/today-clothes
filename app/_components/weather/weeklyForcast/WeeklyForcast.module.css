@@ -3,10 +3,6 @@
   min-height: 40rem;
 }
 
-.header h2 {
-  margin: 0 0 1.8rem 0;
-}
-
 .forcastUL {
   display: grid;
   grid-template-columns: repeat(2, auto);

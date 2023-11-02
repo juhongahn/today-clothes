@@ -1,7 +1,7 @@
 import Image from "next/image";
-import { MidTermForcast } from "../../../api/mid-term-forcast/route";
 import styles from "./WeeklyForcast.module.css";
 import { advanceTime } from "../../../_lib/weatherUtils";
+import { MidTermForcast } from "../../../_reducers/midTermForcastReducer";
 
 interface WeeklyForcastItemProps {
   mtForcast: MidTermForcast;

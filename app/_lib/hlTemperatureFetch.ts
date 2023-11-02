@@ -1,5 +1,3 @@
-import { appFetch } from "../_helpers/custom-fetch/fetchWrapper";
-
 interface ResponseItem {
   regId: string;
   taMin3: number;
@@ -77,17 +75,3 @@ interface Response {
 export interface HLTemperatureResponseType {
   response: Response;
 }
-
-const hlTemperatureFetcher = async (
-  url: string
-): Promise<HLTemperatureResponseType> => {
-  const response = await appFetch(url, {
-    method: "GET",
-    headers: {
-      Accept: "application/json",
-    },
-  });
-  return response.json();
-};
-
-export default hlTemperatureFetcher;

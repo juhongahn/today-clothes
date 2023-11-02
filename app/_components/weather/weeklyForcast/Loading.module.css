@@ -1,3 +1,11 @@
+.skeletonUl {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  column-gap: 0.75rem;
+  row-gap: 1rem;
+  padding: 0;
+}
+
 .skeleton {
   border-radius: 3px;
   opacity: 0.7;
@@ -6,10 +14,19 @@
 }
 
 @keyframes skeleton-loading {
-    0% {
-      background-color: hsl(201, 18%, 85%);
-    }
-    100% {
-      background-color: hsl(200, 20%, 95%);
-    }
+  0% {
+    background-color: hsl(201, 18%, 85%);
   }
+  100% {
+    background-color: hsl(200, 20%, 95%);
+  }
+}
+
+@media screen and (max-width: 680px) {
+  .skeletonUl {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 0;
+  }
+}

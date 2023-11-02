@@ -1,7 +1,7 @@
-export type Riseset = {
-  locdate: string[];
-  sunrise: string[];
-  sunset: string[];
+export type RISESET = {
+  locdate: number;
+  sunrise: string;
+  sunset: string;
 };
 
 export type Local = {
@@ -16,21 +16,10 @@ export type Local = {
   y: string;
 };
 
-export type Weather = {
+export type WEATHER = {
   dt: number;
   value: {
-    TMP: string;
-    SKY: string;
-    PTY: string;
-    POP: string;
-    REH: string;
-    PCP: string;
-    SNO: string;
-    UUU: string;
-    VEC: string;
-    VVV: string;
-    WAV: string;
-    WSD: string;
+    [x: string]: string;
     TMX: string;
     TMN: string;
   };
@@ -38,14 +27,13 @@ export type Weather = {
 
 export type UV = {
   dt: number;
-  components: { uv: GRADE_OBJ };
+  components: {
+    uv: GRADE_OBJ;
+  };
 };
 
 export type DUST = {
   dt: number;
-  main: {
-    aqi: number;
-  };
   components: {
     co: GRADE_OBJ;
     no: number;

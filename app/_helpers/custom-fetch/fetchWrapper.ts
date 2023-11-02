@@ -31,8 +31,7 @@ export const handleError = (
   error: unknown,
   handler: (body: any, init?: ResponseInit) => NextResponse
 ) => {
-  // console.error(error);
-
+  
   if (error instanceof HttpError) {
     switch (error.response.status) {
       case 400:

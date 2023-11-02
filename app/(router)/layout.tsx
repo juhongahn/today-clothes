@@ -26,8 +26,9 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           src={backgroundImg}
           alt="배경 이미지"
           fill
-          priority
+          sizes="100vw"
           placeholder="blur"
+          quality={100}
           style={{ zIndex: "-100", opacity: "0.5" , objectFit: "cover"}}
         />
         <section id="rootSection">{children}</section>
