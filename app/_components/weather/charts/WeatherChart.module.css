@@ -44,8 +44,6 @@
 
 .line {
   stroke: #e5e9ef;
-  stroke-dasharray: 100;
-  stroke-dashoffset: 0;
   stroke-width: 2;
   stroke-linecap: round;
   z-index: -100;
