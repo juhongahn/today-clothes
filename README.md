@@ -43,6 +43,7 @@
 - GPT-3.5 Turbo
   - 옷 추천 응답을 stream으로 변경해 ux 개선(응답 18초 -> 실시간)
 - 전역 상태 관리를 위해 redux-toolkit 도입
+- 반응형 웹 디자인
 ## 배운점
 - Parallel and sequential data fetching pattern
   - 다른 종류의 공공 데이터를 처리할 때 Primise.all을 사용하여 waterfall을 방지했습니다.
